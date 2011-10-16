@@ -24,14 +24,19 @@
     background-color: #fff;
     border: 1px dashed maroon;
     display: block;
+    text-align: center;
+    line-height: auto;
+    vertical-align: middle;
   }
   #demo div:nth-child(11n) {
     clear: right;
   }
   #demo .inview {
+    color: #ddd;
     background-color: #444;
   }
   #demo .outofview {
+    color: #444;
     background-color: #ddd;
   }
   #explanation {
@@ -121,13 +126,19 @@
         divWidth = parseInt((document.body.clientHeight + 400)/10, 10);
       }
       
-      // Generate divs
+      // Generate divs which will each be tested for their viewport within-ness
       i = 0;
       while (i < divCount) {
-        divHTML += '<div style="width:' + divWidth + 'px;height:' + divWidth + 'px;">&nbsp;</div>';
+        //divHTML += '<div style="width:' + divWidth + 'px;height:' + divWidth + 'px;line-height:' + divWidth + 'px;">&nbsp;</div>';
+				divHTML += '<div>&nbsp;</div>';
         i++;
       }
+			
+			// Add a container and put the <div>s inside
       $body.append('<div id="demo" style="width:' + (divWidth*10 + 20) + 'px;">' + divHTML + '</div>');
+			
+			// Set the styles so everything is nice and proportional to this page
+			$body.append('<style>#demo div { width:' + divWidth + 'px;height:' + divWidth + 'px;line-height:' + divWidth + 'px; }</style>');
       demo.$divs = $('#demo div');
       demo.$divs.get(4).id = 'test';
       
@@ -139,6 +150,9 @@
         withinViewSettings[this.id] = parseInt(this.value);
         demo.updateClasses();
       });
+			
+			// Update the <div>s for the first time
+			demo.updateClasses();
     },
     
     // Update each <div>'s class to reflect whether it was determined to be within the viewport or not
@@ -146,10 +160,16 @@
       demo.$divs.each(function() {
         var $this = $(this);
         if ($this.is(':within-viewport')) {
-          $this.addClass('inview').removeClass('outofview');
+          $this
+						.html('in')
+						.addClass('inview')
+						.removeClass('outofview');
         }
         else {
-          $this.addClass('outofview').removeClass('inview');
+          $this
+						.html('out')
+						.addClass('outofview')
+						.removeClass('inview');
         }
       });
     }
