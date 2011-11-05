@@ -1,86 +1,109 @@
-var withinView, withinViewSettings;
+/**
+ * Within Viewport jQuery Plugin
+ *
+ * @description Companion plugin for withinViewport.js
+ * @author      Craig Patik, http://patik.com/
+ * @version     0.2
+ * @date        2011-11-05
+ */
 
-;(function($) {
-  var withinViewport = function(element, settings) {
-    settings = settings || withinViewSettings;
-    
-    // Make sure all settings have a numeric value
-    "top,right,bottom,left".split(",")
-      .forEach(function (pos) {
-        if (isNaN(this[pos])) {
-          this[pos] = 0;
-        }
-      }, settings);
-   	
-		// Element is below the top edge of the viewport
-    this.top = function(element, settings) {
-      settings = settings || this.settings;
-      return $(element).offset().top 
-			    >= $(window).scrollTop() + settings.top;
-    };
-    
-		// Element is to the left of the right edge of the viewport
-    this.right = function(element, settings) {
-      settings = settings || this.settings;
-      return $(element).offset().left + $(element).outerWidth()
-			    <= $(window).width() + $(window).scrollLeft() - settings.right;
-    };
-    
-		// Element is above the bottom edge of the viewport
-    this.bottom = function(element, settings) {
-      settings = settings || this.settings;
-			if (element.id == 'test') {
-				console.log($(element).offset().top + ' >= ' + ($(window).scrollTop() + settings.bottom));
-			}
-      return $(element).offset().top + $(element).outerHeight()
-			    <= $(window).scrollTop() + $(window).height() - settings.bottom;
-    };
-    
-		// Element is to the right of the left edge of the viewport
-    this.left = function(element, settings) {
-      settings = settings || this.settings;
-      return $(element).offset().left 
-			    >= $(window).scrollLeft() + settings.left;
-    };
-  };
+;(function( $, window, undefined ) {
 	
-	// Create instance and default settings object
-  withinView = new withinViewport();
-  withinViewSettings = {top: 0, right: 0, bottom: 0, left: 0, events: false};
-  
-  // jQuery plugin
-  $.withinViewportTop = function(element, settings) {
-    return withinView.top(element, settings);
-  };
-  $.withinViewportRight = function(element, settings) {
-    return withinView.right(element, settings);
-  };
-  $.withinViewportBottom = function(element, settings) {
-    return withinView.bottom(element, settings);
-  };
-  $.withinViewportLeft = function(element, settings) {
-    return withinView.left(element, settings);
-  };
-  $.withinViewport = function(element, settings) {
-    return withinView.top(element, settings) && withinView.left(element, settings) 
-        && withinView.bottom(element, settings) && withinView.right(element, settings);
+	/**
+	 * $.withinViewport()
+   * @description          jQuery method
+	 * @param {Object}       [settings] optional settings
+	 * @return {Collection}  Contains all elements that were within the viewport
+	*/
+  $.fn.withinViewport = function(settings) {
+    if (typeof settings === "string") { settings = {sides: settings}; }
+		var opts = $.extend({}, settings, {sides: "all"}), elems = [];
+    this.each(function() {
+      if (withinViewport(this, opts)) {
+        elems.push(this);
+      }
+    });
+    return $(elems);
   };
   
+  // Custom selector
   $.extend($.expr[":"], {
-		"within-viewport-top": function(element, index, meta) {
-			return $.withinViewportTop(element, withinViewSettings);
-		},
-		"within-viewport-right": function(element, index, meta) {
-			return $.withinViewportRight(element, withinViewSettings);
-		},
-		"within-viewport-bottom": function(element, index, meta) {
-			return $.withinViewportBottom(element, withinViewSettings);
-		},
-		"within-viewport-left": function(element, index, meta) {
-			return $.withinViewportLeft(element, withinViewSettings);
-		},
-		"within-viewport": function(element, index, meta) {
-			return $.withinViewport(element, withinViewSettings);
-		}
+    "within-viewport": function(element) {
+      return withinViewport(element, "all");
+    }
   });
-})(jQuery);
+  
+  /**
+   * Optional enhancements and shortcuts
+   * 
+   * @description Uncomment or comment these pieces as they apply to your project and coding preferences
+   */
+  
+  // Shorthand jQuery methods
+  //
+  $.fn.withinViewportTop = function(settings) {
+    if (typeof settings === "string") { settings = {sides: settings}; }
+    var opts = $.extend({}, settings, {sides: "top"}), elems = [];
+    this.each(function() {
+      if (withinViewport(this, opts)) {
+        elems.push(this);
+      }
+    });
+    return $(elems);
+  };
+  
+  $.fn.withinViewportRight = function(settings) {
+    if (typeof settings === "string") { settings = {sides: settings}; }
+    var opts = $.extend({}, settings, {sides: "right"}), elems = [];
+    this.each(function() {
+      if (withinViewport(this, opts)) {
+        elems.push(this);
+      }
+    });
+    return $(elems);
+  };
+  
+  $.fn.withinViewportBottom = function(settings) {
+    if (typeof settings === "string") { settings = {sides: settings}; }
+    var opts = $.extend({}, settings, {sides: "bottom"}), elems = [];
+    this.each(function() {
+      if (withinViewport(this, opts)) {
+        elems.push(this);
+      }
+    });
+    return $(elems);
+  };
+  
+  $.fn.withinViewportLeft = function(settings) {
+    if (typeof settings === "string") { settings = {sides: settings}; }
+    var opts = $.extend({}, settings, {sides: "left"}), elems = [];
+    this.each(function() {
+      if (withinViewport(this, opts)) {
+        elems.push(this);
+      }
+    });
+    return $(elems);
+  };
+  
+  // Custom jQuery selectors
+  //
+  $.extend($.expr[":"], {
+    "within-viewport-top": function(element) {
+      return withinViewport(element, "top");
+    },
+    "within-viewport-right": function(element) {
+      return withinViewport(element, "right");
+    },
+    "within-viewport-bottom": function(element) {
+      return withinViewport(element, "bottom");
+    },
+    "within-viewport-left": function(element) {
+      return withinViewport(element, "left");
+    }
+    //,
+    // "within-viewport-top-left-45": function(element) {
+    //   return withinViewport(element, {sides:'top left', top: 45, left: 45});
+    // }
+  });
+  
+})(jQuery, window);
