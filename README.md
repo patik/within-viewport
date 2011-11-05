@@ -121,6 +121,7 @@ You can specify *negative threshold values* to allow elements to reside outside 
 - Option to perform simple actions on matched elements (toggle class, set attribute value, etc)
 - Test against Firefox 3.6, Safari 5.0.1
 - Support IE7
+- Find out how old of a jQuery version you can use (my guess: 1.4-ish)
 
 No IE6 support is planned &mdash; if you'd like to add it, feel free to make a pull request.
 
