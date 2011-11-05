@@ -42,7 +42,7 @@ For more options, see 'Settings' section below.
 
 The scripts must be included in this order:
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.7.min.js"></script>
     <script src="withinViewport.js"></script>
     <script src="jquery.withinViewport.js"></script>
 
