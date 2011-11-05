@@ -129,8 +129,15 @@
       },
       
       onControlsToggle: function(event) {
-        $("#explanation").toggleClass("collapsed");
-        $("#toggler").toggleClass("plus minus");
+        var $toggler = $("#toggler");
+				$("#explanation").toggleClass("collapsed");
+        $toggler.toggleClass("plus minus");
+				if ($toggler.html() === 'Collapse') {
+					$toggler.html('Expand');
+				}
+				else {
+					$toggler.html('Collapse');
+				}
       }
     },
     
