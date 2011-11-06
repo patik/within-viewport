@@ -1,13 +1,8 @@
 # Within Viewport
 
-#### Determine whether elements are within the viewport
+***Determine whether elements are within the viewport***
 
-Includes both a standalone function and a jQuery plugin with handy selectors and shorthand methods.
-
-Inspired by these similar utilities which only reflect whether an element is at least partially in view:
-
-* Remy Sharp's [Element 'in view' Event Plugin](http://remysharp.com/2009/01/26/element-in-view-event-plugin/)
-* Mike Tuupola's [Viewport Selectors for jQuery](http://www.appelsiini.net/projects/viewport)
+Includes both a standalone, plain JavaScript function and a jQuery plugin with handy selectors and shorthand methods. 
 
 The standalone function and jQuery plugin are equally functional. I recommend the plugin if you're using jQuery anyway; otherwise, use the standalone function.
 
@@ -124,6 +119,13 @@ You can specify *negative threshold values* to allow elements to reside outside 
 - Find out how old of a jQuery version you can use (my guess: 1.4-ish)
 
 No IE6 support is planned &mdash; if you'd like to add it, feel free to make a pull request.
+
+## Credit
+
+Within Viewport is inspired by these similar utilities which only reflect whether an element is at least partially in view:
+
+* Remy Sharp's [Element 'in view' Event Plugin](http://remysharp.com/2009/01/26/element-in-view-event-plugin/)
+* Mike Tuupola's [Viewport Selectors for jQuery](http://www.appelsiini.net/projects/viewport)
 
 ## History
 
