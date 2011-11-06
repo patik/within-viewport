@@ -8,16 +8,16 @@
  */
 
 ;(function( $, window, undefined ) {
-	
-	/**
-	 * $.withinViewport()
+  
+  /**
+   * $.withinViewport()
    * @description          jQuery method
-	 * @param {Object}       [settings] optional settings
-	 * @return {Collection}  Contains all elements that were within the viewport
-	*/
+   * @param {Object}       [settings] optional settings
+   * @return {Collection}  Contains all elements that were within the viewport
+  */
   $.fn.withinViewport = function(settings) {
     if (typeof settings === "string") { settings = {sides: settings}; }
-		var opts = $.extend({}, settings, {sides: "all"}), elems = [];
+    var opts = $.extend({}, settings, {sides: "all"}), elems = [];
     this.each(function() {
       if (withinViewport(this, opts)) {
         elems.push(this);

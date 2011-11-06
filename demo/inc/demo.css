@@ -260,7 +260,7 @@ form div {
      -moz-box-shadow: 1px 0 0 rgba(0,0,0,0.5), 2px 0 0 rgba(255,255,255,0.5);
           box-shadow: 1px 0 0 rgba(0,0,0,0.5), 2px 0 0 rgba(255,255,255,0.5);
   -moz-border-radius: .15em 0 0 .15em;
-	     border-radius: .15em 0 0 .15em;
+       border-radius: .15em 0 0 .15em;
   -webkit-background-clip: padding-box;
      -moz-background-clip: padding;
           background-clip: padding-box;

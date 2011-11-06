@@ -64,7 +64,7 @@
         if ((navigator.oscpu && /Windows/.test(navigator.oscpu) && /Firefox|Trident|Safari|Presto/.test(navigator.userAgent))
             || (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))) {
           $("#thresholds p").show();
-        	$("body").on("keydown", wvdemo.events.onNudge);
+          $("body").on("keydown", wvdemo.events.onNudge);
         }
         
         // Controls toggler
@@ -130,14 +130,14 @@
       
       onControlsToggle: function(event) {
         var $toggler = $("#toggler");
-				$("#explanation").toggleClass("collapsed");
+        $("#explanation").toggleClass("collapsed");
         $toggler.toggleClass("plus minus");
-				if ($toggler.html() === 'Collapse') {
-					$toggler.html('Expand');
-				}
-				else {
-					$toggler.html('Collapse');
-				}
+        if ($toggler.html() === 'Collapse') {
+          $toggler.html('Expand');
+        }
+        else {
+          $toggler.html('Collapse');
+        }
       }
     },
     
