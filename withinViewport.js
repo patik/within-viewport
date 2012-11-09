@@ -47,14 +47,16 @@
             
             // Element is to the left of the right edge of the viewport
             right: function() {
+              var width = window.innerWidth || document.documentElement.clientWidth;
               return elemOffset[0] + elem.offsetWidth
-                  <= window.innerWidth + scrollOffset[0] - config.right;
+                  <= width + scrollOffset[0] - config.right;
             },
             
             // Element is above the bottom edge of the viewport
             bottom: function() {
+              var height = window.innerHeight || document.documentElement.clientHeight;
               return elemOffset[1] + elem.offsetHeight
-                  <= scrollOffset[1] + window.innerHeight - config.bottom;
+                  <= height + scrollOffset[1] - config.bottom;
             },
             
             // Element is to the right of the left edge of the viewport
