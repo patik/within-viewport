@@ -1,7 +1,7 @@
 /**
  * Within Viewport
  *
- * @description Determines whether an element is completely 
+ * @description Determines whether an element is completely
  *              within the browser viewport
  * @author      Craig Patik, http://patik.com/
  * @version     0.2
@@ -9,7 +9,7 @@
  */
 
 ;(function(d) {
-  
+
   /**
    * withinViewport
    * @param {Object} [elem]      DOM Element, required
@@ -41,35 +41,35 @@
           isWithin = {
             // Element is below the top edge of the viewport
             top: function() {
-              return elemOffset[1] 
+              return elemOffset[1]
                   >= scrollOffset[1] + config.top;
             },
-            
+
             // Element is to the left of the right edge of the viewport
             right: function() {
               var width = window.innerWidth || document.documentElement.clientWidth;
               return elemOffset[0] + elem.offsetWidth
                   <= width + scrollOffset[0] - config.right;
             },
-            
+
             // Element is above the bottom edge of the viewport
             bottom: function() {
               var height = window.innerHeight || document.documentElement.clientHeight;
               return elemOffset[1] + elem.offsetHeight
                   <= height + scrollOffset[1] - config.bottom;
             },
-            
+
             // Element is to the right of the left edge of the viewport
             left: function() {
-              return elemOffset[0] 
+              return elemOffset[0]
                   >= scrollOffset[0] + config.left;
             },
-            
+
             all: function() {
               return (isWithin.top() && isWithin.right() && isWithin.bottom() && isWithin.left());
             }
           },
-          
+
           // Current offset values
           scrollOffset = (function() {
             var x = d.body.scrollLeft,
@@ -92,7 +92,7 @@
             }
             return [x, y];
           })(),
-          
+
           elemOffset = (function() {
             var el = elem,
                 x = 0,
@@ -107,7 +107,7 @@
             }
             return [x, y];
           })();
-      
+
       // Test element against each side of the viewport that was requested
       arr = config.sides.split(" ");
       i = arr.length;
@@ -123,7 +123,7 @@
           }
         }
       }
-      
+
       return result;
     }
     catch(e) { }
@@ -141,27 +141,27 @@
     left: 0
   };
   withinViewport.defaults = withinViewport.prototype.defaults;
-  
+
   // Make function available globally
   window.withinViewport = withinViewport;
-  
+
   /**
    * Optional enhancements and shortcuts
-   * 
+   *
    * @description Uncomment or comment these pieces as they apply to your project and coding preferences
    */
-  
+
   // Shortcut methods for each side of the viewport
   // Ex: withinViewport.top(elem) is the same as withinViewport(elem, "top")
   //
-  arr = "top,right,bottom,left".split(",");
-  i = arr.length;
+  var arr = ['top', 'right', 'bottom', 'left'];
+  var i = arr.length;
   while(i--) {
-    side = arr[i];
+    var side = arr[i];
     withinViewport.prototype[side] = function(element) {
       return withinViewport(element, side);
     };
     withinViewport[side] = withinViewport.prototype[side];
   }
-  
+
 })(document);
