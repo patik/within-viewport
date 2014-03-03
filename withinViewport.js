@@ -11,20 +11,20 @@
     /**
      * withinViewport
      * @param  {Object} [elem]      DOM Element, required
-     * @param  {Object} [settings]  optional settings
-     * @return {Boolean}            whether elem was completely within the viewport
+     * @param  {Object} [settings]  Optional settings
+     * @return {Boolean}            Whether the element was completely within the viewport
     */
-    var withinViewport = function(elem, settings) {
+    var withinViewport = function _withinViewport(elem, options) {
         if (typeof elem !== 'object' || elem.nodeType !== 1) {
             throw new Error('First argument must be an element');
         }
 
-        var metadata = (elem.getAttribute('data-withinviewport-settings') && window.JSON)
-                                     ? JSON.parse(elem.getAttribute('data-withinviewport-settings'))
-                                     : {},
+        var metadata = (elem.getAttribute('data-withinviewport-settings') && window.JSON) ?
+                                     JSON.parse(elem.getAttribute('data-withinviewport-settings')) :
+                                     {},
 
             // Settings argument may be a simple string (`top`, `right`, etc)
-            settings = typeof settings === 'string' ? {sides: settings} : settings || {},
+            settings = typeof options === 'string' ? {sides: options} : options || {},
 
             // Build configuration from defaults and given settings
             config = {
@@ -164,7 +164,7 @@
         }
 
         return result;
-    };
+    }; // end of `withinViewport()`
 
     // Default settings
     withinViewport.prototype.defaults = {
@@ -189,13 +189,19 @@
 
     // Shortcut methods for each side of the viewport
     // Ex: withinViewport.top(elem) is the same as withinViewport(elem, 'top')
-    arr = 'top,right,bottom,left'.split(',');
-    i = arr.length;
-    while(i--) {
-        side = arr[i];
-        withinViewport.prototype[side] = function(element) {
-            return withinViewport(element, side);
-        };
-        withinViewport[side] = withinViewport.prototype[side];
-    }
+    withinViewport.prototype.top = function _withinViewport_top(element) {
+        return withinViewport(element, 'top');
+    };
+
+    withinViewport.prototype.right = function _withinViewport_right(element) {
+        return withinViewport(element, 'right');
+    };
+
+    withinViewport.prototype.bottom = function _withinViewport_bottom(element) {
+        return withinViewport(element, 'bottom');
+    };
+
+    withinViewport.prototype.left = function _withinViewport_left(element) {
+        return withinViewport(element, 'left');
+    };
 })();
