@@ -198,5 +198,4 @@
         };
         withinViewport[side] = withinViewport.prototype[side];
     }
-
 })();
