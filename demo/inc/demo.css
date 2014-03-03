@@ -1,7 +1,9 @@
 body {
   font: 1em/1.2em "Segoe UI", "Myriad Pro", Tahoma, sans-serif;
   overflow: scroll;
-  padding: 10px;
+  /*padding: 10px;*/
+  margin: 0;
+  padding: 0;
 }
 a {
   color: #36C;
@@ -129,37 +131,17 @@ form div {
   clear: both;
 }
 
-/*
-#nudgeControls {
-  float: left;
-  width: 30%;
-  margin-left: 10%;
+body {
+  background-color: lightblue;
 }
-#nudgeControls input {
-  display: block;
-  width: 2em;
-  font-weight: bold;
+
+#container {
+  background-color: white;
+  margin: 12.5%;
+  width: 75%;
+  height: 400px;
+  overflow: scroll;
 }
-#nudge-up {
-  margin: 0 auto;
-}
-#nudge-left {
-  float: left;
-  clear: both;
-  display: block;
-  margin-right: 20px;
-}
-#nudge-right {
-  display: block;
-  float: right;
-}
-#nudge-down {
-  float: none;
-  clear: both;
-  display: block;
-  margin: 0 auto;
-}
-*/
 
 .boundary {
   position: fixed;
@@ -245,7 +227,7 @@ form div {
 .button:focus {
   outline: 0;
   background: #fafafa;
-}    
+}
 
 .button:before {
   background: #ccc;

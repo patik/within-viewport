@@ -1,19 +1,19 @@
 // ScrollStart/ScrollStop events: http://james.padolsey.com/javascript/special-scroll-events-for-jquery/
-;(function(a){var b=a.event.special,c="D"+ +(new Date),d="D"+(+(new Date)+1);b.scrollstart={setup:function(){var d,e=function(c){var e=this,f=arguments;if(d){clearTimeout(d)}else{c.type="scrollstart";a.event.handle.apply(e,f)}d=setTimeout(function(){d=null},b.scrollstop.latency)};a(this).bind("scroll",e).data(c,e)},teardown:function(){a(this).unbind("scroll",a(this).data(c))}};b.scrollstop={latency:0,setup:function(){var c,e=function(d){var e=this,f=arguments;if(c){clearTimeout(c)}c=setTimeout(function(){c=null;d.type="scrollstop";a.event.handle.apply(e,f)},b.scrollstop.latency)};a(this).bind("scroll",e).data(d,e)},teardown:function(){a(this).unbind("scroll",a(this).data(d))}}})(jQuery);
+(function(){var e=jQuery.event.special,t="D"+ +(new Date),n="D"+(+(new Date)+1);e.scrollstart={setup:function(){var n,r=function(t){var r=this,i=arguments;if(n){clearTimeout(n)}else{t.type="scrollstart";jQuery.event.handle.apply(r,i)}n=setTimeout(function(){n=null},e.scrollstop.latency)};jQuery(this).bind("scroll",r).data(t,r)},teardown:function(){jQuery(this).unbind("scroll",jQuery(this).data(t))}};e.scrollstop={latency:300,setup:function(){var t,r=function(n){var r=this,i=arguments;if(t){clearTimeout(t)}t=setTimeout(function(){t=null;n.type="scrollstop";jQuery.event.dispatch.apply(r,i)},e.scrollstop.latency)};jQuery(this).bind("scroll",r).data(n,r)},teardown:function(){jQuery(this).unbind("scroll",jQuery(this).data(n))}}})();
 
 // Demo code
 (function($) {
   var wvdemo = {
     $boxes: null,
     $showBoundsCheck: null,
-    
+
     init: function() {
-      
+
       var $body = $("body"),
           boxCount = 100,
           boxWidth = 20,
           boxHTML = "", i;
-      
+
       // Make sure the demo will be wider than the device's screen so that vertical scroll bars appear
       //    but not so wide that you can't see at least four on screen at a time with a maximized browser window
       if (screen.width >= screen.height) {
@@ -23,41 +23,41 @@
       else {
         boxWidth = parseInt((screen.height + 400)/10, 10);
       }
-      
+
       // Generate boxes which will each be tested for their viewport within-ness
       i = 0;
       while (i < boxCount) {
         boxHTML += '<div aria-hidden="false">&nbsp;</div>';
         i++;
       }
-      
+
       // Add a container and put the boxes inside
       $body.append('<div id="boxContainer" style="width:' + (boxWidth * 10 + 20) + 'px;">' + boxHTML + '</div>');
-      
+
       // Set the styles so everything is nice and proportional to this device's screen
       $body.append("<style>#boxContainer div { width:" + boxWidth + "px;height:" + boxWidth + "px;line-height:" + boxWidth + "px; }</style>");
       wvdemo.$boxes = $("#boxContainer div");
       wvdemo.$boxes.get(4).id = 'test';
-      
+
       wvdemo.$showBoundsCheck = $("#show-boundary");
       wvdemo.events.init();
-      
+
       // Update the <div>s for the first time
       wvdemo.updateBoxes();
     },
-    
+
     events: {
-      
+
       // Setup event listeners
       init: function() {
         // Scroll or window resize
         $(window).on("resize scrollstop", wvdemo.updateBoxes);
-        
+
         // User entry
         $('input[type="number"]').on("keyup change click", wvdemo.events.onBoundaryChange); // 'click' is for spinners on input[number] control
         // Boundary toggle
         wvdemo.$showBoundsCheck.on("change", wvdemo.events.onBoundaryToggle);
-        
+
         // Nudge controls
         // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
         // Windows: Firefox, Trident, Safari, Opera; Mac: Chrome, Safari, Opera; Not Firefox
@@ -66,17 +66,17 @@
           $("#thresholds p").show();
           $("body").on("keydown", wvdemo.events.onNudge);
         }
-        
+
         // Controls toggler
         $("#toggler").on("click", wvdemo.events.onControlsToggle);
       },
-      
+
       // When a boundary value changes
       onBoundaryChange: function(event) {
         var target = event.target,
             val = parseInt(target.value, 10),
             id = target.id;
-        
+
         // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
         if (val > 0) {
           if (wvdemo.$showBoundsCheck.is(':checked')) {
@@ -91,14 +91,14 @@
         else {
           $(".boundary-" + id).hide();
         }
-        
+
         // Update the page
         withinViewport.defaults[id] = val;
         wvdemo.updateBoxes();
         wvdemo.toggleBoundaryToggle();
       },
-      
-      // When the boundary toggle box is checked/unchecked 
+
+      // When the boundary toggle box is checked/unchecked
       onBoundaryToggle: function() {
         if (wvdemo.$showBoundsCheck.is(":checked")) {
           // Fire the change event so wvdemo.events.onBoundaryChange() will apply any values
@@ -110,7 +110,7 @@
           $(".boundary-" + this.id).hide();
         }
       },
-      
+
       // When shift + arrow key is pressed, nudge the page by 1px
       onNudge: function(event) {
         // Ignore input fields
@@ -127,7 +127,7 @@
           event.preventDefault();
         }
       },
-      
+
       onControlsToggle: function(event) {
         var $toggler = $("#toggler");
         $("#explanation").toggleClass("collapsed");
@@ -140,7 +140,7 @@
         }
       }
     },
-    
+
     // Display or hide the "show boundaries" check box if any values are set (non-zero)
     toggleBoundaryToggle: function() {
       var somethingEntered = false;
@@ -156,7 +156,7 @@
         wvdemo.$showBoundsCheck.parent().slideUp();
       }
     },
-    
+
     // Overlay a boundary line on the viewport when one is set by the user
     drawBound: function(side, dist) {
       dist += "px";
@@ -177,7 +177,7 @@
           break;
       }
     },
-    
+
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     // Uses the jQuery plugin
     updateBoxes: function() {
@@ -194,8 +194,8 @@
           .addClass("inview");
     }
   };
-  
+
   window.wvdemo = wvdemo;
   $(document).ready(wvdemo.init);
-  
+
 })(jQuery);

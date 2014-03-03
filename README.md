@@ -2,7 +2,7 @@
 
 ***Determine whether elements are within the viewport***
 
-Includes both a standalone, plain JavaScript function and a jQuery plugin with handy selectors and shorthand methods. 
+Includes both a standalone, plain JavaScript function and a jQuery plugin with handy selectors and shorthand methods.
 
 The standalone function and jQuery plugin are equally functional. I recommend the plugin if you're using jQuery anyway; otherwise, use the standalone function.
 
@@ -18,7 +18,7 @@ The standalone function and jQuery plugin are equally functional. I recommend th
 
     // Test against only some sides of the viewport for faster performance
     withinViewport(elem, {sides: "left"});
-    
+
     // Define your own viewport by specifying thresholds for each side
     // Example: element is at least 12px inside the top and right of the viewport
     withinViewport(elem, {top: 12, right: 12});
@@ -30,14 +30,14 @@ For more options, see 'Settings' section below.
     // These will use the default thresholds; see 'Settings' section below
     withinViewport(elem, "bottom right");
     withinViewport.left(elem);
-    
+
 ## jQuery plugin
 
 ### Include
 
 The scripts must be included in this order:
 
-    <script src="http://code.jquery.com/jquery-1.7.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="withinViewport.js"></script>
     <script src="jquery.withinViewport.js"></script>
 
@@ -73,7 +73,7 @@ If you're looking to keep tabs on elements' whereabouts at all times, you can bi
 
     $(window).bind("resize scrollStop", function() {
       // Your code here...
-      
+
       // Example:
       $("div")
         // Declare all divs out of the viewport...
@@ -89,7 +89,7 @@ A future version will allow you to fire custom events when elements pass in and 
 
 This applies to both the jQuery plugin and standalone function.
 
-Use the object `withinView.defaults` to define your page's practical viewport compared to the actual browser viewport. 
+Use the object `withinView.defaults` to define your page's practical viewport compared to the actual browser viewport.
 
 For example, a fixed header with a height of 100px that spans the entire width of the page effectively lowers the viewport by 100px from the top edge of the browser window:
 
