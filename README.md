@@ -150,7 +150,3 @@ Have fun with it &mdash; BSD, MIT, or GPL; see included LICENSE file
 ## Author
 
 Craig Patik, [patik.com](http://patik.com/) & [@craigpatik](https://twitter.com/craigpatik)
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/patik/within-viewport/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
