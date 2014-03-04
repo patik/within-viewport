@@ -2,9 +2,7 @@
 
 ***Determine whether elements are within the viewport***
 
-Includes both a standalone, plain JavaScript function and a jQuery plugin with handy selectors and shorthand methods.
-
-The standalone function and jQuery plugin are equally functional. I recommend the plugin if you're using jQuery anyway; otherwise, use the standalone function.
+Includes both a standalone, plain JavaScript function and a jQuery plugin with handy selectors and shorthand methods. Both versions are equally functional.
 
 ## Usage
 
@@ -29,7 +27,7 @@ withinViewport(elem, {sides: "left"});
 withinViewport(elem, {top: 12, right: 12});
 ```
 
-For more options, see ['Settings'](#settings) section below.
+For more options, see [Settings](#settings) section below.
 
 ### Shorthand notation
 
@@ -76,7 +74,7 @@ $("#myElement").is(":within-viewport-left");
 ```
 
 ```js
-// Returns a jQuery object containing all <div>s within the left edge of the viewport
+// Returns a jQuery collection of all <div>s within the left edge of the viewport
 $("div").withinViewportLeft();
 ```
 
@@ -89,7 +87,7 @@ These shortcuts will result in slightly better performance if you're testing hun
 
 #### Live updating
 
-If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. Instead of `scroll`, I recommend using [James Padolsey's `ScrollStop` event](http://james.padolsey.com/javascript/special-scroll-events-for-jquery/) since firing on every `window.scroll` event will [bring your UI to its knees](http://ejohn.org/blog/learning-from-twitter/).
+If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. Instead of `scroll`, I recommend using [James Padolsey's `scrollStop` event](http://james.padolsey.com/javascript/special-scroll-events-for-jquery/) since firing on every `window.scroll` event will [bring your UI to its knees](http://ejohn.org/blog/learning-from-twitter/).
 
 ```js
 $(window).bind("resize scrollStop", function() {
