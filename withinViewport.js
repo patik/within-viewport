@@ -11,140 +11,149 @@
     /**
      * withinViewport
      * @param  {Object} [elem]      DOM Element, required
-     * @param  {Object} [settings]  Optional settings
+     * @param  {Object} [options]   Optional settings
      * @return {Boolean}            Whether the element was completely within the viewport
     */
     var withinViewport = function _withinViewport(elem, options) {
+        var result = false,
+            metadata = {},
+            config = {},
+            settings, useHtmlElem, isWithin, scrollOffset, elemOffset, arr, i, side;
+
+        if (elem instanceof jQuery) {
+            elem = elem.get(0);
+        }
+
         if (typeof elem !== 'object' || elem.nodeType !== 1) {
             throw new Error('First argument must be an element');
         }
 
-        var metadata = (elem.getAttribute('data-withinviewport-settings') && window.JSON) ?
-                                     JSON.parse(elem.getAttribute('data-withinviewport-settings')) :
-                                     {},
+        if (elem.getAttribute('data-withinviewport-settings') && window.JSON) {
+            metadata = JSON.parse(elem.getAttribute('data-withinviewport-settings'));
+        }
 
-            // Settings argument may be a simple string (`top`, `right`, etc)
-            settings = typeof options === 'string' ? {sides: options} : options || {},
+        // Settings argument may be a simple string (`top`, `right`, etc)
+        if (typeof options === 'string') {
+            settings = {sides: options};
+        }
+        else {
+            settings = options || {};
+        }
 
-            // Build configuration from defaults and given settings
-            config = {
-                container: settings.container || metadata.container || withinViewport.defaults.container || document.body,
-                sides: settings.sides || metadata.sides || withinViewport.defaults.sides || 'all',
-                top: settings.top || metadata.top || withinViewport.defaults.top || 0,
-                right: settings.right || metadata.right || withinViewport.defaults.right || 0,
-                bottom: settings.bottom || metadata.bottom || withinViewport.defaults.bottom || 0,
-                left: settings.left || metadata.left || withinViewport.defaults.left || 0
+        // Build configuration from defaults and given settings
+        config.container = settings.container || metadata.container || withinViewport.defaults.container || document.body;
+        config.sides = settings.sides || metadata.sides || withinViewport.defaults.sides || 'all';
+        config.top = settings.top || metadata.top || withinViewport.defaults.top || 0;
+        config.right = settings.right || metadata.right || withinViewport.defaults.right || 0;
+        config.bottom = settings.bottom || metadata.bottom || withinViewport.defaults.bottom || 0;
+        config.left = settings.left || metadata.left || withinViewport.defaults.left || 0;
+
+        // Whether we can use the `<html`> element for `scrollTop`
+        // Unfortunately at the moment I can't find a way to do this without UA-sniffing
+        useHtmlElem = !/Chrome/.test(navigator.userAgent);
+
+        // Element testing methods
+        isWithin = {
+            // Element is below the top edge of the viewport
+            top: function _isWithin_top() {
+                return elemOffset[1] >= scrollOffset[1] + config.top;
             },
 
-            // Whether we can use the `<html`> element for `scrollTop`
-            // Unfortunately at the moment I can't find a way to do this without UA-sniffing
-            useHtmlElem = !/Chrome/.test(navigator.userAgent),
+            // Element is to the left of the right edge of the viewport
+            right: function _isWithin_right() {
+                var container = (config.container === document.body) ? window : config.container;
 
-            // Element testing methods
-            isWithin = {
-                // Element is below the top edge of the viewport
-                top: function() {
-                    return elemOffset[1] >= scrollOffset[1] + config.top;
-                },
+                return elemOffset[0] + elem.offsetWidth <= container.innerWidth + scrollOffset[0] - config.right;
+            },
 
-                // Element is to the left of the right edge of the viewport
-                right: function() {
-                    var container = (config.container === document.body) ? window : config.container;
+            // Element is above the bottom edge of the viewport
+            bottom: function _isWithin_bottom() {
+                var container = (config.container === document.body) ? window : config.container;
 
-                    return elemOffset[0] + elem.offsetWidth <= container.innerWidth + scrollOffset[0] - config.right;
-                },
+                return elemOffset[1] + elem.offsetHeight <= scrollOffset[1] + container.innerHeight - config.bottom;
+            },
 
-                // Element is above the bottom edge of the viewport
-                bottom: function() {
-                    var container = (config.container === document.body) ? window : config.container;
+            // Element is to the right of the left edge of the viewport
+            left: function _isWithin_left() {
+                return elemOffset[0] >= scrollOffset[0] + config.left;
+            },
 
-                    return elemOffset[1] + elem.offsetHeight <= scrollOffset[1] + container.innerHeight - config.bottom;
-                },
+            all: function _isWithin_all() {
+                return (isWithin.top() && isWithin.right() && isWithin.bottom() && isWithin.left());
+            }
+        };
 
-                // Element is to the right of the left edge of the viewport
-                left: function() {
-                    return elemOffset[0] >= scrollOffset[0] + config.left;
-                },
+        // Current offset values
+        scrollOffset = (function _scrollOffset() {
+            var x = config.container.scrollLeft,
+                y = config.container.scrollTop;
 
-                all: function() {
-                    return (isWithin.top() && isWithin.right() && isWithin.bottom() && isWithin.left());
+            if (y === 0) {
+                if (config.container.pageYOffset) {
+                    y = config.container.pageYOffset;
                 }
-            },
-
-            // Current offset values
-            scrollOffset = (function() {
-                var x = config.container.scrollLeft,
-                    y = config.container.scrollTop;
-
-                if (y === 0) {
-                    if (config.container.pageYOffset) {
-                        y = config.container.pageYOffset;
-                    }
-                    else if (window.pageYOffset) {
-                        y = window.pageYOffset;
-                    }
-                    else {
-                        if (config.container === document.body) {
-                            if (useHtmlElem) {
-                                y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
-                            }
-                            else {
-                                y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
-                            }
+                else if (window.pageYOffset) {
+                    y = window.pageYOffset;
+                }
+                else {
+                    if (config.container === document.body) {
+                        if (useHtmlElem) {
+                            y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
                         }
                         else {
                             y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
                         }
                     }
-                }
-
-                if (x === 0) {
-                    if (config.container.pageXOffset) {
-                        x = config.container.pageXOffset;
+                    else {
+                        y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
                     }
-                    else if (window.pageXOffset) {
-                        x = window.pageXOffset;
+                }
+            }
+
+            if (x === 0) {
+                if (config.container.pageXOffset) {
+                    x = config.container.pageXOffset;
+                }
+                else if (window.pageXOffset) {
+                    x = window.pageXOffset;
+                }
+                else {
+                    if (config.container === document.body) {
+                        x = (config.container.parentElement) ? config.container.parentElement.scrollLeft : 0;
                     }
                     else {
-                        if (config.container === document.body) {
-                            x = (config.container.parentElement) ? config.container.parentElement.scrollLeft : 0;
-                        }
-                        else {
-                            x = (config.container.parentElement) ? config.container.parentElement.scrollLeft : 0;
-                        }
+                        x = (config.container.parentElement) ? config.container.parentElement.scrollLeft : 0;
                     }
                 }
+            }
 
-                return [x, y];
-            }()),
+            return [x, y];
+        }());
 
-            elemOffset = (function() {
-                var el = elem,
-                    x = 0,
-                    y = 0;
+        elemOffset = (function _elemOffset() {
+            var el = elem,
+                x = 0,
+                y = 0;
 
-                if (el.parentNode) { // offsetParent
-                    x = el.offsetLeft;
-                    y = el.offsetTop;
+            if (el.parentNode) {
+                x = el.offsetLeft;
+                y = el.offsetTop;
 
-                    while (el = el.parentNode) { // offsetParent
-                        if (el == config.container) {
-                            break;
-                        }
-
-                        x += el.offsetLeft;
-                        y += el.offsetTop;
+                el = el.parentNode;
+                while (el) {
+                    if (el == config.container) {
+                        break;
                     }
+
+                    x += el.offsetLeft;
+                    y += el.offsetTop;
+
+                    el = el.parentNode;
                 }
+            }
 
-                return [x, y];
-            })(),
-
-            // Return value
-            result = false,
-
-            // Temporary variables for looping
-            arr, i, side;
+            return [x, y];
+        })();
 
         // Test the element against each side of the viewport that was requested
         arr = config.sides.split(' ');

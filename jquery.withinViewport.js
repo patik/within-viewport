@@ -7,7 +7,7 @@
  * @date        2014-03-03
  */
 
-(function($, window, undefined) {
+(function($) {
     /**
      * $.withinViewport()
      * @description          jQuery method
@@ -44,53 +44,66 @@
     // Shorthand jQuery methods
     //
     $.fn.withinViewportTop = function(settings) {
+        var opts;
+
         if (typeof settings === "string") { settings = {sides: settings}; }
 
-        var opts = $.extend({}, settings, {sides: "top"}), elems = [];
+        opts = $.extend({}, settings, {sides: "top"}), elems = [];
 
         this.each(function() {
             if (withinViewport(this, opts)) {
                 elems.push(this);
             }
         });
+
         return $(elems);
     };
 
     $.fn.withinViewportRight = function(settings) {
+        var opts;
+
         if (typeof settings === "string") { settings = {sides: settings}; }
 
-        var opts = $.extend({}, settings, {sides: "right"}), elems = [];
+        opts = $.extend({}, settings, {sides: "right"}), elems = [];
 
         this.each(function() {
             if (withinViewport(this, opts)) {
               elems.push(this);
             }
         });
+
         return $(elems);
     };
 
     $.fn.withinViewportBottom = function(settings) {
+        var opts;
+
         if (typeof settings === "string") { settings = {sides: settings}; }
 
-        var opts = $.extend({}, settings, {sides: "bottom"}), elems = [];
+        opts = $.extend({}, settings, {sides: "bottom"}), elems = [];
 
         this.each(function() {
             if (withinViewport(this, opts)) {
                 elems.push(this);
             }
         });
+
         return $(elems);
     };
 
     $.fn.withinViewportLeft = function(settings) {
+        var opts;
+
         if (typeof settings === "string") { settings = {sides: settings}; }
-        var opts = $.extend({}, settings, {sides: "left"}), elems = [];
+
+        opts = $.extend({}, settings, {sides: "left"}), elems = [];
 
         this.each(function() {
             if (withinViewport(this, opts)) {
                 elems.push(this);
             }
         });
+
         return $(elems);
     };
 
@@ -114,4 +127,4 @@
         //     return withinViewport(element, {sides:'top left', top: 45, left: 45});
         // }
     });
-}(jQuery, window));
+}(jQuery));
