@@ -4,14 +4,14 @@
  * @description Determines whether an element is completely
  *              within the browser viewport
  * @author      Craig Patik, http://patik.com/
- * @version     0.0.3
- * @date        2014-03-03
+ * @version     0.0.4
+ * @date        2014-07-05
  */
 ;(function() {
     /**
-     * withinViewport
-     * @param  {Object} [elem]      DOM Element, required
-     * @param  {Object} [options]   Optional settings
+     * Determines whether an element is within the viewport
+     * @param  {Object}  elem       DOM Element (required)
+     * @param  {Object}  options    Optional settings
      * @return {Boolean}            Whether the element was completely within the viewport
     */
     var withinViewport = function _withinViewport(elem, options) {
@@ -20,7 +20,7 @@
             config = {},
             settings, useHtmlElem, isWithin, scrollOffset, elemOffset, arr, i, side;
 
-        if (elem instanceof jQuery) {
+        if (typeof jQuery !== 'undefined' && elem instanceof jQuery) {
             elem = elem.get(0);
         }
 
@@ -213,4 +213,4 @@
     withinViewport.prototype.left = function _withinViewport_left(element) {
         return withinViewport(element, 'left');
     };
-})();
+}());
