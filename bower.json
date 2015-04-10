@@ -1,6 +1,6 @@
 {
     "name": "within-viewport",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "homepage": "http://patik.github.io/within-viewport/",
     "authors": [
         "Craig Patik <craig@patik.com>"
@@ -27,8 +27,6 @@
         "node_modules",
         "bower.json",
         "bower_components",
-        "demo",
-        "index.html",
-        "notes.md"
+        "demo"
     ]
 }

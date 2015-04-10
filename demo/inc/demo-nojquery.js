@@ -137,7 +137,7 @@ var wvdemo = (function($) {
         }
 
         // Update the page
-        withinViewport.defaults[id] = val;
+        withinviewport.defaults[id] = val;
         updateBoxes();
         toggleBoundaryToggle();
     }
@@ -257,7 +257,7 @@ var wvdemo = (function($) {
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
         $boxes.forEach(function(box) {
-            if (withinViewport(box)) {
+            if (withinviewport(box)) {
                 box.innerHTML = 'in';
                 box.setAttribute('aria-hidden', 'false');
                 box.classList.add('inview');

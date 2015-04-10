@@ -93,7 +93,7 @@
         }
 
         // Update the page
-        withinViewport.defaults[id] = val;
+        withinviewport.defaults[id] = val;
         wvdemo.updateBoxes();
         wvdemo.toggleBoundaryToggle();
       },
@@ -186,9 +186,9 @@
         .html("out")
         .attr("aria-hidden", "true")
         .removeClass("inview");
-      // Then run withinViewport() on them to reveal which ones are inside
+      // Then run withinviewport() on them to reveal which ones are inside
       wvdemo.$boxes
-        .withinViewport()
+        .withinviewport()
           .html("in")
           .attr("aria-hidden", "false")
           .addClass("inview");

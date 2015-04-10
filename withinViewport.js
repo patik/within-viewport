@@ -1,13 +1,28 @@
 /**
  * Within Viewport
  *
- * @description Determines whether an element is completely
- *              within the browser viewport
+ * @description Determines whether an element is completely within the browser viewport
  * @author      Craig Patik, http://patik.com/
- * @version     0.0.4
- * @date        2014-07-05
+ * @version     0.1.0
+ * @date        2015-04-10
  */
-;(function() {
+(function (root, name, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    }
+    else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    }
+    else {
+        // Browser globals (root is window)
+        root[name] = factory();
+    }
+}(this, 'withinviewport', function () {
+
     /**
      * Determines whether an element is within the viewport
      * @param  {Object}  elem       DOM Element (required)
@@ -187,9 +202,6 @@
 
     withinViewport.defaults = withinViewport.prototype.defaults;
 
-    // Make function available globally
-    window.withinViewport = withinViewport;
-
     /**
      * Optional enhancements and shortcuts
      *
@@ -213,4 +225,6 @@
     withinViewport.prototype.left = function _withinViewport_left(element) {
         return withinViewport(element, 'left');
     };
-}());
+
+    return withinViewport;
+}));
