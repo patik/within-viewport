@@ -18,7 +18,13 @@
     // Browser global
     else {
         root[name] = factory();
-        root.withinViewport = factory();
+
+        // Legacy support for camelCase naming
+        // DEPRECATED: will be removed in v1.0
+        root.withinViewport = function (a, b) {
+            try { console.warn('DEPRECATED: use lowercase `withinviewport()` instead'); } catch(e) { }
+            return withinviewport(a, b);
+        };
         root.withinViewport.defaults = factory().defaults;
     }
 }(this, 'withinviewport', function () {
