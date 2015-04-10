@@ -2,7 +2,44 @@
 
 ***Determine whether elements are within the viewport***
 
-Includes both a standalone, plain JavaScript function and a jQuery plugin with handy selectors and shorthand methods. Both versions are equally functional.
+Includes:
+    - A standalone, plain JavaScript function, `withinviewport()`
+    - AMD and Node/CommonJS support
+    - Optional jQuery plugin with handy selectors and shorthand methods
+
+All versions are equally functional.
+
+## Installation
+
+### AMD, Node.js, CommonJS
+
+NPM:
+
+`npm install withinviewport`
+
+Bower:
+
+`bower install within-viewport`
+
+And then:
+
+`var withinviewport = require('withinviewport');`
+
+### Traditional include
+
+Standalone (no jQuery):
+
+```js
+<script src="withinviewport.js"></script>
+```
+
+jQuery plugin:
+
+```js
+<script src="withinviewport.js"></script>
+<script src="jquery.js"></script>
+<script src="jquery.withinviewport.js"></script>
+```
 
 ## Usage
 
@@ -10,7 +47,7 @@ Includes both a standalone, plain JavaScript function and a jQuery plugin with h
 
 ```js
 // Returns true if the element is entirely within view
-var elem = document.getElementById("#myElement");
+var elem = document.getElementById('#myElement');
 withinViewport(elem);
 ```
 
@@ -18,7 +55,7 @@ withinViewport(elem);
 
 ```js
 // Test against only some sides of the viewport for faster performance
-withinViewport(elem, {sides: "left"});
+withinViewport(elem, {sides: 'left'});
 ```
 
 ```js
@@ -33,21 +70,11 @@ For more options, see [Settings](#settings) section below.
 
 ```js
 // These will use the default thresholds; see 'Settings' section below
-withinViewport(elem, "bottom right");
+withinViewport(elem, 'bottom right');
 withinViewport.left(elem);
 ```
 
 ## jQuery plugin
-
-### Include
-
-The scripts must be included in this order:
-
-```html
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="withinViewport.js"></script>
-<script src="jquery.withinViewport.js"></script>
-```
 
 ### Usage
 
@@ -55,12 +82,12 @@ The scripts must be included in this order:
 
 ```js
 // Returns true if the element is entirely within the viewport
-$("#myElement").is(":within-viewport");
+$('#myElement').is(':within-viewport');
 ```
 
 ```js
 // Returns a jQuery object of all <div>s that are within the viewport
-$("div").withinViewport();
+$('div').withinViewport();
 ```
 
 #### Advanced
@@ -70,17 +97,17 @@ There are shorthand selectors and methods for testing against only one edge of t
 ```js
 // Returns true if the element is within the left edge of the viewport
 // Also works with 'top', 'right', and 'bottom'
-$("#myElement").is(":within-viewport-left");
+$('#myElement').is(':within-viewport-left');
 ```
 
 ```js
 // Returns a jQuery collection of all <div>s within the left edge of the viewport
-$("div").withinViewportLeft();
+$('div').withinViewportLeft();
 ```
 
 ```js
 // Same as above, but only elements that are at least 12px inside the left edge
-$("div").withinViewportLeft({left: 12});
+$('div').withinViewportLeft({left: 12});
 ```
 
 These shortcuts will result in slightly better performance if you're testing hundreds or thousands of elements.
@@ -90,16 +117,16 @@ These shortcuts will result in slightly better performance if you're testing hun
 If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. Instead of `scroll`, I recommend using [James Padolsey's `scrollStop` event](http://james.padolsey.com/javascript/special-scroll-events-for-jquery/) since firing on every `window.scroll` event will [bring your UI to its knees](http://ejohn.org/blog/learning-from-twitter/).
 
 ```js
-$(window).bind("resize scrollStop", function() {
+$(window).bind('resize scrollStop', function() {
   // Your code here...
 
   // Example:
-  $("div")
+  $('div')
     // Declare all divs out of the viewport...
-    .removeClass("within-viewport");
+    .removeClass('within-viewport');
     // Then filter them to reveal which ones are still within it
-    .filter(":within-viewport")
-      .addClass("within-viewport");
+    .filter(':within-viewport')
+      .addClass('within-viewport');
 });
 ```
 
@@ -120,14 +147,14 @@ withinView.defaults.top = 100;
 If you only care about some edges of the viewport, you can specify them to improve performance:
 
 ```js
-withinView.defaults.sides = "left bottom";
+withinView.defaults.sides = 'left bottom';
 ```
 
 You can also pass settings on the fly to temporarily override the defaults:
 
 ```js
-withinViewport(elem, {sides:"left bottom", left: 40});
-$("div").withinViewport({sides:"left bottom", left: 40});
+withinViewport(elem, {sides:'left bottom', left: 40});
+$('div').withinViewport({sides:'left bottom', left: 40});
 ```
 
 Individual elements may have their own settings embedded in a `data` attribute using object notation. These will override both the defaults any any settings passed to the function on the fly (like the example above).

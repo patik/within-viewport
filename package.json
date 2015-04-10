@@ -14,13 +14,15 @@
         "within-viewport",
         "browser",
         "detect",
-        "viewport",
-        "scroll",
+        "event",
         "infinite-scroll",
-        "view"
+        "scroll",
+        "view",
+        "viewport",
+        "window"
     ],
     "author": "Craig Patik <craig@patik.com> (http://patik.com)",
-    "license": "ISC",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/patik/within-viewport/issues"
     },
