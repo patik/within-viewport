@@ -1,14 +1,15 @@
 // Demo code
-var wvdemo = (function($) {
-    var $boxes = null,
-        showBoundsCheck = null;
+var wvdemo = (function ($) {
+    var $boxes = null;
+    var showBoundsCheck = null;
 
     function init() {
-        var boxCount = 100,
-            boxWidth = 20,
-            boxHTML = '',
-            boxContainer,
-            elem, i;
+        var boxCount = 100;
+        var boxWidth = 20;
+        var boxHTML = '';
+        var boxContainer;
+        var elem;
+        var i;
 
         // Make sure the demo will be wider than the device's screen so that vertical scroll bars appear
         //    but not so wide that you can't see at least four on screen at a time with a maximized browser window
@@ -55,31 +56,31 @@ var wvdemo = (function($) {
     }
 
     function show(selector) {
-        query(selector).forEach(function(elem) {
+        query(selector).forEach(function (elem) {
             elem.style.display = 'block';
         });
     }
 
     function hide(selector) {
-        query(selector).forEach(function(elem) {
+        query(selector).forEach(function (elem) {
             elem.style.display = 'none';
         });
     }
 
     function trigger(node, eventName) {
-        var event;
+        var evt;
 
         if (document.createEvent) {
-            event = document.createEvent('HTMLEvents');
-            event.initEvent(eventName, true, true);
-            event.eventName = eventName;
-            element.dispatchEvent(event);
+            evt = document.createEvent('HTMLEvents');
+            evt.initEvent(eventName, true, true);
+            evt.eventName = eventName;
+            node.dispatchEvent(evt);
         }
         else {
-            event = document.createEventObject();
-            event.eventType = eventName;
-            event.eventName = eventName;
-            element.fireEvent('on' + event.eventType, event);
+            evt = document.createEventObject();
+            evt.eventType = eventName;
+            evt.eventName = eventName;
+            node.fireEvent('on' + evt.eventType, evt);
         }
     }
 
@@ -94,7 +95,7 @@ var wvdemo = (function($) {
         window.addEventListener('scroll', updateBoxes);
 
         // User entry
-        query('input[type="number"]').forEach(function(elem) {
+        query('input[type="number"]').forEach(function (elem) {
             elem.addEventListener('keyup', onBoundaryChange);
             elem.addEventListener('change', onBoundaryChange);
             elem.addEventListener('click', onBoundaryChange); // 'click' is for spinners on input[number] control
@@ -117,15 +118,15 @@ var wvdemo = (function($) {
 
     // When a boundary value changes
     function onBoundaryChange(evt) {
-        var val = parseInt(evt.target.value, 10),
-            id = evt.target.id;
+        var val = parseInt(evt.target.value, 10);
+        var id = evt.target.id;
 
         // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
         if (val > 0) {
             if (showBoundsCheck.checked) {
                 show('.boundary-' + id);
 
-                wvdemo.drawBound(id, val);
+                drawBound(id, val);
             }
             else {
                 hide('.boundary-' + id);
@@ -137,17 +138,17 @@ var wvdemo = (function($) {
         }
 
         // Update the page
-        withinViewport.defaults[id] = val;
+        withinviewport.defaults[id] = val;
         updateBoxes();
         toggleBoundaryToggle();
     }
 
     // When the boundary toggle box is checked/unchecked
-    function onBoundaryToggle() {
+    function onBoundaryToggle(evt) {
         if (showBoundsCheck.checked) {
             // Fire the change event so onBoundaryChange() will apply any values
-            query('input[type="number"]').forEach(function(elem) {
-                elem.trigger('change');
+            query('input[type="number"]').forEach(function (elem) {
+                trigger(elem, 'change');
             });
 
             toggleBoundaryToggle();
@@ -198,17 +199,17 @@ var wvdemo = (function($) {
     function toggleBoundaryToggle() {
         var somethingEntered = false;
 
-        query('input[type="number"]').forEach(function(elem) {
+        query('input[type="number"]').forEach(function (elem) {
             if (parseInt(elem.value, 10) !== 0) {
                 somethingEntered = true;
             }
         });
 
         if (somethingEntered) {
-            showBoundsCheck.parentNode.slideDown();
+            showBoundsCheck.parentNode.style.display = 'block';
         }
         else {
-            showBoundsCheck.parentNode.slideUp();
+            showBoundsCheck.parentNode.style.display = 'none';
         }
     }
 
@@ -218,7 +219,7 @@ var wvdemo = (function($) {
 
         switch (side) {
             case 'top':
-                query('.boundary-top').forEach(function(elem) {
+                query('.boundary-top').forEach(function (elem) {
                     elem.style.top = dist;
                     elem.style.height = dist;
                     elem.style.marginTop = '-' + dist;
@@ -226,7 +227,7 @@ var wvdemo = (function($) {
                 break;
 
             case 'right':
-                query('.boundary-right').forEach(function(elem) {
+                query('.boundary-right').forEach(function (elem) {
                     elem.style.right = dist;
                     elem.style.width = dist;
                     elem.style.marginRight = '-' + dist;
@@ -234,7 +235,7 @@ var wvdemo = (function($) {
                 break;
 
             case 'bottom':
-                query('.boundary-bottom').forEach(function(elem) {
+                query('.boundary-bottom').forEach(function (elem) {
                     elem.style.bottom = dist;
                     elem.style.height = dist;
                     elem.style.marginBottom = '-' + dist;
@@ -242,7 +243,7 @@ var wvdemo = (function($) {
                 break;
 
             case 'left':
-                query('.boundary-left').forEach(function(elem) {
+                query('.boundary-left').forEach(function (elem) {
                     elem.style.left = dist;
                     elem.style.width = dist;
                     elem.style.marginLeft = '-' + dist;
@@ -256,8 +257,8 @@ var wvdemo = (function($) {
 
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
-        $boxes.forEach(function(box) {
-            if (withinViewport(box)) {
+        $boxes.forEach(function (box) {
+            if (withinviewport(box)) {
                 box.innerHTML = 'in';
                 box.setAttribute('aria-hidden', 'false');
                 box.classList.add('inview');
