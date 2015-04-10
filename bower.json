@@ -21,7 +21,7 @@
         "JavaScript plugin",
         "Developer Tools"
     ],
-    "license": "MIT",
+    "license": "ISC",
     "ignore": [
         "**/.*",
         "node_modules",

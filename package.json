@@ -22,7 +22,7 @@
         "window"
     ],
     "author": "Craig Patik <craig@patik.com> (http://patik.com)",
-    "license": "MIT",
+    "license": "ISC",
     "bugs": {
         "url": "https://github.com/patik/within-viewport/issues"
     },
