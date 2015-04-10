@@ -1,0 +1,28 @@
+{
+    "name": "withinviewport",
+    "version": "0.1.0",
+    "description": "Determine whether an element is completely within the browser viewport",
+    "main": "withinviewport.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/patik/within-viewport.git"
+    },
+    "keywords": [
+        "within-viewport",
+        "browser",
+        "detect",
+        "viewport",
+        "scroll",
+        "infinite-scroll",
+        "view"
+    ],
+    "author": "Craig Patik <craig@patik.com> (http://patik.com)",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/patik/within-viewport/issues"
+    },
+    "homepage": "http://patik.github.io/within-viewport"
+}
