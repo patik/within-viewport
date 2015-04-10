@@ -43,7 +43,7 @@
 
     // Shorthand jQuery methods
     //
-    $.fn.withinviewportTop = function(settings) {
+    $.fn.withinviewporttop = function(settings) {
         var opts;
 
         if (typeof settings === "string") { settings = {sides: settings}; }
@@ -59,7 +59,7 @@
         return $(elems);
     };
 
-    $.fn.withinviewportRight = function(settings) {
+    $.fn.withinviewportright = function(settings) {
         var opts;
 
         if (typeof settings === "string") { settings = {sides: settings}; }
@@ -75,7 +75,7 @@
         return $(elems);
     };
 
-    $.fn.withinviewportBottom = function(settings) {
+    $.fn.withinviewportbottom = function(settings) {
         var opts;
 
         if (typeof settings === "string") { settings = {sides: settings}; }
@@ -91,7 +91,7 @@
         return $(elems);
     };
 
-    $.fn.withinviewportLeft = function(settings) {
+    $.fn.withinviewportleft = function(settings) {
         var opts;
 
         if (typeof settings === "string") { settings = {sides: settings}; }
