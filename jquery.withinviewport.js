@@ -1,24 +1,29 @@
+/*global withinviewport: true */
 /**
  * Within Viewport jQuery Plugin
  *
- * @description Companion plugin for withinviewport.js
+ * @description Companion plugin for withinviewport.js - determines whether an element is completely within the browser viewport
  * @author      Craig Patik, http://patik.com/
  * @version     0.1.0
  * @date        2015-04-10
  */
-(function($) {
+(function ($) {
     /**
      * $.withinviewport()
      * @description          jQuery method
      * @param  {Object}      [settings] optional settings
      * @return {Collection}  Contains all elements that were within the viewport
     */
-    $.fn.withinviewport = function(settings) {
-        if (typeof settings === "string") { settings = {sides: settings}; }
+    $.fn.withinviewport = function (settings) {
+        var opts;
+        var elems;
 
-        var opts = $.extend({}, settings, {sides: "all"}), elems = [];
+        if (typeof settings === 'string') { settings = {sides: settings}; }
 
-        this.each(function() {
+        opts = $.extend({}, settings, {sides: 'all'});
+        elems = [];
+
+        this.each(function () {
             if (withinviewport(this, opts)) {
               elems.push(this);
             }
@@ -28,9 +33,9 @@
     };
 
     // Main custom selector
-    $.extend($.expr[":"], {
-        "within-viewport": function(element) {
-            return withinviewport(element, "all");
+    $.extend($.expr[':'], {
+        'within-viewport': function (element) {
+            return withinviewport(element, 'all');
         }
     });
 
@@ -41,15 +46,17 @@
      */
 
     // Shorthand jQuery methods
-    //
-    $.fn.withinviewporttop = function(settings) {
+
+    $.fn.withinviewporttop = function (settings) {
         var opts;
+        var elems;
 
-        if (typeof settings === "string") { settings = {sides: settings}; }
+        if (typeof settings === 'string') { settings = {sides: settings}; }
 
-        opts = $.extend({}, settings, {sides: "top"}), elems = [];
+        opts = $.extend({}, settings, {sides: 'top'});
+        elems = [];
 
-        this.each(function() {
+        this.each(function () {
             if (withinviewport(this, opts)) {
                 elems.push(this);
             }
@@ -58,14 +65,16 @@
         return $(elems);
     };
 
-    $.fn.withinviewportright = function(settings) {
+    $.fn.withinviewportright = function (settings) {
         var opts;
+        var elems;
 
-        if (typeof settings === "string") { settings = {sides: settings}; }
+        if (typeof settings === 'string') { settings = {sides: settings}; }
 
-        opts = $.extend({}, settings, {sides: "right"}), elems = [];
+        opts = $.extend({}, settings, {sides: 'right'});
+        elems = [];
 
-        this.each(function() {
+        this.each(function () {
             if (withinviewport(this, opts)) {
               elems.push(this);
             }
@@ -74,14 +83,16 @@
         return $(elems);
     };
 
-    $.fn.withinviewportbottom = function(settings) {
+    $.fn.withinviewportbottom = function (settings) {
         var opts;
+        var elems;
 
-        if (typeof settings === "string") { settings = {sides: settings}; }
+        if (typeof settings === 'string') { settings = {sides: settings}; }
 
-        opts = $.extend({}, settings, {sides: "bottom"}), elems = [];
+        opts = $.extend({}, settings, {sides: 'bottom'});
+        elems = [];
 
-        this.each(function() {
+        this.each(function () {
             if (withinviewport(this, opts)) {
                 elems.push(this);
             }
@@ -90,14 +101,16 @@
         return $(elems);
     };
 
-    $.fn.withinviewportleft = function(settings) {
+    $.fn.withinviewportleft = function (settings) {
         var opts;
+        var elems;
 
-        if (typeof settings === "string") { settings = {sides: settings}; }
+        if (typeof settings === 'string') { settings = {sides: settings}; }
 
-        opts = $.extend({}, settings, {sides: "left"}), elems = [];
+        opts = $.extend({}, settings, {sides: 'left'});
+        elems = [];
 
-        this.each(function() {
+        this.each(function () {
             if (withinviewport(this, opts)) {
                 elems.push(this);
             }
@@ -107,22 +120,22 @@
     };
 
     // Custom jQuery selectors
-    $.extend($.expr[":"], {
-        "within-viewport-top": function(element) {
-            return withinviewport(element, "top");
+    $.extend($.expr[':'], {
+        'within-viewport-top': function (element) {
+            return withinviewport(element, 'top');
         },
-        "within-viewport-right": function(element) {
-            return withinviewport(element, "right");
+        'within-viewport-right': function (element) {
+            return withinviewport(element, 'right');
         },
-        "within-viewport-bottom": function(element) {
-            return withinviewport(element, "bottom");
+        'within-viewport-bottom': function (element) {
+            return withinviewport(element, 'bottom');
         },
-        "within-viewport-left": function(element) {
-            return withinviewport(element, "left");
+        'within-viewport-left': function (element) {
+            return withinviewport(element, 'left');
         }
         // Example custom selector:
         //,
-        // "within-viewport-top-left-45": function(element) {
+        // 'within-viewport-top-left-45': function (element) {
         //     return withinviewport(element, {sides:'top left', top: 45, left: 45});
         // }
     });

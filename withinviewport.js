@@ -12,15 +12,12 @@
         define([], factory);
     }
     // Node and CommonJS-like environments
-    else if (typeof exports === 'object') {
+    else if (typeof module !== 'undefined' && typeof exports === 'object') {
         module.exports = factory();
     }
     // Browser global
     else {
         root[name] = factory();
-
-        // Legacy support for camelCase naming
-        // DEPRECATED: will be removed in v1.0
         root.withinViewport = factory();
         root.withinViewport.defaults = factory().defaults;
     }
@@ -32,7 +29,7 @@
      * @param  {Object}  options    Optional settings
      * @return {Boolean}            Whether the element was completely within the viewport
     */
-    var withinviewport = function _withinviewport(elem, options) {
+    var withinviewport = function withinviewport(elem, options) {
         var result = false;
         var metadata = {};
         var config = {};
@@ -45,6 +42,7 @@
         var side;
         var i;
 
+        // If invoked by the jQuery plugin, get the actual DOM element
         if (typeof jQuery !== 'undefined' && elem instanceof jQuery) {
             elem = elem.get(0);
         }
@@ -53,6 +51,7 @@
             throw new Error('First argument must be an element');
         }
 
+        // Look for inline settings on the element
         if (elem.getAttribute('data-withinviewport-settings') && window.JSON) {
             metadata = JSON.parse(elem.getAttribute('data-withinviewport-settings'));
         }
@@ -156,9 +155,9 @@
         }());
 
         elemOffset = (function _elemOffset() {
-            var el = elem,
-                x = 0,
-                y = 0;
+            var el = elem;
+            var x = 0;
+            var y = 0;
 
             if (el.parentNode) {
                 x = el.offsetLeft;
@@ -166,7 +165,7 @@
 
                 el = el.parentNode;
                 while (el) {
-                    if (el == config.container) {
+                    if (el === config.container) {
                         break;
                     }
 

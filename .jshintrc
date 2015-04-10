@@ -1,0 +1,10 @@
+{
+    "browser": true,
+    "strict": false,
+    "globals": {
+        "jQuery": true,
+        "withinviewport": false,
+        "define": true,
+        "module": true
+    }
+}
