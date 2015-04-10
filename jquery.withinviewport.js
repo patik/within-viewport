@@ -6,7 +6,6 @@
  * @version     0.1.0
  * @date        2015-04-10
  */
-
 (function($) {
     /**
      * $.withinviewport()

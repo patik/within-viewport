@@ -7,19 +7,22 @@
  * @date        2015-04-10
  */
 (function (root, name, factory) {
+    // AMD
     if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
         define([], factory);
     }
+    // Node and CommonJS-like environments
     else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
         module.exports = factory();
     }
+    // Browser global
     else {
-        // Browser globals (root is window)
         root[name] = factory();
+
+        // Legacy support for camelCase naming
+        // DEPRECATED: will be removed in v1.0
+        root.withinViewport = factory();
+        root.withinViewport.defaults = factory().defaults;
     }
 }(this, 'withinviewport', function () {
 
@@ -29,11 +32,18 @@
      * @param  {Object}  options    Optional settings
      * @return {Boolean}            Whether the element was completely within the viewport
     */
-    var withinViewport = function _withinViewport(elem, options) {
-        var result = false,
-            metadata = {},
-            config = {},
-            settings, useHtmlElem, isWithin, scrollOffset, elemOffset, arr, i, side;
+    var withinviewport = function _withinviewport(elem, options) {
+        var result = false;
+        var metadata = {};
+        var config = {};
+        var settings;
+        var useHtmlElem;
+        var isWithin;
+        var scrollOffset;
+        var elemOffset;
+        var arr;
+        var side;
+        var i;
 
         if (typeof jQuery !== 'undefined' && elem instanceof jQuery) {
             elem = elem.get(0);
@@ -56,12 +66,12 @@
         }
 
         // Build configuration from defaults and given settings
-        config.container = settings.container || metadata.container || withinViewport.defaults.container || document.body;
-        config.sides = settings.sides || metadata.sides || withinViewport.defaults.sides || 'all';
-        config.top = settings.top || metadata.top || withinViewport.defaults.top || 0;
-        config.right = settings.right || metadata.right || withinViewport.defaults.right || 0;
-        config.bottom = settings.bottom || metadata.bottom || withinViewport.defaults.bottom || 0;
-        config.left = settings.left || metadata.left || withinViewport.defaults.left || 0;
+        config.container = settings.container || metadata.container || withinviewport.defaults.container || document.body;
+        config.sides = settings.sides || metadata.sides || withinviewport.defaults.sides || 'all';
+        config.top = settings.top || metadata.top || withinviewport.defaults.top || 0;
+        config.right = settings.right || metadata.right || withinviewport.defaults.right || 0;
+        config.bottom = settings.bottom || metadata.bottom || withinviewport.defaults.bottom || 0;
+        config.left = settings.left || metadata.left || withinviewport.defaults.left || 0;
 
         // Whether we can use the `<html`> element for `scrollTop`
         // Unfortunately at the moment I can't find a way to do this without UA-sniffing
@@ -100,8 +110,8 @@
 
         // Current offset values
         scrollOffset = (function _scrollOffset() {
-            var x = config.container.scrollLeft,
-                y = config.container.scrollTop;
+            var x = config.container.scrollLeft;
+            var y = config.container.scrollTop;
 
             if (y === 0) {
                 if (config.container.pageYOffset) {
@@ -175,12 +185,14 @@
         i = arr.length;
         while (i--) {
             side = arr[i].toLowerCase();
+
             if (/top|right|bottom|left|all/.test(side)) {
                 if (isWithin[side]()) {
                     result = true;
                 }
                 else {
                     result = false;
+
                     // Quit as soon as the first failure is found
                     break;
                 }
@@ -188,10 +200,10 @@
         }
 
         return result;
-    }; // end of `withinViewport()`
+    };
 
     // Default settings
-    withinViewport.prototype.defaults = {
+    withinviewport.prototype.defaults = {
         container: document.body,
         sides: 'all',
         top: 0,
@@ -200,7 +212,7 @@
         left: 0
     };
 
-    withinViewport.defaults = withinViewport.prototype.defaults;
+    withinviewport.defaults = withinviewport.prototype.defaults;
 
     /**
      * Optional enhancements and shortcuts
@@ -209,22 +221,22 @@
      */
 
     // Shortcut methods for each side of the viewport
-    // Ex: withinViewport.top(elem) is the same as withinViewport(elem, 'top')
-    withinViewport.prototype.top = function _withinViewport_top(element) {
-        return withinViewport(element, 'top');
+    // Example: `withinviewport.top(elem)` is the same as `withinviewport(elem, 'top')`
+    withinviewport.prototype.top = function _withinviewport_top(element) {
+        return withinviewport(element, 'top');
     };
 
-    withinViewport.prototype.right = function _withinViewport_right(element) {
-        return withinViewport(element, 'right');
+    withinviewport.prototype.right = function _withinviewport_right(element) {
+        return withinviewport(element, 'right');
     };
 
-    withinViewport.prototype.bottom = function _withinViewport_bottom(element) {
-        return withinViewport(element, 'bottom');
+    withinviewport.prototype.bottom = function _withinviewport_bottom(element) {
+        return withinviewport(element, 'bottom');
     };
 
-    withinViewport.prototype.left = function _withinViewport_left(element) {
-        return withinViewport(element, 'left');
+    withinviewport.prototype.left = function _withinviewport_left(element) {
+        return withinviewport(element, 'left');
     };
 
-    return withinViewport;
+    return withinviewport;
 }));
