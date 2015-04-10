@@ -13,17 +13,17 @@ All versions are equally functional.
 
 ### AMD, Node.js, CommonJS
 
-NPM:
+#### [NPM](https://www.npmjs.com/package/withinviewport)
 
 `npm install withinviewport`
-
-Bower:
-
-`bower install within-viewport`
 
 And then:
 
 `var withinviewport = require('withinviewport');`
+
+#### Bower:
+
+`bower install within-viewport`
 
 ### Traditional include
 
