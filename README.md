@@ -48,20 +48,20 @@ jQuery plugin:
 ```js
 // Returns true if the element is entirely within view
 var elem = document.getElementById('#myElement');
-withinViewport(elem);
+withinviewport(elem);
 ```
 
 ### Advanced
 
 ```js
 // Test against only some sides of the viewport for faster performance
-withinViewport(elem, {sides: 'left'});
+withinviewport(elem, {sides: 'left'});
 ```
 
 ```js
 // Define your own viewport by specifying thresholds for each side
 // Example: element is at least 12px inside the top and right of the viewport
-withinViewport(elem, {top: 12, right: 12});
+withinviewport(elem, {top: 12, right: 12});
 ```
 
 For more options, see [Settings](#settings) section below.
@@ -70,8 +70,8 @@ For more options, see [Settings](#settings) section below.
 
 ```js
 // These will use the default thresholds; see 'Settings' section below
-withinViewport(elem, 'bottom right');
-withinViewport.left(elem);
+withinviewport(elem, 'bottom right');
+withinviewport.left(elem);
 ```
 
 ## jQuery plugin
@@ -87,7 +87,7 @@ $('#myElement').is(':within-viewport');
 
 ```js
 // Returns a jQuery object of all <div>s that are within the viewport
-$('div').withinViewport();
+$('div').withinviewport();
 ```
 
 #### Advanced
@@ -102,12 +102,12 @@ $('#myElement').is(':within-viewport-left');
 
 ```js
 // Returns a jQuery collection of all <div>s within the left edge of the viewport
-$('div').withinViewportLeft();
+$('div').withinviewportleft();
 ```
 
 ```js
 // Same as above, but only elements that are at least 12px inside the left edge
-$('div').withinViewportLeft({left: 12});
+$('div').withinviewportleft({left: 12});
 ```
 
 These shortcuts will result in slightly better performance if you're testing hundreds or thousands of elements.
@@ -153,8 +153,8 @@ withinView.defaults.sides = 'left bottom';
 You can also pass settings on the fly to temporarily override the defaults:
 
 ```js
-withinViewport(elem, {sides:'left bottom', left: 40});
-$('div').withinViewport({sides:'left bottom', left: 40});
+withinviewport(elem, {sides:'left bottom', left: 40});
+$('div').withinviewport({sides:'left bottom', left: 40});
 ```
 
 Individual elements may have their own settings embedded in a `data` attribute using object notation. These will override both the defaults any any settings passed to the function on the fly (like the example above).
@@ -166,6 +166,8 @@ Individual elements may have their own settings embedded in a `data` attribute u
 You can specify *negative threshold values* to allow elements to reside outside the viewport.
 
 ## What's Next
+
+*Please note that the camel case `withinViewport` method name is deprecated. It will be removed in a future release.*
 
 - Option to **fire events** when elements pass in and out of the viewport
 - Test against Firefox 3.6, Safari 5.0.1
@@ -198,7 +200,7 @@ Within Viewport is inspired by these similar utilities which only reflect whethe
 
 ## License
 
-Have fun with it &mdash; BSD, MIT, or GPL; see included LICENSE file
+Have fun with it &mdash; [ISC](http://choosealicense.com/licenses/isc/). See included LICENSE file.
 
 ## Author
 
