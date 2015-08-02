@@ -35,7 +35,7 @@
      * @param  {Object}  options    Optional settings
      * @return {Boolean}            Whether the element was completely within the viewport
     */
-    var withinviewport = function withinviewport(elem, options) {
+    var withinviewport = function withinviewport (elem, options) {
         var result = false;
         var metadata = {};
         var config = {};
@@ -43,7 +43,7 @@
         var useHtmlElem;
         var isWithin;
         var scrollOffset;
-        var elemOffset;
+        var elemBoundingRect;
         var arr;
         var side;
         var i;
@@ -86,30 +86,36 @@
         isWithin = {
             // Element is below the top edge of the viewport
             top: function _isWithin_top() {
-                return elemOffset[1] >= scrollOffset[1] + config.top;
+                return elemBoundingRect.top >= config.top;
             },
 
             // Element is to the left of the right edge of the viewport
             right: function _isWithin_right() {
                 var container = (config.container === document.body) ? window : config.container;
 
-                return elemOffset[0] + elem.offsetWidth <= container.innerWidth + scrollOffset[0] - config.right;
+                // `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's (far) right edge
+                return elemBoundingRect.right <= container.innerWidth - config.right;
             },
 
             // Element is above the bottom edge of the viewport
             bottom: function _isWithin_bottom() {
                 var container = (config.container === document.body) ? window : config.container;
 
-                return elemOffset[1] + elem.offsetHeight <= scrollOffset[1] + container.innerHeight - config.bottom;
+                // `elemBoundingRect.bottom` is the distance from the *top* of the viewport to the element's bottom edge
+                return elemBoundingRect.bottom <= container.innerHeight - config.bottom;
             },
 
             // Element is to the right of the left edge of the viewport
             left: function _isWithin_left() {
-                return elemOffset[0] >= scrollOffset[0] + config.left;
+                return elemBoundingRect.left >= config.left;
             },
 
             all: function _isWithin_all() {
-                return (isWithin.top() && isWithin.right() && isWithin.bottom() && isWithin.left());
+                // Test in order of most efficient and most likely to return false so we can avoid running all four functions much of the time
+                // Top: Quickest to calculate + most likely to be false
+                // Bottom: Note quite as quick to calculate, but also very likely to be false
+                // Left and right are both equally unlikely since most sites only scroll vertically, but left is faster
+                return (isWithin.top() && isWithin.bottom() && isWithin.left() && isWithin.right());
             }
         };
 
@@ -160,30 +166,32 @@
             return [x, y];
         }());
 
-        elemOffset = (function _elemOffset() {
-            var el = elem;
-            var x = 0;
-            var y = 0;
+        elemBoundingRect = elem.getBoundingClientRect();
 
-            if (el.parentNode) {
-                x = el.offsetLeft;
-                y = el.offsetTop;
+        // elemOffset = (function _elemOffset() {
+        //     var el = elem;
+        //     var x = 0;
+        //     var y = 0;
 
-                el = el.parentNode;
-                while (el) {
-                    if (el === config.container) {
-                        break;
-                    }
+        //     if (el.parentNode) {
+        //         x = el.offsetLeft;
+        //         y = el.offsetTop;
 
-                    x += el.offsetLeft;
-                    y += el.offsetTop;
+        //         el = el.parentNode;
+        //         while (el) {
+        //             if (el === config.container) {
+        //                 break;
+        //             }
 
-                    el = el.parentNode;
-                }
-            }
+        //             x += el.offsetLeft;
+        //             y += el.offsetTop;
 
-            return [x, y];
-        })();
+        //             el = el.parentNode;
+        //         }
+        //     }
+
+        //     return [x, y];
+        // })();
 
         // Test the element against each side of the viewport that was requested
         arr = config.sides.split(' ');
