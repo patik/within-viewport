@@ -86,7 +86,7 @@
             right: function _isWithin_right () {
                 var containerWidth;
 
-                if (canUseWindowDimensions) {
+                if (canUseWindowDimensions || config.container !== window) {
                     containerWidth = config.container.innerWidth;
                 }
                 else {
@@ -101,7 +101,7 @@
             bottom: function _isWithin_bottom () {
                 var containerHeight;
 
-                if (canUseWindowDimensions) {
+                if (canUseWindowDimensions || config.container !== window) {
                     containerHeight = config.container.innerHeight;
                 }
                 else {
