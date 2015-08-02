@@ -42,9 +42,9 @@
         var settings;
         var useHtmlElem;
         var isWithin;
-        var scrollOffset;
         var elemBoundingRect;
-        var arr;
+        var sideNamesPattern;
+        var sides;
         var side;
         var i;
 
@@ -72,11 +72,11 @@
 
         // Build configuration from defaults and given settings
         config.container = settings.container || metadata.container || withinviewport.defaults.container || document.body;
-        config.sides = settings.sides || metadata.sides || withinviewport.defaults.sides || 'all';
-        config.top = settings.top || metadata.top || withinviewport.defaults.top || 0;
-        config.right = settings.right || metadata.right || withinviewport.defaults.right || 0;
+        config.sides  = settings.sides  || metadata.sides  || withinviewport.defaults.sides  || 'all';
+        config.top    = settings.top    || metadata.top    || withinviewport.defaults.top    || 0;
+        config.right  = settings.right  || metadata.right  || withinviewport.defaults.right  || 0;
         config.bottom = settings.bottom || metadata.bottom || withinviewport.defaults.bottom || 0;
-        config.left = settings.left || metadata.left || withinviewport.defaults.left || 0;
+        config.left   = settings.left   || metadata.left   || withinviewport.defaults.left   || 0;
 
         // Whether we can use the `<html`> element for `scrollTop`
         // Unfortunately at the moment I can't find a way to do this without UA-sniffing
@@ -93,7 +93,7 @@
             right: function _isWithin_right() {
                 var container = (config.container === document.body) ? window : config.container;
 
-                // `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's (far) right edge
+                // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
                 return elemBoundingRect.right <= container.innerWidth - config.right;
             },
 
@@ -101,7 +101,7 @@
             bottom: function _isWithin_bottom() {
                 var container = (config.container === document.body) ? window : config.container;
 
-                // `elemBoundingRect.bottom` is the distance from the *top* of the viewport to the element's bottom edge
+                // Note that `elemBoundingRect.bottom` is the distance from the *top* of the viewport to the element's bottom edge
                 return elemBoundingRect.bottom <= container.innerHeight - config.bottom;
             },
 
@@ -110,96 +110,28 @@
                 return elemBoundingRect.left >= config.left;
             },
 
+            // Element is within all four boundaries
             all: function _isWithin_all() {
-                // Test in order of most efficient and most likely to return false so we can avoid running all four functions much of the time
+                // Test each boundary in order of most efficient and most likely to be false so that we can avoid running all four functions on most elements
                 // Top: Quickest to calculate + most likely to be false
                 // Bottom: Note quite as quick to calculate, but also very likely to be false
-                // Left and right are both equally unlikely since most sites only scroll vertically, but left is faster
+                // Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster
                 return (isWithin.top() && isWithin.bottom() && isWithin.left() && isWithin.right());
             }
         };
 
-        // Current offset values
-        scrollOffset = (function _scrollOffset() {
-            var x = config.container.scrollLeft;
-            var y = config.container.scrollTop;
-
-            if (y === 0) {
-                if (config.container.pageYOffset) {
-                    y = config.container.pageYOffset;
-                }
-                else if (window.pageYOffset) {
-                    y = window.pageYOffset;
-                }
-                else {
-                    if (config.container === document.body) {
-                        if (useHtmlElem) {
-                            y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
-                        }
-                        else {
-                            y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
-                        }
-                    }
-                    else {
-                        y = (config.container.parentElement) ? config.container.parentElement.scrollTop : 0;
-                    }
-                }
-            }
-
-            if (x === 0) {
-                if (config.container.pageXOffset) {
-                    x = config.container.pageXOffset;
-                }
-                else if (window.pageXOffset) {
-                    x = window.pageXOffset;
-                }
-                else {
-                    if (config.container === document.body) {
-                        x = (config.container.parentElement) ? config.container.parentElement.scrollLeft : 0;
-                    }
-                    else {
-                        x = (config.container.parentElement) ? config.container.parentElement.scrollLeft : 0;
-                    }
-                }
-            }
-
-            return [x, y];
-        }());
-
+        // Get the element's bounding rectangle with respect to the viewport
         elemBoundingRect = elem.getBoundingClientRect();
 
-        // elemOffset = (function _elemOffset() {
-        //     var el = elem;
-        //     var x = 0;
-        //     var y = 0;
-
-        //     if (el.parentNode) {
-        //         x = el.offsetLeft;
-        //         y = el.offsetTop;
-
-        //         el = el.parentNode;
-        //         while (el) {
-        //             if (el === config.container) {
-        //                 break;
-        //             }
-
-        //             x += el.offsetLeft;
-        //             y += el.offsetTop;
-
-        //             el = el.parentNode;
-        //         }
-        //     }
-
-        //     return [x, y];
-        // })();
-
         // Test the element against each side of the viewport that was requested
-        arr = config.sides.split(' ');
-        i = arr.length;
+        sideNamesPattern = /^top$|^right$|^bottom$|^left$|^all$/;
+        // Loop through all of the sides
+        sides = config.sides.split(' ');
+        i = sides.length;
         while (i--) {
-            side = arr[i].toLowerCase();
+            side = sides[i].toLowerCase();
 
-            if (/top|right|bottom|left|all/.test(side)) {
+            if (sideNamesPattern.test(side)) {
                 if (isWithin[side]()) {
                     result = true;
                 }
