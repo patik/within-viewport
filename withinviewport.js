@@ -78,7 +78,7 @@
         config.left   = settings.left   || metadata.left   || withinviewport.defaults.left   || 0;
 
         // Use the window as the container if the user specified the body or a non-element
-        if (!(config.container instanceof HTMLElement) || config.container === document.body) {
+        if (config.container === document.body || !config.container.nodeType === 1) {
             config.container = window;
         }
 
