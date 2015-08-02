@@ -18,16 +18,9 @@
     // Browser global
     else {
         root[name] = factory();
-
-        // Legacy support for camelCase naming
-        // DEPRECATED: will be removed in v1.0
-        root.withinViewport = function (a, b) {
-            try { console.warn('DEPRECATED: use lowercase `withinviewport()` instead'); } catch(e) { }
-            return withinviewport(a, b);
-        };
-        root.withinViewport.defaults = factory().defaults;
     }
 }(this, 'withinviewport', function () {
+    var canUseWindowDimensions = window.innerHeight !== undefined; // IE 8 and lower fail this
 
     /**
      * Determines whether an element is within the viewport
@@ -91,14 +84,32 @@
 
             // Element is to the left of the right edge of the viewport
             right: function _isWithin_right () {
+                var containerWidth;
+
+                if (canUseWindowDimensions) {
+                    containerWidth = config.container.innerWidth;
+                }
+                else {
+                    containerWidth = document.documentElement.clientWidth;
+                }
+
                 // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
-                return elemBoundingRect.right <= config.container.innerWidth - config.right;
+                return elemBoundingRect.right <= containerWidth - config.right;
             },
 
             // Element is above the bottom edge of the viewport
             bottom: function _isWithin_bottom () {
+                var containerHeight;
+
+                if (canUseWindowDimensions) {
+                    containerHeight = config.container.innerHeight;
+                }
+                else {
+                    containerHeight = document.documentElement.clientHeight;
+                }
+
                 // Note that `elemBoundingRect.bottom` is the distance from the *top* of the viewport to the element's bottom edge
-                return elemBoundingRect.bottom <= config.container.innerHeight - config.bottom;
+                return elemBoundingRect.bottom <= containerHeight - config.bottom;
             },
 
             // Element is to the right of the left edge of the viewport
