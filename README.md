@@ -165,13 +165,20 @@ Individual elements may have their own settings embedded in a `data` attribute u
 
 You can specify *negative threshold values* to allow elements to reside outside the viewport.
 
+## Browser Support
+
+- IE 7 and higher
+- All the others except Opera Mini
+    + Tested in the latest stable Chrome, Firefox, Safari, and IE
+    + No "new" JavaScript or quirky techniques are employed so it should work in all other modern browsers not specifically mentioned above
+
 ## What's Next
 
 *Please note that the camel case `withinViewport` method name is deprecated. It will be removed in a future release.*
 
 - Option to **fire events** when elements pass in and out of the viewport
 - Test against Firefox 3.6, Safari 5.0.1
-- Support IE7
+- ~~Support IE7~~
 
 No IE6 support is planned &mdash; if you'd like to add it, feel free to make a pull request.
 
@@ -181,22 +188,6 @@ Within Viewport is inspired by these similar utilities which only reflect whethe
 
 * Remy Sharp's [Element 'in view' Event Plugin](http://remysharp.com/2009/01/26/element-in-view-event-plugin/)
 * Mike Tuupola's [Viewport Selectors for jQuery](http://www.appelsiini.net/projects/viewport)
-
-## History
-
-### 0.2 - November 5, 2011
-
-- Standalone version now available, no jQuery or other dependencies
-- Cleaned up and standardized the jQuery plugin
-- Added optional shortcut methods
-- Added support for testing multiple sides at once (eg, left and bottom)
-- Removed requirement for Array.forEach and replaced with faster while() loops
-- Tested against IE8-9, Firefox 7, Chrome 15, Safari 5.1, Opera 11.52; Mac & Windows
-- Included a demo
-
-### 0.1 - October 15, 2011
-
-- Initial beta version
 
 ## License
 
