@@ -36,7 +36,9 @@
         // Set the styles so everything is nice and proportional to this device's screen
         $body.append('<style>#boxContainer div { width:' + boxWidth + 'px;height:' + boxWidth + 'px;line-height:' + boxWidth + 'px; }</style>');
         $boxes = $('#boxContainer div');
+        // Mark a couple of boxes for testing and debugging
         $boxes.get(4).id = 'test';
+        $boxes.get(52).id = 'test2';
 
         $showBoundsCheck = $('#show-boundary');
         events.init();

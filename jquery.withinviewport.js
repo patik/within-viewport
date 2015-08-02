@@ -1,11 +1,10 @@
-/*global withinviewport: true */
 /**
  * Within Viewport jQuery Plugin
  *
  * @description Companion plugin for withinviewport.js - determines whether an element is completely within the browser viewport
  * @author      Craig Patik, http://patik.com/
- * @version     0.1.0
- * @date        2015-04-10
+ * @version     1.0.0
+ * @date        2015-08-02
  */
 (function ($) {
     /**
