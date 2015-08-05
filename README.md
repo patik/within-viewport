@@ -3,9 +3,9 @@
 ***Determine whether elements are within the viewport***
 
 Includes:
-    - A standalone, plain JavaScript function, `withinviewport()`
-    - AMD and Node/CommonJS support
-    - Optional jQuery plugin with handy selectors and shorthand methods
+- A standalone, plain JavaScript function, `withinviewport()`
+- AMD and Node/CommonJS support
+- Optional jQuery plugin with handy selectors and shorthand methods
 
 All versions are equally functional.
 
