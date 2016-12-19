@@ -90,78 +90,23 @@
             // Element is below the top edge of the viewport
             top: function _isWithin_top () {
                 if (isContainerTheWindow) {
-                    var returnVal = elemBoundingRect.top >= config.top;
-
-                    if (elem.id === 'test') {
-                        if (returnVal) {
-                            console.info('top:\n' +
-                                elemBoundingRect.top + ' >= ' + config.top);
-                        }
-                        else {
-                            console.warn('top:\n' +
-                                elemBoundingRect.top + ' < ' + config.top);
-                        }
-                    }
+                    return (elemBoundingRect.top >= config.top);
                 }
                 else {
-                    var returnVal = elemBoundingRect.top >= containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top;
-
-                    if (elem.id === 'test') {
-                        if (returnVal) {
-                            console.info('top:\n' +
-                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
-                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
-                        }
-                        else {
-                            console.warn('top:\n' +
-                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
-                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
-                        }
-                    }
+                    return (elemBoundingRect.top >= containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top);
                 }
-
-                return returnVal;
             },
 
             // Element is to the left of the right edge of the viewport
             right: function _isWithin_right () {
                 // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
-                var returnVal;
 
                 if (isContainerTheWindow) {
-                    returnVal = elemBoundingRect.right <= (containerBoundingRect.right + containerScrollLeft) - config.right;
-
-                    if (elem.id === 'test') {
-                        if (returnVal) {
-                            console.info('right\n' +
-                                       elemBoundingRect.right + ' <= (' + containerBoundingRect.right + ' + ' + containerScrollLeft + ') - ' + config.right +
-                                '\n' + elemBoundingRect.right + ' <= ' + (containerBoundingRect.right + containerScrollLeft) + ' - ' + config.right);
-                        }
-                        else {
-                            console.warn('right\n' +
-                                       elemBoundingRect.right + ' > (' + containerBoundingRect.right + ' + ' + containerScrollLeft + ') - ' + config.right +
-                                '\n' + elemBoundingRect.right + ' > ' + (containerBoundingRect.right + containerScrollLeft) + ' - ' + config.right);
-                        }
-                    }
+                    return (elemBoundingRect.right <= (containerBoundingRect.right + containerScrollLeft) - config.right);
                 }
                 else {
-                    returnVal = elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right;
-
-                    if (elem.id === 'test') {
-                        if (returnVal) {
-                            console.info('right\n' +
-                                       elemBoundingRect.right + ' <= ' + containerBoundingRect.right + ' - ' + scrollBarWidths[0] + ' - ' + config.right +
-                                '\n' + elemBoundingRect.right + ' <= ' + (containerBoundingRect.right - scrollBarWidths[0]) + ' - ' + config.right);
-                        }
-                        else {
-                            console.warn('right\n' +
-                                       elemBoundingRect.right + ' > ' + containerBoundingRect.right + ' - ' + scrollBarWidths[0] + ' - ' + config.right +
-                                '\n' + elemBoundingRect.right + ' > ' + (containerBoundingRect.right - scrollBarWidths[0]) + ' - ' + config.right);
-                        }
-                    }
+                    return (elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right);
                 }
-
-                return returnVal;
             },
 
             // Element is above the bottom edge of the viewport
@@ -170,7 +115,6 @@
 
                 if (isContainerTheWindow) {
                     if (canUseWindowDimensions) {
-                        // if (elem.id === 'test') { console.log(' -> canUseWindowDimensions'); }
                         containerHeight = config.container.innerHeight;
                     }
                     else {
@@ -178,74 +122,29 @@
                     }
                 }
                 else {
-                    // containerHeight = config.container.offsetHeight;
-                    // if (elem.id === 'test') { console.log(' -> containerBoundingRect.bottom'); }
                     containerHeight = containerBoundingRect.bottom;
                 }
 
-                var returnVal = elemBoundingRect.bottom <= containerHeight - scrollBarWidths[1] - config.bottom;
-
-                // if (elem.id === 'test') {
-                //     console.log('bottom containerHeight: ', containerHeight);
-
-                //     if (returnVal) {
-                //         console.info('bottom\n' +
-                //                    elemBoundingRect.bottom + ' <= ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
-                //             '\n' + elemBoundingRect.bottom + ' <= ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
-                //     }
-                //     else {
-                //         console.warn('bottom\n' +
-                //                    elemBoundingRect.bottom + ' > ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
-                //             '\n' + elemBoundingRect.bottom + ' > ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
-                //     }
-                // }
-
                 // Note that `elemBoundingRect.bottom` is the distance from the *top* of the viewport to the element's bottom edge
-                return (returnVal);
+                return (elemBoundingRect.bottom <= containerHeight - scrollBarWidths[1] - config.bottom);
             },
 
             // Element is to the right of the left edge of the viewport
             left: function _isWithin_left () {
                 if (isContainerTheWindow) {
-                    var returnVal = elemBoundingRect.left >= config.left;
-
-                    if (elem.id === 'test') {
-                        if (returnVal) {
-                            console.info('left:\n' +
-                                elemBoundingRect.left + ' >= ' + config.left);
-                        }
-                        else {
-                            console.warn('left:\n' +
-                                elemBoundingRect.left + ' < ' + config.left);
-                        }
-                    }
+                    return (elemBoundingRect.left >= config.left);
                 }
                 else {
-                    var returnVal = elemBoundingRect.left >= containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left;
-
-                    if (elem.id === 'test') {
-                        if (returnVal) {
-                            console.info('left:\n' +
-                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
-                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
-                        }
-                        else {
-                            console.warn('left:\n' +
-                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
-                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
-                        }
-                    }
+                    return (elemBoundingRect.left >= containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left);
                 }
-
-                return returnVal;
             },
 
             // Element is within all four boundaries
             all: function _isWithin_all () {
-                // Test each boundary in order of most efficient and most likely to be false so that we can avoid running all four functions on most elements
-                // Top: Quickest to calculate + most likely to be false
-                // Bottom: Note quite as quick to calculate, but also very likely to be false
-                // Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster
+                // Test each boundary in order of efficiency and likeliness to be false. This way we can avoid running all four functions on most elements.
+                //     1. Top: Quickest to calculate + most likely to be false
+                //     2. Bottom: Note quite as quick to calculate, but also very likely to be false
+                //     3-4. Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster
                 return (isWithin.top() && isWithin.bottom() && isWithin.left() && isWithin.right());
             }
         };
@@ -272,16 +171,6 @@
 
         if (containerScrollTop) {
             scrollBarWidths[1] = 16;
-        }
-
-        if (elem.id === 'test') {
-            console.clear();
-            console.log(elem);
-            if (isContainerTheWindow) { console.log('using window'); } else { console.log('using custom container'); }
-            console.log('elem: ', elemBoundingRect);
-            console.log('container: ', containerBoundingRect);
-            console.log('scrollTop: ', containerScrollTop);
-            console.log('scrollLeft: ', containerScrollLeft);
         }
 
         // Test the element against each side of the viewport that was requested
