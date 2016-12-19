@@ -37,7 +37,7 @@
         var isContainerTheWindow;
         var elemBoundingRect;
         var containerBoundingRect;
-        var scrollBarWidth = 16;
+        var scrollBarWidths = [0, 0];
         var sideNamesPattern;
         var sides;
         var side;
@@ -73,6 +73,11 @@
         config.bottom = settings.bottom || metadata.bottom || withinviewport.defaults.bottom || 0;
         config.left   = settings.left   || metadata.left   || withinviewport.defaults.left   || 0;
 
+        // Extract the DOM node from a jQuery collection
+        if (typeof jQuery !== 'undefined' && config.container instanceof jQuery) {
+            config.container = config.container.get(0);
+        }
+
         // Use the window as the container if the user specified the body or a non-element
         if (config.container === document.body || !config.container.nodeType === 1) {
             config.container = window;
@@ -90,22 +95,42 @@
             // Element is to the left of the right edge of the viewport
             right: function _isWithin_right () {
                 // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
-                var returnVal = elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidth - config.right;
+                var returnVal;
 
-                if (elem.id === 'test2') {
-                    if (returnVal) {
-                        console.info('right\n' +
-                                   elemBoundingRect.right + ' <= ' + containerBoundingRect.right + ' - ' + scrollBarWidth + ' - ' + config.right +
-                            '\n' + elemBoundingRect.right + ' <= ' + (containerBoundingRect.right - scrollBarWidth) + ' - ' + config.right);
+                if (isContainerTheWindow) {
+                    returnVal = elemBoundingRect.right <= (containerBoundingRect.right + containerScrollLeft) - config.right;
+
+                    if (elem.id === 'test2') {
+                        if (returnVal) {
+                            console.info('right\n' +
+                                       elemBoundingRect.right + ' <= (' + containerBoundingRect.right + ' + ' + containerScrollLeft + ') - ' + config.right +
+                                '\n' + elemBoundingRect.right + ' <= ' + (containerBoundingRect.right + containerScrollLeft) + ' - ' + config.right);
+                        }
+                        else {
+                            console.warn('right\n' +
+                                       elemBoundingRect.right + ' > (' + containerBoundingRect.right + ' + ' + containerScrollLeft + ') - ' + config.right +
+                                '\n' + elemBoundingRect.right + ' > ' + (containerBoundingRect.right + containerScrollLeft) + ' - ' + config.right);
+                        }
                     }
-                    else {
-                        console.warn('right\n' +
-                                   elemBoundingRect.right + ' > ' + containerBoundingRect.right + ' - ' + scrollBarWidth + ' - ' + config.right +
-                            '\n' + elemBoundingRect.right + ' > ' + (containerBoundingRect.right - scrollBarWidth) + ' - ' + config.right);
+                }
+                else {
+                    returnVal = elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right;
+
+                    if (elem.id === 'test2') {
+                        if (returnVal) {
+                            console.info('right\n' +
+                                       elemBoundingRect.right + ' <= ' + containerBoundingRect.right + ' - ' + scrollBarWidths[0] + ' - ' + config.right +
+                                '\n' + elemBoundingRect.right + ' <= ' + (containerBoundingRect.right - scrollBarWidths[0]) + ' - ' + config.right);
+                        }
+                        else {
+                            console.warn('right\n' +
+                                       elemBoundingRect.right + ' > ' + containerBoundingRect.right + ' - ' + scrollBarWidths[0] + ' - ' + config.right +
+                                '\n' + elemBoundingRect.right + ' > ' + (containerBoundingRect.right - scrollBarWidths[0]) + ' - ' + config.right);
+                        }
                     }
                 }
 
-                return (returnVal);
+                return returnVal;
             },
 
             // Element is above the bottom edge of the viewport
@@ -127,20 +152,20 @@
                     containerHeight = containerBoundingRect.bottom;
                 }
 
-                var returnVal = elemBoundingRect.bottom <= containerHeight - scrollBarWidth - config.bottom;
+                var returnVal = elemBoundingRect.bottom <= containerHeight - scrollBarWidths[1] - config.bottom;
 
                 if (elem.id === 'test2') {
                     console.log('bottom containerHeight: ', containerHeight);
 
                     if (returnVal) {
                         console.info('bottom\n' +
-                                   elemBoundingRect.bottom + ' <= ' + containerHeight + ' - ' + scrollBarWidth + ' - ' + config.bottom +
-                            '\n' + elemBoundingRect.bottom + ' <= ' + (containerHeight - scrollBarWidth) + ' - ' + config.bottom);
+                                   elemBoundingRect.bottom + ' <= ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
+                            '\n' + elemBoundingRect.bottom + ' <= ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
                     }
                     else {
                         console.warn('bottom\n' +
-                                   elemBoundingRect.bottom + ' > ' + containerHeight + ' - ' + scrollBarWidth + ' - ' + config.bottom +
-                            '\n' + elemBoundingRect.bottom + ' > ' + (containerHeight - scrollBarWidth) + ' - ' + config.bottom);
+                                   elemBoundingRect.bottom + ' > ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
+                            '\n' + elemBoundingRect.bottom + ' > ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
                     }
                 }
 
@@ -166,6 +191,7 @@
         // Get the element's bounding rectangle with respect to the viewport
         elemBoundingRect = elem.getBoundingClientRect();
 
+        // Get viewport dimensions and offsets
         if (isContainerTheWindow) {
             containerBoundingRect = document.documentElement.getBoundingClientRect();
             containerScrollTop = document.body.scrollTop;
@@ -177,8 +203,19 @@
             containerScrollLeft = config.container.scrollLeft;
         }
 
+        // Don't count the space consumed by scrollbars
+        if (containerScrollLeft) {
+            scrollBarWidths[0] = 18;
+        }
+
+        if (containerScrollTop) {
+            scrollBarWidths[1] = 16;
+        }
+
         if (elem.id === 'test2') {
+            console.clear();
             console.log(elem);
+            if (isContainerTheWindow) { console.log('using window'); } else { console.log('using custom container'); }
             console.log('elem: ', elemBoundingRect);
             console.log('container: ', containerBoundingRect);
             console.log('scrollTop: ', containerScrollTop);
