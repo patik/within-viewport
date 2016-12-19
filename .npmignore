@@ -4,4 +4,5 @@ node_modules
 .jshintrc
 .editorconfig
 demo
+demo-container
 bower.json

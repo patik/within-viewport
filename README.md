@@ -8,7 +8,7 @@ Includes:
 - AMD and Node/CommonJS support
 - Optional jQuery plugin with handy selectors and shorthand methods
 
-All of the above are equally functional.
+All of the above offer the same features.
 
 ## Installation
 
@@ -47,7 +47,7 @@ jQuery plugin:
 ### Basic
 
 ```js
-// Returns true if the element is entirely within view
+// Returns true if the element is entirely within view of the window
 var elem = document.getElementById('#myElement');
 withinviewport(elem);
 ```
@@ -55,12 +55,17 @@ withinviewport(elem);
 ### Advanced
 
 ```js
-// Test against only some sides of the viewport for faster performance
+// Test against only some sides of the window for faster performance
 withinviewport(elem, {sides: 'left'});
 ```
 
 ```js
-// Define your own viewport by specifying thresholds for each side
+// Pick another element to act as the viewport (instead of `window`)
+withinviewport(elem, {container: document.getElementById('myElem')});
+```
+
+```js
+// Define your own viewport crop by specifying thresholds for each side
 // Example: element is at least 12px inside the top and right of the viewport
 withinviewport(elem, {top: 12, right: 12});
 ```
@@ -137,7 +142,19 @@ A future version will allow you to fire custom events when elements pass in and 
 
 This applies to both the jQuery plugin and standalone function.
 
-Use the object `withinviewport.defaults` to define your page's practical viewport compared to the actual browser viewport.
+Use the object `withinviewport.defaults` to define your page's practical viewport compared to the actual browser window.
+
+### Custom viewport element
+
+If you want to test whether an element is within a scrollable parent element (e.g. which has `overflow: auto`), assign the parent element to the `container` property:
+
+```js
+$('.child-element').withinviewport({
+    container: $('.parent-element')
+});
+```
+
+### Custom boundaries
 
 For example, a fixed header with a height of 100px that spans the entire width of the page effectively lowers the viewport by 100px from the top edge of the browser window:
 
@@ -168,20 +185,18 @@ You can specify *negative threshold values* to allow elements to reside outside 
 
 ## Browser Support
 
-- IE 7 and higher
+- IE 7(?) and higher
 - All the others except Opera Mini
     + Tested in the latest stable Chrome, Firefox, Safari, and IE
     + No "new" JavaScript or quirky techniques are employed so it should work in all other modern browsers not specifically mentioned above
 
 ## What's Next
 
-*Please note that the camel case `withinViewport` method name is deprecated. It will be removed in a future release.*
+*Please note that the camel case `withinViewport` method name is deprecated and is no longer supported as of version 2.0.0.*
 
 - Option to **fire events** when elements pass in and out of the viewport
 - Test against Firefox 3.6, Safari 5.0.1
-- ~~Support IE7~~
 
-No IE6 support is planned &mdash; if you'd like to add it, feel free to make a pull request.
 
 ## Credit
 

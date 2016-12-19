@@ -1,6 +1,6 @@
 {
     "name": "withinviewport",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Determine whether an element is completely within the browser viewport",
     "main": "withinviewport.js",
     "scripts": {

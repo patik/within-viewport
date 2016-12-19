@@ -3,8 +3,8 @@
  *
  * @description Determines whether an element is completely within the browser viewport
  * @author      Craig Patik, http://patik.com/
- * @version     1.0.0
- * @date        2015-08-02
+ * @version     2.0.0
+ * @date        2016-12-19
  */
 (function (root, name, factory) {
     // AMD
@@ -34,7 +34,10 @@
         var config = {};
         var settings;
         var isWithin;
+        var isContainerTheWindow;
         var elemBoundingRect;
+        var containerBoundingRect;
+        var scrollBarWidths = [0, 0];
         var sideNamesPattern;
         var sides;
         var side;
@@ -70,65 +73,105 @@
         config.bottom = settings.bottom || metadata.bottom || withinviewport.defaults.bottom || 0;
         config.left   = settings.left   || metadata.left   || withinviewport.defaults.left   || 0;
 
+        // Extract the DOM node from a jQuery collection
+        if (typeof jQuery !== 'undefined' && config.container instanceof jQuery) {
+            config.container = config.container.get(0);
+        }
+
         // Use the window as the container if the user specified the body or a non-element
         if (config.container === document.body || !config.container.nodeType === 1) {
             config.container = window;
         }
 
+        isContainerTheWindow = (config.container === window);
+
         // Element testing methods
         isWithin = {
             // Element is below the top edge of the viewport
             top: function _isWithin_top () {
-                return elemBoundingRect.top >= config.top;
+                if (isContainerTheWindow) {
+                    return (elemBoundingRect.top >= config.top);
+                }
+                else {
+                    return (elemBoundingRect.top >= containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top);
+                }
             },
 
             // Element is to the left of the right edge of the viewport
             right: function _isWithin_right () {
-                var containerWidth;
+                // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
 
-                if (canUseWindowDimensions || config.container !== window) {
-                    containerWidth = config.container.innerWidth;
+                if (isContainerTheWindow) {
+                    return (elemBoundingRect.right <= (containerBoundingRect.right + containerScrollLeft) - config.right);
                 }
                 else {
-                    containerWidth = document.documentElement.clientWidth;
+                    return (elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right);
                 }
-
-                // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
-                return elemBoundingRect.right <= containerWidth - config.right;
             },
 
             // Element is above the bottom edge of the viewport
             bottom: function _isWithin_bottom () {
                 var containerHeight;
 
-                if (canUseWindowDimensions || config.container !== window) {
-                    containerHeight = config.container.innerHeight;
+                if (isContainerTheWindow) {
+                    if (canUseWindowDimensions) {
+                        containerHeight = config.container.innerHeight;
+                    }
+                    else {
+                        containerHeight = document.documentElement.clientHeight;
+                    }
                 }
                 else {
-                    containerHeight = document.documentElement.clientHeight;
+                    containerHeight = containerBoundingRect.bottom;
                 }
 
                 // Note that `elemBoundingRect.bottom` is the distance from the *top* of the viewport to the element's bottom edge
-                return elemBoundingRect.bottom <= containerHeight - config.bottom;
+                return (elemBoundingRect.bottom <= containerHeight - scrollBarWidths[1] - config.bottom);
             },
 
             // Element is to the right of the left edge of the viewport
             left: function _isWithin_left () {
-                return elemBoundingRect.left >= config.left;
+                if (isContainerTheWindow) {
+                    return (elemBoundingRect.left >= config.left);
+                }
+                else {
+                    return (elemBoundingRect.left >= containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left);
+                }
             },
 
             // Element is within all four boundaries
             all: function _isWithin_all () {
-                // Test each boundary in order of most efficient and most likely to be false so that we can avoid running all four functions on most elements
-                // Top: Quickest to calculate + most likely to be false
-                // Bottom: Note quite as quick to calculate, but also very likely to be false
-                // Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster
+                // Test each boundary in order of efficiency and likeliness to be false. This way we can avoid running all four functions on most elements.
+                //     1. Top: Quickest to calculate + most likely to be false
+                //     2. Bottom: Note quite as quick to calculate, but also very likely to be false
+                //     3-4. Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster
                 return (isWithin.top() && isWithin.bottom() && isWithin.left() && isWithin.right());
             }
         };
 
         // Get the element's bounding rectangle with respect to the viewport
         elemBoundingRect = elem.getBoundingClientRect();
+
+        // Get viewport dimensions and offsets
+        if (isContainerTheWindow) {
+            containerBoundingRect = document.documentElement.getBoundingClientRect();
+            containerScrollTop = document.body.scrollTop;
+            containerScrollLeft = document.body.scrollLeft;
+        }
+        else {
+            containerBoundingRect = config.container.getBoundingClientRect();
+            containerScrollTop = config.container.scrollTop;
+            containerScrollLeft = config.container.scrollLeft;
+        }
+
+        // Don't count the space consumed by scrollbars
+        if (containerScrollLeft) {
+            scrollBarWidths[0] = 18;
+        }
+
+        if (containerScrollTop) {
+            scrollBarWidths[1] = 16;
+        }
 
         // Test the element against each side of the viewport that was requested
         sideNamesPattern = /^top$|^right$|^bottom$|^left$|^all$/;

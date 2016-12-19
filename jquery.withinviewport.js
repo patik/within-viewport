@@ -3,8 +3,8 @@
  *
  * @description Companion plugin for withinviewport.js - determines whether an element is completely within the browser viewport
  * @author      Craig Patik, http://patik.com/
- * @version     1.0.0
- * @date        2015-08-02
+ * @version     2.0.0
+ * @date        2016-12-19
  */
 (function ($) {
     /**
@@ -138,23 +138,4 @@
         //     return withinviewport(element, {sides:'top left', top: 45, left: 45});
         // }
     });
-
-    // Legacy support for camelCase naming
-    // DEPRECATED: will be removed in v1.0
-    $.fn.withinViewportTop = function (settings) {
-        try { console.warn('DEPRECATED: use lowercase `withinviewporttop()` instead'); } catch (e) { }
-        return $.fn.withinviewporttop(settings);
-    };
-    $.fn.withinViewportRight = function (settings) {
-        try { console.warn('DEPRECATED: use lowercase `withinviewportright()` instead'); } catch (e) { }
-        return $.fn.withinviewportright(settings);
-    };
-    $.fn.withinViewportBottom = function (settings) {
-        try { console.warn('DEPRECATED: use lowercase `withinviewportbottom()` instead'); } catch (e) { }
-        return $.fn.withinviewportbottom(settings);
-    };
-    $.fn.withinViewportLeft = function (settings) {
-        try { console.warn('DEPRECATED: use lowercase `withinviewportleft()` instead'); } catch (e) { }
-        return $.fn.withinviewportleft(settings);
-    };
 }(jQuery));
