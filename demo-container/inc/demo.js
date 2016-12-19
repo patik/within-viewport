@@ -2,16 +2,19 @@
 (function(){var e=jQuery.event.special,t="D"+ +(new Date),n="D"+(+(new Date)+1);e.scrollstart={setup:function(){var n,r=function(t){var r=this,i=arguments;if(n){clearTimeout(n)}else{t.type="scrollstart";jQuery.event.handle.apply(r,i)}n=setTimeout(function(){n=null},e.scrollstop.latency)};jQuery(this).bind("scroll",r).data(t,r)},teardown:function(){jQuery(this).unbind("scroll",jQuery(this).data(t))}};e.scrollstop={latency:300,setup:function(){var t,r=function(n){var r=this,i=arguments;if(t){clearTimeout(t)}t=setTimeout(function(){t=null;n.type="scrollstop";jQuery.event.dispatch.apply(r,i)},e.scrollstop.latency)};jQuery(this).bind("scroll",r).data(n,r)},teardown:function(){jQuery(this).unbind("scroll",jQuery(this).data(n))}}})();
 
 // Demo code
-(function($) {
+(function ($) {
     var $boxes = null;
     var $showBoundsCheck = null;
+    var container = null
 
-    var _init = function _init() {
-        var $body = $('body');
+    var _init = function _init () {
+        var $container = $('#container');
         var boxCount = 100;
         var boxWidth = 20;
         var boxHTML = '';
         var i;
+
+        container = $container.get(0);
 
         // Make sure the demo will be wider than the device's screen so that vertical scroll bars appear
         //    but not so wide that you can't see at least four on screen at a time with a maximized browser window
@@ -31,16 +34,17 @@
         }
 
         // Add a container and put the boxes inside
-        $body.append('<div id="boxContainer" style="width:' + (boxWidth * 10 + 20) + 'px;">' + boxHTML + '</div>');
+        $container.append('<div id="boxContainer" style="width:' + (boxWidth * 10 + 20) + 'px;">' + boxHTML + '</div>');
 
         // Set the styles so everything is nice and proportional to this device's screen
-        $body.append('<style>#boxContainer div { width:' + boxWidth + 'px;height:' + boxWidth + 'px;line-height:' + boxWidth + 'px; }</style>');
+        $container.append('<style>#boxContainer div { width:' + boxWidth + 'px;height:' + boxWidth + 'px;line-height:' + boxWidth + 'px; }</style>');
         $boxes = $('#boxContainer div');
         // Mark a couple of boxes for testing and debugging
         $boxes.get(4).id = 'test';
-        $boxes.get(15).id = 'test2';
+        $boxes.get(25).id = 'test2';
 
         $showBoundsCheck = $('#show-boundary');
+
         events.init();
 
         // Update the <div>s for the first time
@@ -55,8 +59,8 @@
 
         // Setup event listeners
         init: function () {
-            // Scroll or window resize
-            $(window).on('resize scrollstop', _updateBoxes);
+            // Scroll
+            $(container).on('scrollstop', _updateBoxes);
 
             // User entry
             $('input[type="number"]').on('keyup change click', events.onBoundaryChange); // 'click' is for spinners on input[number] control
@@ -216,20 +220,23 @@
 
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     // Uses the jQuery plugin
-    var _updateBoxes = function _updateBoxes() {
+    var _updateBoxes = function _updateBoxes () {
+        console.clear();
         // Reset all boxes to being considered out of view
         $boxes
             .html('out')
             .attr('aria-hidden', 'true')
             .removeClass('inview');
+
         // Then run withinviewport() on them to reveal which ones are inside
         $boxes
-            .withinviewport()
+            .withinviewport({
+                container: container
+            })
             .html('in')
             .attr('aria-hidden', 'false')
             .addClass('inview');
     }
 
     $(document).ready(_init);
-
 })(jQuery);
