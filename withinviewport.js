@@ -89,7 +89,38 @@
         isWithin = {
             // Element is below the top edge of the viewport
             top: function _isWithin_top () {
-                return (elemBoundingRect.top >= containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top);
+                if (isContainerTheWindow) {
+                    var returnVal = elemBoundingRect.top >= config.top;
+
+                    if (elem.id === 'test') {
+                        if (returnVal) {
+                            console.info('top:\n' +
+                                elemBoundingRect.top + ' >= ' + config.top);
+                        }
+                        else {
+                            console.warn('top:\n' +
+                                elemBoundingRect.top + ' < ' + config.top);
+                        }
+                    }
+                }
+                else {
+                    var returnVal = elemBoundingRect.top >= containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top;
+
+                    if (elem.id === 'test') {
+                        if (returnVal) {
+                            console.info('top:\n' +
+                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
+                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
+                        }
+                        else {
+                            console.warn('top:\n' +
+                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
+                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
+                        }
+                    }
+                }
+
+                return returnVal;
             },
 
             // Element is to the left of the right edge of the viewport
@@ -100,7 +131,7 @@
                 if (isContainerTheWindow) {
                     returnVal = elemBoundingRect.right <= (containerBoundingRect.right + containerScrollLeft) - config.right;
 
-                    if (elem.id === 'test2') {
+                    if (elem.id === 'test') {
                         if (returnVal) {
                             console.info('right\n' +
                                        elemBoundingRect.right + ' <= (' + containerBoundingRect.right + ' + ' + containerScrollLeft + ') - ' + config.right +
@@ -116,7 +147,7 @@
                 else {
                     returnVal = elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right;
 
-                    if (elem.id === 'test2') {
+                    if (elem.id === 'test') {
                         if (returnVal) {
                             console.info('right\n' +
                                        elemBoundingRect.right + ' <= ' + containerBoundingRect.right + ' - ' + scrollBarWidths[0] + ' - ' + config.right +
@@ -139,7 +170,7 @@
 
                 if (isContainerTheWindow) {
                     if (canUseWindowDimensions) {
-                        if (elem.id === 'test2') { console.log(' -> canUseWindowDimensions'); }
+                        // if (elem.id === 'test') { console.log(' -> canUseWindowDimensions'); }
                         containerHeight = config.container.innerHeight;
                     }
                     else {
@@ -148,26 +179,26 @@
                 }
                 else {
                     // containerHeight = config.container.offsetHeight;
-                    if (elem.id === 'test2') { console.log(' -> containerBoundingRect.bottom'); }
+                    // if (elem.id === 'test') { console.log(' -> containerBoundingRect.bottom'); }
                     containerHeight = containerBoundingRect.bottom;
                 }
 
                 var returnVal = elemBoundingRect.bottom <= containerHeight - scrollBarWidths[1] - config.bottom;
 
-                if (elem.id === 'test2') {
-                    console.log('bottom containerHeight: ', containerHeight);
+                // if (elem.id === 'test') {
+                //     console.log('bottom containerHeight: ', containerHeight);
 
-                    if (returnVal) {
-                        console.info('bottom\n' +
-                                   elemBoundingRect.bottom + ' <= ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
-                            '\n' + elemBoundingRect.bottom + ' <= ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
-                    }
-                    else {
-                        console.warn('bottom\n' +
-                                   elemBoundingRect.bottom + ' > ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
-                            '\n' + elemBoundingRect.bottom + ' > ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
-                    }
-                }
+                //     if (returnVal) {
+                //         console.info('bottom\n' +
+                //                    elemBoundingRect.bottom + ' <= ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
+                //             '\n' + elemBoundingRect.bottom + ' <= ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
+                //     }
+                //     else {
+                //         console.warn('bottom\n' +
+                //                    elemBoundingRect.bottom + ' > ' + containerHeight + ' - ' + scrollBarWidths[1] + ' - ' + config.bottom +
+                //             '\n' + elemBoundingRect.bottom + ' > ' + (containerHeight - scrollBarWidths[1]) + ' - ' + config.bottom);
+                //     }
+                // }
 
                 // Note that `elemBoundingRect.bottom` is the distance from the *top* of the viewport to the element's bottom edge
                 return (returnVal);
@@ -175,7 +206,38 @@
 
             // Element is to the right of the left edge of the viewport
             left: function _isWithin_left () {
-                return elemBoundingRect.left >= containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left;
+                if (isContainerTheWindow) {
+                    var returnVal = elemBoundingRect.left >= config.left;
+
+                    if (elem.id === 'test') {
+                        if (returnVal) {
+                            console.info('left:\n' +
+                                elemBoundingRect.left + ' >= ' + config.left);
+                        }
+                        else {
+                            console.warn('left:\n' +
+                                elemBoundingRect.left + ' < ' + config.left);
+                        }
+                    }
+                }
+                else {
+                    var returnVal = elemBoundingRect.left >= containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left;
+
+                    if (elem.id === 'test') {
+                        if (returnVal) {
+                            console.info('left:\n' +
+                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
+                                elemBoundingRect.left + ' >= ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
+                        }
+                        else {
+                            console.warn('left:\n' +
+                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - (' + containerScrollLeft + ' - ' + containerBoundingRect.left + ') + ' + config.left + '\n' +
+                                elemBoundingRect.left + ' < ' + containerScrollLeft + ' - ' + (containerScrollLeft - containerBoundingRect.left) + ' + ' + config.left);
+                        }
+                    }
+                }
+
+                return returnVal;
             },
 
             // Element is within all four boundaries
@@ -212,7 +274,7 @@
             scrollBarWidths[1] = 16;
         }
 
-        if (elem.id === 'test2') {
+        if (elem.id === 'test') {
             console.clear();
             console.log(elem);
             if (isContainerTheWindow) { console.log('using window'); } else { console.log('using custom container'); }

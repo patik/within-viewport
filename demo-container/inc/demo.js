@@ -144,6 +144,7 @@
             var $toggler = $('#toggler');
 
             $('#explanation').toggleClass('collapsed');
+
             $toggler.toggleClass('plus minus');
 
             if ($toggler.html() === 'Collapse') {
@@ -160,7 +161,7 @@
     /////////
 
     // Display or hide the "show boundaries" check box if any values are set (non-zero)
-    var _toggleBoundaryToggle = function _toggleBoundaryToggle() {
+    var _toggleBoundaryToggle = function _toggleBoundaryToggle () {
         var somethingEntered = false;
 
         $('input[type="number"]').each(function () {
@@ -178,8 +179,9 @@
     };
 
     // Overlay a boundary line on the viewport when one is set by the user
-    var _drawBound = function _drawBound(side, dist) {
+    var _drawBound = function _drawBound (side, dist) {
         dist += 'px';
+
         switch (side) {
             case 'top':
                 $('.boundary-top').css({
@@ -221,7 +223,6 @@
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     // Uses the jQuery plugin
     var _updateBoxes = function _updateBoxes () {
-        console.clear();
         // Reset all boxes to being considered out of view
         $boxes
             .html('out')
