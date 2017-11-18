@@ -3,10 +3,10 @@
  *
  * @description Determines whether an element is completely within the browser viewport
  * @author      Craig Patik, http://patik.com/
- * @version     2.0.0
- * @date        2016-12-19
+ * @version     2.0.1
+ * @date        2017-11-18
  */
-(function (root, name, factory) {
+(function(root, name, factory) {
     // AMD
     if (typeof define === 'function' && define.amd) {
         define([], factory);
@@ -19,16 +19,16 @@
     else {
         root[name] = factory();
     }
-}(this, 'withinviewport', function () {
-    var canUseWindowDimensions = window.innerHeight !== undefined; // IE 8 and lower fail this
+}(this, 'withinviewport', function() {
+    var canUseWindowDimensions = window && window.innerHeight !== undefined; // IE 8 and lower fail this
 
     /**
      * Determines whether an element is within the viewport
      * @param  {Object}  elem       DOM Element (required)
      * @param  {Object}  options    Optional settings
      * @return {Boolean}            Whether the element was completely within the viewport
-    */
-    var withinviewport = function withinviewport (elem, options) {
+     */
+    var withinviewport = function withinviewport(elem, options) {
         var result = false;
         var metadata = {};
         var config = {};
@@ -59,7 +59,7 @@
 
         // Settings argument may be a simple string (`top`, `right`, etc)
         if (typeof options === 'string') {
-            settings = {sides: options};
+            settings = { sides: options };
         }
         else {
             settings = options || {};
@@ -67,11 +67,11 @@
 
         // Build configuration from defaults and user-provided settings and metadata
         config.container = settings.container || metadata.container || withinviewport.defaults.container || window;
-        config.sides  = settings.sides  || metadata.sides  || withinviewport.defaults.sides  || 'all';
-        config.top    = settings.top    || metadata.top    || withinviewport.defaults.top    || 0;
-        config.right  = settings.right  || metadata.right  || withinviewport.defaults.right  || 0;
+        config.sides = settings.sides || metadata.sides || withinviewport.defaults.sides || 'all';
+        config.top = settings.top || metadata.top || withinviewport.defaults.top || 0;
+        config.right = settings.right || metadata.right || withinviewport.defaults.right || 0;
         config.bottom = settings.bottom || metadata.bottom || withinviewport.defaults.bottom || 0;
-        config.left   = settings.left   || metadata.left   || withinviewport.defaults.left   || 0;
+        config.left = settings.left || metadata.left || withinviewport.defaults.left || 0;
 
         // Extract the DOM node from a jQuery collection
         if (typeof jQuery !== 'undefined' && config.container instanceof jQuery) {
@@ -79,7 +79,7 @@
         }
 
         // Use the window as the container if the user specified the body or a non-element
-        if (config.container === document.body || !config.container.nodeType === 1) {
+        if (config.container === document.body || config.container.nodeType !== 1) {
             config.container = window;
         }
 
@@ -88,7 +88,7 @@
         // Element testing methods
         isWithin = {
             // Element is below the top edge of the viewport
-            top: function _isWithin_top () {
+            top: function _isWithin_top() {
                 if (isContainerTheWindow) {
                     return (elemBoundingRect.top >= config.top);
                 }
@@ -98,7 +98,7 @@
             },
 
             // Element is to the left of the right edge of the viewport
-            right: function _isWithin_right () {
+            right: function _isWithin_right() {
                 // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
 
                 if (isContainerTheWindow) {
@@ -110,14 +110,14 @@
             },
 
             // Element is above the bottom edge of the viewport
-            bottom: function _isWithin_bottom () {
-                var containerHeight;
+            bottom: function _isWithin_bottom() {
+                var containerHeight = 0;
 
                 if (isContainerTheWindow) {
                     if (canUseWindowDimensions) {
                         containerHeight = config.container.innerHeight;
                     }
-                    else {
+                    else if (document && document.documentElement) {
                         containerHeight = document.documentElement.clientHeight;
                     }
                 }
@@ -130,7 +130,7 @@
             },
 
             // Element is to the right of the left edge of the viewport
-            left: function _isWithin_left () {
+            left: function _isWithin_left() {
                 if (isContainerTheWindow) {
                     return (elemBoundingRect.left >= config.left);
                 }
@@ -140,11 +140,11 @@
             },
 
             // Element is within all four boundaries
-            all: function _isWithin_all () {
+            all: function _isWithin_all() {
                 // Test each boundary in order of efficiency and likeliness to be false. This way we can avoid running all four functions on most elements.
                 //     1. Top: Quickest to calculate + most likely to be false
                 //     2. Bottom: Note quite as quick to calculate, but also very likely to be false
-                //     3-4. Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster
+                //     3-4. Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster to calculate
                 return (isWithin.top() && isWithin.bottom() && isWithin.left() && isWithin.right());
             }
         };
@@ -156,7 +156,7 @@
         if (isContainerTheWindow) {
             containerBoundingRect = document.documentElement.getBoundingClientRect();
             containerScrollTop = document.body.scrollTop;
-            containerScrollLeft = document.body.scrollLeft;
+            containerScrollLeft = window.scrollX || document.body.scrollLeft;
         }
         else {
             containerBoundingRect = config.container.getBoundingClientRect();
@@ -175,9 +175,11 @@
 
         // Test the element against each side of the viewport that was requested
         sideNamesPattern = /^top$|^right$|^bottom$|^left$|^all$/;
+
         // Loop through all of the sides
         sides = config.sides.split(' ');
         i = sides.length;
+
         while (i--) {
             side = sides[i].toLowerCase();
 
@@ -217,19 +219,19 @@
 
     // Shortcut methods for each side of the viewport
     // Example: `withinviewport.top(elem)` is the same as `withinviewport(elem, 'top')`
-    withinviewport.prototype.top = function _withinviewport_top (element) {
+    withinviewport.prototype.top = function _withinviewport_top(element) {
         return withinviewport(element, 'top');
     };
 
-    withinviewport.prototype.right = function _withinviewport_right (element) {
+    withinviewport.prototype.right = function _withinviewport_right(element) {
         return withinviewport(element, 'right');
     };
 
-    withinviewport.prototype.bottom = function _withinviewport_bottom (element) {
+    withinviewport.prototype.bottom = function _withinviewport_bottom(element) {
         return withinviewport(element, 'bottom');
     };
 
-    withinviewport.prototype.left = function _withinviewport_left (element) {
+    withinviewport.prototype.left = function _withinviewport_left(element) {
         return withinviewport(element, 'left');
     };
 

@@ -38,7 +38,7 @@
         $boxes = $('#boxContainer div');
         // Mark a couple of boxes for testing and debugging
         $boxes.get(4).id = 'test';
-        $boxes.get(15).id = 'test2';
+        $boxes.get(55).id = 'test2';
 
         $showBoundsCheck = $('#show-boundary');
         events.init();
@@ -77,9 +77,9 @@
 
         // When a boundary value changes
         onBoundaryChange: function (evt) {
-            var target = evt.target,
-                val = parseInt(target.value, 10),
-                id = target.id;
+            var target = evt.target;
+            var val = parseInt(target.value, 10);
+            var id = target.id;
 
             // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
             if (val > 0) {
