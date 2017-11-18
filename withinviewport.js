@@ -20,7 +20,7 @@
         root[name] = factory();
     }
 }(this, 'withinviewport', function() {
-    var canUseWindowDimensions = window && window.innerHeight !== undefined; // IE 8 and lower fail this
+    var canUseWindowDimensions = typeof window !== 'undefined' && window.innerHeight !== undefined; // IE 8 and lower fail this
 
     /**
      * Determines whether an element is within the viewport
