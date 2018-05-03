@@ -201,7 +201,7 @@
 
     // Default settings
     withinviewport.prototype.defaults = {
-        container: document.body,
+        container: typeof document !== 'undefined' ? document.body : {},
         sides: 'all',
         top: 0,
         right: 0,
