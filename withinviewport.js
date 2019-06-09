@@ -6,7 +6,7 @@
  * @version     2.0.1
  * @date        2017-11-18
  */
-(function(root, name, factory) {
+(function (root, name, factory) {
     // AMD
     if (typeof define === 'function' && define.amd) {
         define([], factory);
@@ -19,7 +19,7 @@
     else {
         root[name] = factory();
     }
-}(this, 'withinviewport', function() {
+}(this, 'withinviewport', function () {
     var canUseWindowDimensions = typeof window !== 'undefined' && window.innerHeight !== undefined; // IE 8 and lower fail this
 
     /**
@@ -37,6 +37,8 @@
         var isContainerTheWindow;
         var elemBoundingRect;
         var containerBoundingRect;
+        var containerScrollTop;
+        var containerScrollLeft;
         var scrollBarWidths = [0, 0];
         var sideNamesPattern;
         var sides;
