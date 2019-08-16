@@ -37,6 +37,8 @@
         var isContainerTheWindow;
         var elemBoundingRect;
         var containerBoundingRect;
+        var containerScrollTop;
+        var containerScrollLeft;
         var scrollBarWidths = [0, 0];
         var sideNamesPattern;
         var sides;
