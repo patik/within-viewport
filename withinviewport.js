@@ -3,10 +3,10 @@
  *
  * @description Determines whether an element is completely within the browser viewport
  * @author      Craig Patik, http://patik.com/
- * @version     2.0.1
- * @date        2017-11-18
+ * @version     2.1.2
+ * @date        2019-08-16
  */
-(function(root, name, factory) {
+(function (root, name, factory) {
     // AMD
     if (typeof define === 'function' && define.amd) {
         define([], factory);
@@ -19,7 +19,7 @@
     else {
         root[name] = factory();
     }
-}(this, 'withinviewport', function() {
+}(this, 'withinviewport', function () {
     var canUseWindowDimensions = typeof window !== 'undefined' && window.innerHeight !== undefined; // IE 8 and lower fail this
 
     /**
@@ -59,9 +59,10 @@
 
         // Settings argument may be a simple string (`top`, `right`, etc)
         if (typeof options === 'string') {
-            settings = { sides: options };
-        }
-        else {
+            settings = {
+                sides: options
+            };
+        } else {
             settings = options || {};
         }
 
@@ -91,8 +92,7 @@
             top: function _isWithin_top() {
                 if (isContainerTheWindow) {
                     return (elemBoundingRect.top >= config.top);
-                }
-                else {
+                } else {
                     return (elemBoundingRect.top >= containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top);
                 }
             },
@@ -103,8 +103,7 @@
 
                 if (isContainerTheWindow) {
                     return (elemBoundingRect.right <= (containerBoundingRect.right + containerScrollLeft) - config.right);
-                }
-                else {
+                } else {
                     return (elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right);
                 }
             },
@@ -116,12 +115,10 @@
                 if (isContainerTheWindow) {
                     if (canUseWindowDimensions) {
                         containerHeight = config.container.innerHeight;
-                    }
-                    else if (document && document.documentElement) {
+                    } else if (document && document.documentElement) {
                         containerHeight = document.documentElement.clientHeight;
                     }
-                }
-                else {
+                } else {
                     containerHeight = containerBoundingRect.bottom;
                 }
 
@@ -133,8 +130,7 @@
             left: function _isWithin_left() {
                 if (isContainerTheWindow) {
                     return (elemBoundingRect.left >= config.left);
-                }
-                else {
+                } else {
                     return (elemBoundingRect.left >= containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left);
                 }
             },
@@ -157,8 +153,7 @@
             containerBoundingRect = document.documentElement.getBoundingClientRect();
             containerScrollTop = document.body.scrollTop;
             containerScrollLeft = window.scrollX || document.body.scrollLeft;
-        }
-        else {
+        } else {
             containerBoundingRect = config.container.getBoundingClientRect();
             containerScrollTop = config.container.scrollTop;
             containerScrollLeft = config.container.scrollLeft;
@@ -186,8 +181,7 @@
             if (sideNamesPattern.test(side)) {
                 if (isWithin[side]()) {
                     result = true;
-                }
-                else {
+                } else {
                     result = false;
 
                     // Quit as soon as the first failure is found
