@@ -1,6 +1,6 @@
 {
-    "name": "@patik/dof",
-    "version": "2.1.2",
+    "name": "@patik/within-viewport",
+    "version": "3.0.0",
     "private": true,
     "workspaces": [
         "package",
@@ -17,7 +17,8 @@
         "preversion": "yarn workspaces run preversion",
         "postversion": "git push && git push --tags",
         "test": "yarn workspaces run test",
-        "cypress:open": "cypress open --project ./app"
+        "cypress:open": "cypress open --project ./app",
+        "prepare": "husky install"
     },
     "dependencies": {
         "typescript": "^4.9.4"

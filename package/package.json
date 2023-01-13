@@ -23,9 +23,6 @@
     "files": [
         "./dist/"
     ],
-    "directories": {
-        "doc": "./docs"
-    },
     "scripts": {
         "build": "rm -rf dist/*; yarn tsc && cp ../README.md ./README.md",
         "clean": "git clean -fdx",
@@ -54,5 +51,8 @@
         "email": "craig@patik.com",
         "url": "https://patik.com"
     },
-    "license": "BSD-3-Clause"
+    "license": "BSD-3-Clause",
+    "lint-staged": {
+        "*.ts": "eslint --cache --cache-location .eslintcache --fix"
+    }
 }
