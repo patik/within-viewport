@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Within Viewport Demo</title>
+
+    <!-- jQuery and the other 2 scripts are all required to run the Within Viewport jQuery plugin -->
+    <script src="../withinviewport.js"></script>
+    <script src="inc/jquery.min.js"></script>
+    <script src="../jquery.withinviewport.js"></script>
+
+    <!-- The following files are only needed for this demo -->
+    <link href="inc/demo.css" rel="stylesheet" media="all">
+    <script src="inc/demo.js"></script>
+</head>
+<body>
+    <div id="explanation" class="" role="main">
+        <h1>Within Viewport</h1>
+        <div id="toggler" class="button minus small">Collapse</div>
+        <p>Scroll around the page. Boxes completely within the viewport will darken.</p>
+        <p>See the <a href="https://github.com/patik/within-viewport">code on GitHub</a> and the <a href="http://patik.com/blog/within-viewport-javascript-and-jquery-plugin/">blog post</a> for more info.</p>
+        <div id="thresholds">
+            <p>Set your own thresholds (in pixels):</p>
+            <form action="." method="post">
+                <div id="threshold-top">
+                    <label for="top">Top:</label>
+                    <input type="number" size="3" id="top" value="0" tabindex="1">
+                </div>
+                <div id="threshold-left">
+                    <label for="left">Left:</label>
+                    <input type="number" size="3" id="left" value="0" tabindex="1">
+                </div>
+                <div id="threshold-right">
+                    <label for="right">Right:</label>
+                    <input type="number" size="3" id="right" value="0" tabindex="1">
+                </div>
+                <div id="threshold-bottom">
+                    <label for="bottom">Bottom:</label>
+                    <input type="number" size="3" id="bottom" value="0" tabindex="1">
+                </div>
+                <div style="display:none;">
+                    <input type="checkbox" checked="checked" id="show-boundary" tabindex="1">
+                    <label for="show-boundary">Show boundary regions</label>
+                </div>
+            </form>
+            <p style="display:none;">Press <code>shift + arrow key</code> to nudge the page by 1 pixel</p>
+        </div>
+    </div>
+    <!-- Boundary lines -->
+    <div style="display:none;" class="boundary boundary-top"></div>
+    <div style="display:none;" class="boundary boundary-right"></div>
+    <div style="display:none;" class="boundary boundary-bottom"></div>
+    <div style="display:none;" class="boundary boundary-left"></div>
+</body>
+</html>
