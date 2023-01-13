@@ -1,22 +1,23 @@
 {
     "name": "within-viewport",
     "description": "Depth-of-field calculator for comparing camera lenses",
-    "version": "2.1.2",
+    "version": "3.0.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/patik/dof.git"
+        "url": "https://github.com/patik/within-viewport.git"
     },
     "devDependencies": {
         "@types/lodash": "^4.14.191",
+        "eslint-config-prettier": "^8.6.0",
         "source-map-support": "^0.5.21"
     },
     "dependencies": {
         "lodash": "^4.17.21"
     },
     "bugs": {
-        "url": "https://github.com/patik/dof/issues"
+        "url": "https://github.com/patik/within-viewport/issues"
     },
-    "homepage": "https://github.com/patik/dof",
+    "homepage": "https://github.com/patik/within-viewport",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [

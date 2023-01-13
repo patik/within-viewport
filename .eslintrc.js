@@ -9,11 +9,11 @@ module.exports = {
     extends: [
         'eslint:recommended',
         'plugin:node/recommended',
-        "plugin:react-hooks/recommended",
+        'plugin:react-hooks/recommended',
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
-        "plugin:jsx-a11y/recommended"
+        'plugin:jsx-a11y/recommended',
         'plugin:prettier/recommended',
     ],
     rules: {
@@ -31,13 +31,13 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
     },
-    "env": {
-        "jest": true,
-        "node": true
+    env: {
+        jest: true,
+        node: true,
     },
-    "settings": {
-        "react": {
-            "version": "detect"
-        }
+    settings: {
+        react: {
+            version: 'detect',
+        },
     },
 }

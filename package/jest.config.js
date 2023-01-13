@@ -5,6 +5,6 @@ module.exports = {
     rootDir: '.',
     testPathIgnorePatterns: ['.js'],
     moduleNameMapper: {
-        '^dof$': '<rootDir>/dist/index.js',
+        '^within-viewport$': '<rootDir>/dist/index.js',
     },
 }
