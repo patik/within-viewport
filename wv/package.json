@@ -7,8 +7,6 @@
         "dist/**/*"
     ],
     "scripts": {
-        "build": "tsc",
-        "clean": "rm -rf ./dist/",
         "cm": "cz",
         "coverage": "codecov",
         "lint": "eslint ./src/ --fix",

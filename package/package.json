@@ -31,20 +31,16 @@
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
         "preversion": "yarn build && yarn cover",
-        "test": "yarn jest",
+        "test": "yarn jest --coverage",
         "unused-exports": "ts-prune -p ./tsconfig.json"
     },
     "keywords": [
-        "depth-of-field",
-        "lens",
-        "camera",
-        "sensor",
-        "calculator",
-        "focal-length",
-        "photography",
-        "bokeh",
-        "focus",
-        "blur"
+        "viewport",
+        "intersection observer",
+        "window",
+        "DOM",
+        "visibility",
+        "element"
     ],
     "author": {
         "name": "Craig Patik",
@@ -54,5 +50,8 @@
     "license": "BSD-3-Clause",
     "lint-staged": {
         "*.ts": "eslint --cache --cache-location .eslintcache --fix"
+    },
+    "engines": {
+        "node": ">=14.0"
     }
 }
