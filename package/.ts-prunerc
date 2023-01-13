@@ -1,0 +1,4 @@
+{
+    "ignore": "./dist|./index.ts",
+    "error": true
+}

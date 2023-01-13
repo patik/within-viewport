@@ -1,0 +1,46 @@
+{
+    "name": "app",
+    "version": "2.1.2",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build && next export",
+        "start": "next start",
+        "typecheck": "tsc --noEmit",
+        "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
+        "lint": "next lint && yarn typecheck && yarn code-lint && yarn unused-exports",
+        "test": "yarn jest",
+        "unused-exports": "ts-prune -p ./tsconfig.json"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
+        "@fontsource/open-sans": "^4.5.13",
+        "@mdx-js/loader": "^2.2.1",
+        "@mdx-js/react": "^2.2.1",
+        "@mui/icons-material": "^5.10.16",
+        "@mui/material": "^5.11.4",
+        "@mui/styled-engine-sc": "^5.10.16",
+        "@next/mdx": "^13.1.1",
+        "@nivo/core": "^0.80.0",
+        "@nivo/line": "^0.80.0",
+        "@types/mdx": "^2.0.3",
+        "dof": "^2.0.0",
+        "footinch": "^1.0.2",
+        "idb-keyval": "^6.2.0",
+        "next": "13.1.1",
+        "react": "18.2.0",
+        "react-copy-to-clipboard": "^5.1.0",
+        "react-dom": "18.2.0",
+        "react-error-boundary": "^3.1.4",
+        "styled-components": "^5.3.6",
+        "zustand": "^4.2.0"
+    },
+    "devDependencies": {
+        "@types/react-copy-to-clipboard": "^5.0.4",
+        "eslint-plugin-prettier": "^4.2.1"
+    },
+    "config": {
+        "basePath": "/dof"
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "lib": ["es5", "es6", "es2020"],
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "rootDir": "src",
+        "baseUrl": ".",
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "moduleResolution": "node",
+        "typeRoots": ["../node_modules/@types", "types"],
+        "forceConsistentCasingInFileNames": true,
+        "preserveConstEnums": true,
+        "resolveJsonModule": true
+    },
+    "include": ["**/*.ts", "**/*.tsx"],
+    "exclude": [
+        "../node_modules",
+        "node_modules",
+        "test",
+        "spec",
+        "types",
+        "dist",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.spec.ts"
+    ]
+}

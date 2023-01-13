@@ -1,0 +1,57 @@
+{
+    "name": "dof",
+    "description": "Depth-of-field calculator for comparing camera lenses",
+    "version": "2.1.2",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/patik/dof.git"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.14.191",
+        "source-map-support": "^0.5.21"
+    },
+    "dependencies": {
+        "lodash": "^4.17.21"
+    },
+    "bugs": {
+        "url": "https://github.com/patik/dof/issues"
+    },
+    "homepage": "https://github.com/patik/dof",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "./dist/"
+    ],
+    "directories": {
+        "doc": "./docs"
+    },
+    "scripts": {
+        "build": "rm -rf dist/*; yarn tsc && cp ../README.md ./README.md",
+        "clean": "git clean -fdx",
+        "cover": "yarn test --collectCoverage",
+        "typecheck": "tsc --noEmit",
+        "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
+        "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
+        "preversion": "yarn build && yarn cover",
+        "test": "yarn jest",
+        "unused-exports": "ts-prune -p ./tsconfig.json"
+    },
+    "keywords": [
+        "depth-of-field",
+        "lens",
+        "camera",
+        "sensor",
+        "calculator",
+        "focal-length",
+        "photography",
+        "bokeh",
+        "focus",
+        "blur"
+    ],
+    "author": {
+        "name": "Craig Patik",
+        "email": "craig@patik.com",
+        "url": "https://patik.com"
+    },
+    "license": "BSD-3-Clause"
+}

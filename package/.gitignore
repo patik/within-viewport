@@ -1,0 +1,2 @@
+# NPM needs the readme to be in this folder when publishing; the root's README will be copied to this folder during build time, but we don't want to commit it
+README.md
