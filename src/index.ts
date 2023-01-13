@@ -18,7 +18,7 @@ type Options = {
     left: 0
 }
 
-const defaults: Options = {
+const defaultOptions: Options = {
     container: typeof document !== 'undefined' ? document.body : window,
     sides: ['all'],
     top: 0,
@@ -27,11 +27,11 @@ const defaults: Options = {
     left: 0,
 }
 
-function isSide(side: string | Options | Partial<Options>): side is Side {
+function isSide(side: string | Options | Partial<Options> | undefined): side is Side {
     return Boolean(side) && typeof side === 'string' && ['all', 'top', 'right', 'bottom', 'left'].includes(side)
 }
 
-function isSides(sides: string | string[] | Options | Partial<Options>): sides is Side[] {
+function isSides(sides: string | string[] | Options | Partial<Options> | undefined): sides is Side[] {
     if (Array.isArray(sides)) {
         return sides.every((side) => ['all', 'top', 'right', 'bottom', 'left'].includes(side))
     }
@@ -50,12 +50,7 @@ function isSides(sides: string | string[] | Options | Partial<Options>): sides i
  * @return {Boolean}            Whether the element was completely within the viewport
  */
 export function withinviewport(elem: HTMLElement, options?: Side | Partial<Options>): boolean {
-    if (!options) {
-        options = Object.assign({}, defaults)
-    }
-
     let settings: Options
-    // let elemBoundingRect
     let containerBoundingRect: DOMRect
     let containerScrollTop = 0
     let containerScrollLeft = 0
@@ -68,20 +63,20 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
     // Settings argument may be a simple string (`top`, `right`, etc)
     if (isSide(options)) {
         settings = {
-            ...defaults,
+            ...defaultOptions,
             sides: [options],
         }
     } else if (isSides(options)) {
         settings = {
-            ...defaults,
+            ...defaultOptions,
             sides: options,
         }
     } else {
-        settings = Object.assign({}, defaults, options)
+        settings = Object.assign({}, defaultOptions, options)
     }
 
     // Build configuration from defaults and user-provided settings and metadata
-    const config: Options = Object.assign({}, defaults, settings)
+    const config: Options = Object.assign({}, defaultOptions, settings)
 
     // Use the window as the container if the user specified the body or a non-element
     if (config.container === document.body || ('nodeType' in config.container && config.container.nodeType !== 1)) {
@@ -116,7 +111,7 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
     // Element testing methods
     const isWithin = {
         // Element is below the top edge of the viewport
-        top: function _isWithin_top() {
+        top() {
             if (isContainerTheWindow) {
                 return elemBoundingRect.top >= config.top
             } else {
@@ -128,7 +123,7 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         },
 
         // Element is to the left of the right edge of the viewport
-        right: function _isWithin_right() {
+        right() {
             // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
 
             if (isContainerTheWindow) {
@@ -139,10 +134,10 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         },
 
         // Element is above the bottom edge of the viewport
-        bottom: function _isWithin_bottom() {
+        bottom() {
             let containerHeight = 0
 
-            if (isContainerTheWindow) {
+            if (config.container === window) {
                 // FIXME
                 containerHeight = config.container.innerHeight
             } else {
@@ -154,7 +149,7 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         },
 
         // Element is to the right of the left edge of the viewport
-        left: function _isWithin_left() {
+        left() {
             if (isContainerTheWindow) {
                 return elemBoundingRect.left >= config.left
             } else {
@@ -166,10 +161,10 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         },
 
         // Element is within all four boundaries
-        all: function _isWithin_all() {
+        all() {
             // Test each boundary in order of efficiency and likeliness to be false. This way we can avoid running all four functions on most elements.
             //     1. Top: Quickest to calculate + most likely to be false
-            //     2. Bottom: Note quite as quick to calculate, but also very likely to be false
+            //     2. Bottom: Not quite as quick to calculate, but also very likely to be false
             //     3-4. Left and right are both equally unlikely to be false since most sites only scroll vertically, but left is faster to calculate
             return isWithin.top() && isWithin.bottom() && isWithin.left() && isWithin.right()
         },

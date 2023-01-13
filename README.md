@@ -1,59 +1,200 @@
-# within-viewport
+# Within Viewport
 
-[![npm package][npm-img]][npm-url]
-[![Build Status][build-img]][build-url]
-[![Downloads][downloads-img]][downloads-url]
-[![Issues][issues-img]][issues-url]
-[![Code Coverage][codecov-img]][codecov-url]
-[![Semantic Release][semantic-release-img]][semantic-release-url]
+***Determine whether elements are within the viewport***
 
-> My awesome module
+Includes:
 
-## Install
+- A standalone, plain JavaScript function, `withinviewport()`
+- AMD and Node/CommonJS support
+- Optional jQuery plugin with handy selectors and shorthand methods
 
-```bash
-npm install within-viewport
+All of the above offer the same features.
+
+## Note
+
+Although this plugin is still actively maintained, it will eventually be made obsolete by the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). You can check the current state of browser compatibility at [caniuse.com](https://caniuse.com/#feat=intersectionobserver). Meanwhile, withinviewport will continue to work on current and [legacy browsers](#Browser-Support).
+
+## Installation
+
+### AMD, Node.js, CommonJS
+
+#### [NPM](https://www.npmjs.com/package/withinviewport)
+
+`npm install withinviewport`
+
+And then:
+
+`import withinViewport from 'withinviewport'`
+
+### Legacy include
+
+Checkout the [legacy](https://github.com/patik/within-viewport/tree/legacy) branch of this repository for an older version that can be used as a CommonJS module or as a jQuery plugin.
+
+Standalone (no jQuery):
+
+```js
+<script src="withinviewport.js"></script>
+```
+
+jQuery plugin:
+
+```js
+<script src="withinviewport.js"></script>
+<script src="jquery.js"></script>
+<script src="jquery.withinviewport.js"></script>
 ```
 
 ## Usage
 
-```ts
-import { withinViewport } from 'within-viewport';
+### Basic
 
-withinViewport('hello');
-//=> 'hello from my package'
+```js
+// Returns true if the element is entirely within view of the window
+const elem = document.getElementById('#myElement')
+withinviewport(elem)
 ```
 
-## API
+### Advanced
 
-### withinViewport(input, options?)
+```js
+// Test against only some sides of the window for faster performance
+withinviewport(elem, {sides: 'left'})
+```
 
-#### input
+```js
+// Pick another element to act as the viewport (instead of `window`)
+withinviewport(elem, { container: document.getElementById('myElem') })
+```
 
-Type: `string`
+```js
+// Define your own viewport crop by specifying thresholds for each side
+// Example: element is at least 12px inside the top and right of the viewport
+withinviewport(elem, { top: 12, right: 12 })
+```
 
-Lorem ipsum.
+For more options, see [Settings](#settings) section below.
 
-#### options
+### Shorthand notation
 
-Type: `object`
+```js
+// These will use the default thresholds; see 'Settings' section below
+withinviewport(elem, 'bottom right')
+withinviewport.left(elem)
+```
 
-##### postfix
+## jQuery plugin
 
-Type: `string`
-Default: `rainbows`
+### Usage
 
-Lorem ipsum.
+#### Basic
 
-[build-img]:https://github.com/patik/within-viewport-next/actions/workflows/release.yml/badge.svg
-[build-url]:https://github.com/patik/within-viewport-next/actions/workflows/release.yml
-[downloads-img]:https://img.shields.io/npm/dt/within-viewport-next
-[downloads-url]:https://www.npmtrends.com/within-viewport-next
-[npm-img]:https://img.shields.io/npm/v/within-viewport-next
-[npm-url]:https://www.npmjs.com/package/within-viewport-next
-[issues-img]:https://img.shields.io/github/issues/patik/within-viewport-next
-[issues-url]:https://github.com/patik/within-viewport-next/issues
-[codecov-img]:https://codecov.io/gh/patik/within-viewport-next/branch/main/graph/badge.svg
-[codecov-url]:https://codecov.io/gh/patik/within-viewport-next
-[semantic-release-img]:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
-[semantic-release-url]:https://github.com/semantic-release/semantic-release
+```js
+// Returns true if the element is entirely within the viewport
+$('#myElement').is(':within-viewport')
+```
+
+```js
+// Returns a jQuery object of all <div>s that are within the viewport
+$('div').withinviewport()
+```
+
+#### Advanced
+
+There are shorthand selectors and methods for testing against only one edge of the viewport.
+
+```js
+// Returns true if the element is within the left edge of the viewport
+// Also works with 'top', 'right', and 'bottom'
+$('#myElement').is(':within-viewport-left');
+```
+
+```js
+// Returns a jQuery collection of all <div>s within the left edge of the viewport
+$('div').withinviewportleft();
+```
+
+```js
+// Same as above, but only elements that are at least 12px inside the left edge
+$('div').withinviewportleft({left: 12});
+```
+
+These shortcuts will result in slightly better performance if you're testing hundreds or thousands of elements.
+
+#### Live updating
+
+If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. Instead of `scroll`, I recommend using [James Padolsey's `scrollStop` event](http://james.padolsey.com/javascript/special-scroll-events-for-jquery/) since firing on every `window.scroll` event will [bring your UI to its knees](http://ejohn.org/blog/learning-from-twitter/).
+
+```js
+$(window).on('resize scrollStop', function() {
+    // Your code here...
+
+    // Example:
+    $('div')
+        // Momentarily declare all divs out of the viewport...
+        .removeClass('within-viewport');
+        // Then filter them to reveal which ones are still within it
+        .filter(':within-viewport')
+            .addClass('within-viewport');
+});
+```
+
+## Settings
+
+This applies to both the jQuery plugin and standalone function.
+
+Use the object `withinviewport.defaults` to define your page's practical viewport compared to the actual browser window.
+
+### Custom viewport element
+
+If you want to test whether an element is within a scrollable parent element (e.g. which has `overflow: auto`), assign the parent element to the `container` property:
+
+```js
+$('.child-element').withinviewport({
+    container: $('.parent-element')
+});
+```
+
+### Custom boundaries
+
+For example, a fixed header with a height of 100px that spans the entire width of the page effectively lowers the viewport by 100px from the top edge of the browser window:
+
+```js
+withinviewport.defaults.top = 100;
+```
+
+If you only care about some edges of the viewport, you can specify them to improve performance:
+
+```js
+withinviewport.defaults.sides = 'left bottom';
+```
+
+You can also pass settings on the fly to temporarily override the defaults:
+
+```js
+withinviewport(elem, {sides:'left bottom', left: 40});
+$('div').withinviewport({sides:'left bottom', left: 40});
+```
+
+Individual elements may have their own settings embedded in a `data` attribute using object notation. These will override both the defaults any any settings passed to the function on the fly (like the example above).
+
+```html
+<div data-withinviewport-settings="{sides: 'left', top: 40}">
+```
+
+You can specify *negative threshold values* to allow elements to reside outside the viewport.
+
+
+## Credit
+
+Within Viewport is inspired by these similar utilities which only reflect whether an element is at least partially in view:
+
+* Remy Sharp's [Element 'in view' Event Plugin](http://remysharp.com/2009/01/26/element-in-view-event-plugin/)
+* Mike Tuupola's [Viewport Selectors for jQuery](http://www.appelsiini.net/projects/viewport)
+
+## License
+
+Have fun with it &mdash; [ISC](http://choosealicense.com/licenses/isc/). See included [LICENSE](LICENSE) file.
+
+## Author
+
+Craig Patik, [patik.com](http://patik.com/) &amp; [@craigpatik](https://twitter.com/craigpatik)
