@@ -7,7 +7,6 @@
         "skipLibCheck": true,
         "strict": true,
         "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
         "esModuleInterop": true,
         "module": "esnext",
         "moduleResolution": "node",
@@ -16,6 +15,6 @@
         "jsx": "preserve",
         "incremental": true
     },
-    "include": ["next-env.d.ts", "src/", "public/", "pages/", "./index.d.ts"],
+    "include": ["next-env.d.ts", "src/", "./index.d.ts", "../package/**.d.ts"],
     "exclude": ["node_modules", "./cypress"]
 }

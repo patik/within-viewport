@@ -3,8 +3,8 @@
     "version": "3.0.0",
     "private": true,
     "scripts": {
-        "start": "yarn build; yarn http-server",
-        "build": "cp -r ./styles/* ./public; cp -r ./html/* ./public; cp -r ./vendor/* ./public; yarn tsc",
+        "start": "yarn build; yarn http-server ./dist",
+        "build": "cp -a ./styles/ ./dist/; cp -a ./html/ ./dist/; cp -a ./vendor/ ./dist/; yarn tsc; cp -a ../package/dist/index.js ./dist/withinviewport.js",
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
@@ -13,6 +13,7 @@
     },
     "dependencies": {},
     "devDependencies": {
+        "@types/jquery": "^3.5.16",
         "eslint-plugin-prettier": "^4.2.1",
         "http-server": "^14.1.1"
     }
