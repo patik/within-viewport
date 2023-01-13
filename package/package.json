@@ -1,5 +1,5 @@
 {
-    "name": "dof",
+    "name": "within-viewport",
     "description": "Depth-of-field calculator for comparing camera lenses",
     "version": "2.1.2",
     "repository": {
