@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "rootDir": ".",
+        "baseUrl": ".",
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "moduleResolution": "node",
+        "typeRoots": ["../node_modules/@types", "types"],
+        "forceConsistentCasingInFileNames": true,
+        "preserveConstEnums": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "types": ["cypress", "node"]
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "jest.config.ts", "cypress.config.ts", "cypress/**/*.ts"],
+    "exclude": ["../node_modules", "node_modules"]
+}

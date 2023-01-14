@@ -10,9 +10,22 @@ Includes:
 
 All of the above offer the same features.
 
+## Next generation
+
+- New version
+  - Uses IntersectionObserver, TypeScript
+  - Tests, e.g. with Cypress
+  - New demo page (but still vanilla JS/HTML)
+  - Also available as a React hook?
+- Legacy version still available for environments without IntersectionObserver
+  - Available from the same package, e.g. `import from 'within-viewport/legacy`
+  - also exports types
+  - Tests, e.g. with Cypress
+  - Same old demos
+
 ## Note
 
-Although this plugin is still actively maintained, it will eventually be made obsolete by the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). You can check the current state of browser compatibility at [caniuse.com](https://caniuse.com/#feat=intersectionobserver). Meanwhile, withinviewport will continue to work on current and [legacy browsers](#Browser-Support).
+Although this plugin is still actively maintained, it will eventually be made obsolete by the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). You can check the current state of browser compatibility at [caniuse.com](https://caniuse.com/#feat=intersectionobserver). Meanwhile, withinviewport will continue to work on current and [legacy browsers](#browser-support).
 
 ## Installation
 
