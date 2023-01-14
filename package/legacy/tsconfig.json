@@ -1,0 +1,8 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "target": "es5",
+        "outDir": "../dist-legacy"
+    },
+    "include": ["src/**/*.ts*", "../modern/src/types.d.ts"]
+}

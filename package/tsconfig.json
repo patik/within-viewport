@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "commonjs",
         "lib": ["dom", "dom.iterable", "esnext"],
         "declaration": true,
@@ -24,8 +24,9 @@
         "preserveConstEnums": true,
         "esModuleInterop": true,
         "resolveJsonModule": true,
-        "types": ["cypress", "node"]
+        "types": ["cypress", "node"],
+        "skipLibCheck": true
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx", "jest.config.ts", "cypress.config.ts", "cypress/**/*.ts"],
-    "exclude": ["../node_modules", "node_modules"]
+    "include": ["modern/src/**/*.ts*", "modern/src/types.d.ts", "cypress.config.ts", "cypress/**/*.ts"],
+    "exclude": ["../node_modules", "node_modules", "modern/**/*.test.ts"]
 }
