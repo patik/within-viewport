@@ -1,11 +1,11 @@
 module.exports = {
     // root: true,
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'node', 'prettier'],
-    // parserOptions: {
-    //     tsconfigRootDir: __dirname,
-    //     project: ['./tsconfig.json'],
-    // },
+    plugins: ['@typescript-eslint', 'node', 'prettier', 'jest-dom'],
+    parserOptions: {
+        // tsconfigRootDir: __dirname,
+        project: ['./package/tsconfig.json'],
+    },
     extends: [
         'eslint:recommended',
         'plugin:node/recommended',
@@ -13,6 +13,7 @@ module.exports = {
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
+        'plugin:jest-dom/recommended',
         'plugin:jsx-a11y/recommended',
         'plugin:prettier/recommended',
     ],

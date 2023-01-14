@@ -7,7 +7,7 @@
         "declarationMap": true,
         "sourceMap": true,
         "outDir": "dist",
-        "rootDir": "src",
+        "rootDir": ".",
         "baseUrl": ".",
         "strict": true,
         "noImplicitAny": true,
@@ -25,16 +25,6 @@
         "esModuleInterop": true,
         "resolveJsonModule": true
     },
-    "include": ["**/*.ts", "**/*.tsx"],
-    "exclude": [
-        "../node_modules",
-        "node_modules",
-        "test",
-        "spec",
-        "types",
-        "dist",
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/*.spec.ts"
-    ]
+    "include": ["src/**/*.ts", "src/**/*.tsx", "jest.config.ts"],
+    "exclude": ["../node_modules", "node_modules", "test", "spec", "types", "dist"]
 }
