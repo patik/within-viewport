@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react'
-import { withinviewport } from '../../package/dist'
+// import { withinviewport } from '../../package/dist'
 
 type Side = 'top' | 'right' | 'bottom' | 'left'
 
@@ -9,12 +9,11 @@ const wvdemo = (function ($) {
     let showBoundsCheck: HTMLElement | null = null
 
     function init() {
-        var boxCount = 100
-        var boxWidth = 20
-        var boxHTML = ''
-        var boxContainer
-        var elem
-        var i
+        let boxCount = 100
+        let boxWidth = 20
+        let boxHTML = ''
+        let boxContainer
+        let i
 
         // Make sure the demo will be wider than the device's screen so that vertical scroll bars appear
         //    but not so wide that you can't see at least four on screen at a time with a maximized browser window
@@ -79,17 +78,15 @@ const wvdemo = (function ($) {
     }
 
     function trigger(node: HTMLElement, eventName: string) {
-        var evt
-
         if (document.createEvent) {
-            evt = document.createEvent('HTMLEvents')
+            let evt = document.createEvent('HTMLEvents')
             evt.initEvent(eventName, true, true)
             // @ts-ignore
             evt.eventName = eventName
             node.dispatchEvent(evt)
         } else {
             // @ts-ignore
-            evt = document.createEventObject()
+            let evt = document.createEventObject()
             evt.eventType = eventName
             evt.eventName = eventName
             // @ts-ignore
@@ -192,13 +189,13 @@ const wvdemo = (function ($) {
         }
 
         if (evt.shiftKey && 37 <= evt.keyCode && evt.keyCode <= 40) {
-            var key = 'key' + evt.keyCode,
-                scrollVals: Record<string, [number, number]> = {
-                    key38: [0, -1],
-                    key37: [-1, 0],
-                    key39: [1, 0],
-                    key40: [0, 1],
-                }
+            const key = 'key' + evt.keyCode
+            const scrollVals: Record<string, [number, number]> = {
+                key38: [0, -1],
+                key37: [-1, 0],
+                key39: [1, 0],
+                key40: [0, 1],
+            }
 
             window.scrollBy(scrollVals[key][0], scrollVals[key][1])
 
@@ -227,17 +224,13 @@ const wvdemo = (function ($) {
 
     // Display or hide the "show boundaries" check box if any values are set (non-zero)
     function toggleBoundaryToggle() {
-        var somethingEntered = false
-
-        query('input[type="number"]').forEach(function (elem) {
-            if (parseInt(elem.getAttribute('value') ?? '', 10) !== 0) {
-                somethingEntered = true
-            }
-        })
-
         if (!showBoundsCheck || !showBoundsCheck.parentNode) {
             return
         }
+
+        const somethingEntered = query('input[type="number"]').some(
+            (elem) => parseInt(elem.getAttribute('value') ?? '', 10) !== 0,
+        )
 
         if (somethingEntered) {
             // @ts-ignore
@@ -253,37 +246,41 @@ const wvdemo = (function ($) {
         const distStr = `${dist}px`
 
         switch (side) {
-            case 'top':
-                query('.boundary-top').forEach(function (elem) {
+            case 'top': {
+                query('.boundary-top').forEach((elem) => {
                     elem.style.top = distStr
                     elem.style.height = distStr
                     elem.style.marginTop = '-' + distStr
                 })
                 break
+            }
 
-            case 'right':
-                query('.boundary-right').forEach(function (elem) {
+            case 'right': {
+                query('.boundary-right').forEach((elem) => {
                     elem.style.right = distStr
                     elem.style.width = distStr
                     elem.style.marginRight = '-' + distStr
                 })
                 break
+            }
 
-            case 'bottom':
-                query('.boundary-bottom').forEach(function (elem) {
+            case 'bottom': {
+                query('.boundary-bottom').forEach((elem) => {
                     elem.style.bottom = distStr
                     elem.style.height = distStr
                     elem.style.marginBottom = '-' + distStr
                 })
                 break
+            }
 
-            case 'left':
-                query('.boundary-left').forEach(function (elem) {
+            case 'left': {
+                query('.boundary-left').forEach((elem) => {
                     elem.style.left = distStr
                     elem.style.width = distStr
                     elem.style.marginLeft = '-' + distStr
                 })
                 break
+            }
 
             default:
                 break
@@ -293,6 +290,7 @@ const wvdemo = (function ($) {
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
         $boxes.forEach(function (box) {
+            // @ts-ignore
             if (withinviewport(box)) {
                 box.innerHTML = 'in'
                 box.setAttribute('aria-hidden', 'false')

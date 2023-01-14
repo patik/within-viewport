@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react'
-import { withinviewport } from '../../package/dist'
+// import { withinviewport } from '../../package/dist'
 
 type Side = 'top' | 'right' | 'bottom' | 'left'
 
@@ -72,7 +72,7 @@ export default (function ($) {
     // Events //
     ////////////
 
-    var events = {
+    const events = {
         // Setup event listeners
         init: function () {
             // Scroll
@@ -108,7 +108,7 @@ export default (function ($) {
         },
 
         // When a boundary value changes
-        onBoundaryChange: function (evt: ChangeEvent | MouseEvent | KeyboardEvent) {
+        onBoundaryChange(evt: ChangeEvent | MouseEvent | KeyboardEvent) {
             const target = evt.target
             const val = target && 'value' in target ? parseInt(String(target?.value ?? ''), 10) : 0
             // @ts-ignore
@@ -136,7 +136,7 @@ export default (function ($) {
         },
 
         // When the boundary toggle box is checked/unchecked
-        onBoundaryToggle: function () {
+        onBoundaryToggle() {
             if ($showBoundsCheck?.is(':checked')) {
                 // Fire the change event so events.onBoundaryChange() will apply any values
                 $('input[type="number"]').change()
@@ -149,7 +149,7 @@ export default (function ($) {
         },
 
         // When shift + arrow key is pressed, nudge the page by 1px
-        onNudge: function (evt: KeyboardEvent) {
+        onNudge(evt: KeyboardEvent) {
             // Ignore input fields
             if (evt.target && $(evt.target).is('input')) {
                 return true
@@ -169,7 +169,7 @@ export default (function ($) {
             }
         },
 
-        onControlsToggle: function (/* evt */) {
+        onControlsToggle(/* evt */) {
             var $toggler = $('#toggler')
 
             $('#explanation').toggleClass('collapsed')
@@ -189,8 +189,8 @@ export default (function ($) {
     /////////
 
     // Display or hide the "show boundaries" check box if any values are set (non-zero)
-    var _toggleBoundaryToggle = function _toggleBoundaryToggle() {
-        var somethingEntered = false
+    const _toggleBoundaryToggle = function _toggleBoundaryToggle() {
+        let somethingEntered = false
 
         $('input[type="number"]').each(function () {
             if (parseInt(this.getAttribute('value') ?? '', 10) !== 0) {
@@ -206,41 +206,45 @@ export default (function ($) {
     }
 
     // Overlay a boundary line on the viewport when one is set by the user
-    var _drawBound = function _drawBound(side: Side, dist: number) {
+    const _drawBound = function _drawBound(side: Side, dist: number) {
         const distStr = `${dist}px`
 
         switch (side) {
-            case 'top':
+            case 'top': {
                 $('.boundary-top').css({
                     top: distStr,
                     height: distStr,
                     marginTop: '-' + distStr,
                 })
                 break
+            }
 
-            case 'right':
+            case 'right': {
                 $('.boundary-right').css({
                     right: distStr,
                     width: distStr,
                     marginRight: '-' + distStr,
                 })
                 break
+            }
 
-            case 'bottom':
+            case 'bottom': {
                 $('.boundary-bottom').css({
                     bottom: distStr,
                     height: distStr,
                     marginBottom: '-' + distStr,
                 })
                 break
+            }
 
-            case 'left':
+            case 'left': {
                 $('.boundary-left').css({
                     left: distStr,
                     width: distStr,
                     marginLeft: '-' + distStr,
                 })
                 break
+            }
 
             default:
                 break
@@ -249,7 +253,7 @@ export default (function ($) {
 
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     // Uses the jQuery plugin
-    var _updateBoxes = function _updateBoxes() {
+    const _updateBoxes = function _updateBoxes() {
         // Reset all boxes to being considered out of view
         $boxes?.html('out').attr('aria-hidden', 'true').removeClass('inview')
 

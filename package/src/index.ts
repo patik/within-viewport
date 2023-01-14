@@ -1,23 +1,3 @@
-/**
- * Within Viewport
- *
- * @description Determines whether an element is completely within the browser viewport
- * @author      Craig Patik, http://patik.com/
- * @version     3.0.0
- * @date        2022-05-09
- */
-
-type Side = 'all' | 'top' | 'right' | 'bottom' | 'left'
-
-type Options = {
-    container: HTMLElement | Window
-    sides: Side[]
-    top: 0
-    right: 0
-    bottom: 0
-    left: 0
-}
-
 const defaultOptions: Options = {
     container: typeof document !== 'undefined' ? document.body : window,
     sides: ['all'],
@@ -114,12 +94,12 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         top() {
             if (isContainerTheWindow) {
                 return elemBoundingRect.top >= config.top
-            } else {
-                return (
-                    elemBoundingRect.top >=
-                    containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top
-                )
             }
+
+            return (
+                elemBoundingRect.top >=
+                containerScrollTop - (containerScrollTop - containerBoundingRect.top) + config.top
+            )
         },
 
         // Element is to the left of the right edge of the viewport
@@ -128,9 +108,9 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
 
             if (isContainerTheWindow) {
                 return elemBoundingRect.right <= containerBoundingRect.right + containerScrollLeft - config.right
-            } else {
-                return elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right
             }
+
+            return elemBoundingRect.right <= containerBoundingRect.right - scrollBarWidths[0] - config.right
         },
 
         // Element is above the bottom edge of the viewport
@@ -152,12 +132,12 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         left() {
             if (isContainerTheWindow) {
                 return elemBoundingRect.left >= config.left
-            } else {
-                return (
-                    elemBoundingRect.left >=
-                    containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left
-                )
             }
+
+            return (
+                elemBoundingRect.left >=
+                containerScrollLeft - (containerScrollLeft - containerBoundingRect.left) + config.left
+            )
         },
 
         // Element is within all four boundaries
