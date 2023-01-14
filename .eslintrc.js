@@ -1,9 +1,9 @@
 module.exports = {
-    // root: true,
+    root: true,
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint', 'node', 'prettier', 'jest-dom'],
     parserOptions: {
-        // tsconfigRootDir: __dirname,
+        tsconfigRootDir: __dirname,
         project: ['./package/tsconfig.json'],
     },
     extends: [
