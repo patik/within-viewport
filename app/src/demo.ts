@@ -1,18 +1,68 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { withinviewport } from '../../package/modern/src/index'
 import { isSide } from '../../package/modern/src/options'
 
-type Side = 'top' | 'right' | 'bottom' | 'left'
-
 const wvOptions: Record<Side, number> = {
+    all: 0,
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
 }
 
+// Query function that returns a proper array
+function query(selector: string, node?: HTMLElement): Array<HTMLElement> {
+    if (typeof node === 'undefined') {
+        node = document.body
+    }
+
+    return Array.from(node.querySelectorAll(selector))
+}
+
+function showAll(selector: string) {
+    query(selector).forEach((elem) => {
+        elem.style.display = 'block'
+    })
+}
+
+function hideAll(selector: string) {
+    query(selector).forEach((elem) => {
+        elem.style.display = 'none'
+    })
+}
+
+function triggerEvent(node: HTMLElement, eventName: string) {
+    // Modern browsers (as of the 2020s)
+    if (typeof Event !== 'undefined') {
+        node.dispatchEvent(new Event(eventName, { bubbles: true, cancelable: true }))
+    }
+    // The first generation of standards-compliant browsers (not IE) from the 2000s
+    else if (document.createEvent) {
+        const evt = document.createEvent('HTMLEvents')
+
+        if ('initEvent' in evt) {
+            evt.initEvent(eventName, true, true)
+        }
+
+        if ('eventName' in evt) {
+            evt.eventName = eventName
+        }
+
+        node.dispatchEvent(evt)
+    }
+    // IE
+    else if ('createEventObject' in document && typeof document.createEventObject === 'function') {
+        const evt = document.createEventObject()
+
+        evt.eventType = eventName
+
+        if ('fireEvent' in node && typeof node.fireEvent === 'function') {
+            node.fireEvent('on' + evt.eventType, evt)
+        }
+    }
+}
+
 // Demo code
-export default (function () {
+function demo() {
     let $boxes: HTMLElement[] = []
     let showBoundsCheck: HTMLInputElement | null = null
 
@@ -48,6 +98,7 @@ export default (function () {
 
         // Add a container and put the boxes inside
         const boxContainer = document.createElement('div')
+
         boxContainer.id = 'boxContainer'
         boxContainer.style.cssText = 'width:' + (boxWidth * 10 + 20) + 'px;'
         boxContainer.innerHTML = boxHTML
@@ -60,6 +111,7 @@ export default (function () {
 
         // FIXME
         if (checkbox && (checkbox as HTMLInputElement).type === 'checkbox') {
+            // FIXME
             showBoundsCheck = checkbox as HTMLInputElement
         }
 
@@ -67,50 +119,6 @@ export default (function () {
 
         // Update the <div>s for the first time
         updateBoxes()
-    }
-
-    // Query function
-    function query(selector: string, node?: HTMLElement): Array<HTMLElement> {
-        if (typeof node === 'undefined') {
-            node = document.body
-        }
-
-        return [].slice.call(node.querySelectorAll(selector))
-    }
-
-    function showAll(selector: string) {
-        console.log('selector ', selector, query(selector))
-        query(selector).forEach((elem) => {
-            elem.style.display = 'block'
-        })
-    }
-
-    function hideAll(selector: string) {
-        query(selector).forEach((elem) => {
-            elem.style.display = 'none'
-        })
-    }
-
-    function trigger(node: HTMLElement, eventName: string) {
-        if (document.createEvent) {
-            const evt = document.createEvent('HTMLEvents')
-
-            evt.initEvent(eventName, true, true)
-
-            if ('eventName' in evt) {
-                evt.eventName = eventName
-            }
-
-            node.dispatchEvent(evt)
-        } else if ('createEventObject' in document && typeof document.createEventObject === 'function') {
-            const evt = document.createEventObject()
-
-            evt.eventType = eventName
-
-            if ('fireEvent' in node && typeof node.fireEvent === 'function') {
-                node.fireEvent('on' + evt.eventType, evt)
-            }
-        }
     }
 
     ////////////
@@ -124,14 +132,13 @@ export default (function () {
         window.addEventListener('scroll', updateBoxes)
 
         // User entry
-        query('input[type="number"]').forEach(function (elem) {
+        query('input[type="number"]').forEach((elem) => {
             elem.addEventListener('keyup', onBoundaryChange)
             elem.addEventListener('change', onBoundaryChange)
             elem.addEventListener('click', onBoundaryChange) // 'click' is for spinners on input[number] control
         })
 
         // Boundary toggle
-        // @ts-ignore
         showBoundsCheck?.addEventListener('change', onBoundaryToggle)
 
         // Nudge controls
@@ -155,32 +162,28 @@ export default (function () {
 
     // When a boundary value changes
     function onBoundaryChange(evt: Event) {
-        // Annoying that I can't get something so basic to be typed correctly
+        // FIXME - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
         const val = parseInt(target?.value ?? '', 10)
+        const side = target?.id
 
-        const id = target?.id
-
-        if (!isSide(id)) {
+        if (!isSide(side)) {
             throw new Error('Input ID must be a valid side')
         }
 
-        const side = id as Side
-
         // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
         if (val > 0) {
-            // @ts-ignore
             if (showBoundsCheck?.checked) {
-                showAll('.boundary-' + id)
+                showAll(`.boundary-${side}`)
 
                 drawBound(side, val)
             } else {
-                hideAll('.boundary-' + id)
+                hideAll(`.boundary-${side}`)
             }
         }
         // Hide boundaries
         else {
-            hideAll('.boundary-' + id)
+            hideAll(`.boundary-${side}`)
         }
 
         // Update the page
@@ -191,13 +194,13 @@ export default (function () {
 
     // When the boundary toggle box is checked/unchecked
     function onBoundaryToggle(evt: Event) {
-        // Annoying that I can't get something so basic to be typed correctly
+        // FIXME - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
 
         if (showBoundsCheck?.checked) {
             // Fire the change event so onBoundaryChange() will apply any values
             query('input[type="number"]').forEach(function (elem) {
-                trigger(elem, 'change')
+                triggerEvent(elem, 'change')
             })
 
             toggleBoundaryToggle()
@@ -208,7 +211,7 @@ export default (function () {
 
     // When shift + arrow key is pressed, nudge the page by 1px
     function onNudge(evt: KeyboardEvent) {
-        // Annoying that I can't get something so basic to be typed correctly
+        // FIXME - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
 
         // Ignore input fields
@@ -216,19 +219,51 @@ export default (function () {
             return true
         }
 
-        if (evt.shiftKey && 37 <= evt.keyCode && evt.keyCode <= 40) {
-            const key = 'key' + evt.keyCode
-            const scrollVals: Record<string, [number, number]> = {
-                key38: [0, -1],
-                key37: [-1, 0],
-                key39: [1, 0],
-                key40: [0, 1],
-            }
-
-            window.scrollBy(scrollVals[key][0], scrollVals[key][1])
-
-            evt.preventDefault()
+        if (!evt.shiftKey) {
+            return
         }
+
+        let code = evt.code
+
+        if (typeof code === 'undefined' && 'keyCode' in evt) {
+            switch (evt.keyCode) {
+                case 37: {
+                    code = 'ArrowLeft'
+                    break
+                }
+                case 38: {
+                    code = 'ArrowUp'
+                    break
+                }
+                case 39: {
+                    code = 'ArrowRight'
+                    break
+                }
+                case 40: {
+                    code = 'ArrowDown'
+                    break
+                }
+                default: {
+                    // Some other, non-arrow key was pressed
+                    break
+                }
+            }
+        }
+
+        if (!code || !/^Arrow\w+/.test(code)) {
+            return
+        }
+
+        const scrollVals: Record<string, [number, number]> = {
+            ArrowUp: [0, -1],
+            ArrowLeft: [-1, 0],
+            ArrowRight: [1, 0],
+            ArrowDown: [0, 1],
+        }
+
+        window.scrollBy(scrollVals[code][0], scrollVals[code][1])
+
+        evt.preventDefault()
     }
 
     function onControlsToggle() {
@@ -261,11 +296,13 @@ export default (function () {
         )
 
         if (somethingEntered) {
-            // @ts-ignore
-            showBoundsCheck.parentNode.style.display = 'block'
+            if (showBoundsCheck.parentElement) {
+                showBoundsCheck.parentElement.style.display = 'block'
+            }
         } else {
-            // @ts-ignore
-            showBoundsCheck.parentNode.style.display = 'none'
+            if (showBoundsCheck.parentElement) {
+                showBoundsCheck.parentElement.style.display = 'none'
+            }
         }
     }
 
@@ -278,7 +315,7 @@ export default (function () {
                 query('.boundary-top').forEach((elem) => {
                     elem.style.top = distStr
                     elem.style.height = distStr
-                    elem.style.marginTop = '-' + distStr
+                    elem.style.marginTop = `-${distStr}`
                 })
                 break
             }
@@ -287,7 +324,7 @@ export default (function () {
                 query('.boundary-right').forEach((elem) => {
                     elem.style.right = distStr
                     elem.style.width = distStr
-                    elem.style.marginRight = '-' + distStr
+                    elem.style.marginRight = `-${distStr}`
                 })
                 break
             }
@@ -296,7 +333,7 @@ export default (function () {
                 query('.boundary-bottom').forEach((elem) => {
                     elem.style.bottom = distStr
                     elem.style.height = distStr
-                    elem.style.marginBottom = '-' + distStr
+                    elem.style.marginBottom = `-${distStr}`
                 })
                 break
             }
@@ -305,7 +342,7 @@ export default (function () {
                 query('.boundary-left').forEach((elem) => {
                     elem.style.left = distStr
                     elem.style.width = distStr
-                    elem.style.marginLeft = '-' + distStr
+                    elem.style.marginLeft = `-${distStr}`
                 })
                 break
             }
@@ -330,5 +367,7 @@ export default (function () {
         })
     }
 
-    window.addEventListener('DOMContentLoaded', init)
-})()
+    window.addEventListener('load', init)
+}
+
+demo()
