@@ -34,7 +34,7 @@
         "./dist/"
     ],
     "scripts": {
-        "build": "rm -rf dist/* && yarn tsc --project ./tsconfig.json && yarn tsc --project ./legacy/tsconfig.json && cp ../README.md ./README.md",
+        "build": "rm -rf dist/* && yarn tsc --project ./tsconfig.export.json && yarn tsc --project ./legacy/tsconfig.json && cp ../README.md ./README.md",
         "clean": "git clean -fdx",
         "cover": "yarn test --collectCoverage",
         "typecheck": "tsc --noEmit",
@@ -47,7 +47,7 @@
     },
     "keywords": [
         "viewport",
-        "intersection observer",
+        "IntersectionObserver",
         "window",
         "DOM",
         "visibility",
