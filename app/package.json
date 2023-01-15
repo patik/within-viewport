@@ -2,9 +2,10 @@
     "name": "@patik/within-viewport-demo",
     "version": "3.0.0",
     "private": true,
+    "source": "src/index.html",
     "scripts": {
-        "start": "yarn build; yarn http-server ./dist",
-        "build": "cp -a ./styles/ ./dist/; cp -a ./html/ ./dist/; cp -a ./vendor/ ./dist/; yarn tsc; cp -a ../package/dist/index.js ./dist/withinviewport.js",
+        "start": "parcel",
+        "build": "parcel build",
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
@@ -15,6 +16,6 @@
     "devDependencies": {
         "@types/jquery": "^3.5.16",
         "eslint-plugin-prettier": "^4.2.1",
-        "http-server": "^14.1.1"
+        "parcel": "^2.8.2"
     }
 }

@@ -1,3 +1,9 @@
+interface Window {
+    scrollTop: HTMLElement['scrollTop']
+    scrollLeft: HTMLElement['scrollLeft']
+    getBoundingClientRect: HTMLElement['getBoundingClientRect']
+}
+
 type Side = 'all' | 'top' | 'right' | 'bottom' | 'left'
 
 type Options = {

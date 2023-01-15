@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
+        "module": "CommonJS",
         "lib": ["dom", "dom.iterable", "esnext"],
         "outDir": "dist",
         "allowJs": true,
@@ -8,7 +9,6 @@
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "esModuleInterop": true,
-        "module": "CommonJS",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,

@@ -8,6 +8,7 @@ yarn-error.log
 app/cypress/e2e/examples
 app/cypress/fixtures
 app/cypress/support
+.parcel-cache/
 
 # Logs
 logs
