@@ -5,7 +5,7 @@ import { withinviewport } from '../../package/modern/src/index'
 type Side = 'top' | 'right' | 'bottom' | 'left'
 
 // Demo code
-export default (function ($) {
+export default (function () {
     let $boxes: HTMLElement[] = []
     let showBoundsCheck: HTMLElement | null = null
 
