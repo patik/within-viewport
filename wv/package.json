@@ -23,8 +23,8 @@
     "license": "MIT",
     "author": {
         "name": "Craig Patik",
-        "email": "patik@users.noreply.github.com",
-        "url": "https://github.com/patik"
+        "email": "craig@patik.com",
+        "url": "https://patik.com"
     },
     "engines": {
         "node": ">=12.0"

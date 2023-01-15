@@ -99,7 +99,7 @@ export default (function ($) {
                     /Firefox|Trident|Safari|Presto/.test(navigator.userAgent)) ||
                 (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))
             ) {
-                $('#thresholds p').show()
+                $('.nudge-instructions').show()
                 // @ts-ignore
                 $('body').on('keydown', events.onNudge)
             }

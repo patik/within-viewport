@@ -9,6 +9,8 @@ const wvOptions: Record<Side, number> = {
     left: 0,
 }
 
+const sides: Side[] = ['top', 'left', 'bottom', 'right']
+
 // Query function that returns a proper array
 function query(selector: string, node?: HTMLElement): Array<HTMLElement> {
     if (typeof node === 'undefined') {
@@ -20,7 +22,7 @@ function query(selector: string, node?: HTMLElement): Array<HTMLElement> {
 
 function showAll(selector: string) {
     query(selector).forEach((elem) => {
-        elem.style.display = 'block'
+        elem.style.display = elem.nodeName === 'SPAN' ? 'inline' : 'block'
     })
 }
 
@@ -30,7 +32,11 @@ function hideAll(selector: string) {
     })
 }
 
-function triggerEvent(node: HTMLElement, eventName: string) {
+function triggerEvent(node: HTMLElement | null, eventName: string) {
+    if (!node) {
+        return
+    }
+
     // Modern browsers (as of the 2020s)
     if (typeof Event !== 'undefined') {
         node.dispatchEvent(new Event(eventName, { bubbles: true, cancelable: true }))
@@ -70,11 +76,9 @@ const areViewportUnitsSupported = (function () {
         const elemWidth = parseInt(getComputedStyle(div, null).width, 10)
         const halfWidth = parseInt(String(window.innerWidth / 2), 10)
 
-        console.log('areViewportUnitsSupported ', elemWidth === halfWidth, elemWidth, halfWidth)
-
         return elemWidth === halfWidth
     } catch (e) {
-        console.log('e ', e)
+        console.error('[areViewportUnitsSupported] ', e)
         return false
     }
 })()
@@ -106,6 +110,7 @@ function isFlexboxSupported() {
 function demo() {
     let $boxes: HTMLElement[] = []
     let showBoundsCheck: HTMLInputElement | null = null
+    let sideStrategy: 'all' | 'independent' = 'all'
 
     function init() {
         const boxCount = 200
@@ -149,7 +154,6 @@ function demo() {
         document.body.appendChild(boxContainer)
 
         $boxes = query('div', boxContainer)
-        $boxes[4].id = 'test'
 
         const checkbox = document.getElementById('show-boundary')
 
@@ -175,11 +179,17 @@ function demo() {
         window.addEventListener('resize', updateBoxes)
         window.addEventListener('scroll', updateBoxes)
 
+        // Radio buttons
+        query('[name="side-strategy"]').forEach((elem) => {
+            elem.addEventListener('change', onSideStrategyChange)
+        })
+
         // User entry
         query('input[type="number"]').forEach((elem) => {
             elem.addEventListener('keyup', onBoundaryChange)
             elem.addEventListener('change', onBoundaryChange)
-            elem.addEventListener('click', onBoundaryChange) // 'click' is for spinners on input[number] control
+            // 'click' is for spinners on input[number] control
+            elem.addEventListener('click', onBoundaryChange)
         })
 
         // Boundary toggle
@@ -196,12 +206,37 @@ function demo() {
                 /Firefox|Trident|Safari|Presto/.test(navigator.userAgent)) ||
             (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))
         ) {
-            showAll('#thresholds p')
             document.body.addEventListener('keydown', onNudge)
+            showAll('.nudge-instructions')
         }
 
         // Controls toggler
         document.getElementById('toggler')?.addEventListener('click', onControlsToggle)
+    }
+
+    // When the radio buttons change
+    function onSideStrategyChange(evt: Event) {
+        // FIXME - Make TS work properly with DOM events
+        const target = evt.target as HTMLInputElement | null
+        const whichRadio = target?.value ?? ''
+
+        if (whichRadio === 'independent') {
+            sideStrategy = 'independent'
+            hideAll('.all-sides-wrapper')
+            showAll('.independent-sides-wrapper')
+            sides.forEach((side) => {
+                triggerEvent(document.getElementById(side), 'change')
+            })
+        } else {
+            sideStrategy = 'all'
+            hideAll('.independent-sides-wrapper')
+            showAll('.all-sides-wrapper')
+            triggerEvent(document.getElementById('all'), 'change')
+        }
+
+        // Update the page
+        updateBoxes()
+        toggleBoundaryToggle()
     }
 
     // When a boundary value changes
@@ -218,7 +253,14 @@ function demo() {
         // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
         if (val > 0) {
             if (showBoundsCheck?.checked) {
-                showAll(`.boundary-${side}`)
+                if (side === 'all') {
+                    showAll(`.boundary-top`)
+                    showAll(`.boundary-right`)
+                    showAll(`.boundary-bottom`)
+                    showAll(`.boundary-left`)
+                } else {
+                    showAll(`.boundary-${side}`)
+                }
 
                 drawBound(side, val)
             } else {
@@ -350,64 +392,97 @@ function demo() {
         }
     }
 
+    function drawTopBoundary(distStr: string) {
+        query('.boundary-top').forEach((elem) => {
+            elem.style.top = distStr
+            elem.style.height = distStr
+            elem.style.marginTop = `-${distStr}`
+        })
+    }
+
+    function drawRightBoundary(distStr: string) {
+        query('.boundary-right').forEach((elem) => {
+            elem.style.right = distStr
+            elem.style.width = distStr
+            elem.style.marginRight = `-${distStr}`
+        })
+    }
+
+    function drawBottomBoundary(distStr: string) {
+        query('.boundary-bottom').forEach((elem) => {
+            elem.style.bottom = distStr
+            elem.style.height = distStr
+            elem.style.marginBottom = `-${distStr}`
+        })
+    }
+
+    function drawLeftBoundary(distStr: string) {
+        query('.boundary-left').forEach((elem) => {
+            elem.style.left = distStr
+            elem.style.width = distStr
+            elem.style.marginLeft = `-${distStr}`
+        })
+    }
+
     // Overlay a boundary line on the viewport when one is set by the user
     function drawBound(side: Side, dist: number) {
         const distStr = `${dist}px`
 
         switch (side) {
             case 'top': {
-                query('.boundary-top').forEach((elem) => {
-                    elem.style.top = distStr
-                    elem.style.height = distStr
-                    elem.style.marginTop = `-${distStr}`
-                })
+                drawTopBoundary(distStr)
                 break
             }
 
             case 'right': {
-                query('.boundary-right').forEach((elem) => {
-                    elem.style.right = distStr
-                    elem.style.width = distStr
-                    elem.style.marginRight = `-${distStr}`
-                })
+                drawRightBoundary(distStr)
                 break
             }
 
             case 'bottom': {
-                query('.boundary-bottom').forEach((elem) => {
-                    elem.style.bottom = distStr
-                    elem.style.height = distStr
-                    elem.style.marginBottom = `-${distStr}`
-                })
+                drawBottomBoundary(distStr)
                 break
             }
 
             case 'left': {
-                query('.boundary-left').forEach((elem) => {
-                    elem.style.left = distStr
-                    elem.style.width = distStr
-                    elem.style.marginLeft = `-${distStr}`
-                })
+                drawLeftBoundary(distStr)
                 break
             }
 
-            default:
+            default: {
+                drawTopBoundary(distStr)
+                drawRightBoundary(distStr)
+                drawBottomBoundary(distStr)
+                drawLeftBoundary(distStr)
                 break
+            }
         }
     }
 
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
-        $boxes.forEach(async function (box) {
-            if (await withinviewportAsync(box, wvOptions)) {
-                box.innerHTML = 'in'
-                box.setAttribute('aria-hidden', 'false')
-                box.classList.add('inview')
-            } else {
-                box.innerHTML = 'out'
-                box.setAttribute('aria-hidden', 'true')
-                box.classList.remove('inview')
-            }
+        const options =
+            sideStrategy === 'all'
+                ? {
+                      top: wvOptions.all,
+                      right: wvOptions.all,
+                      bottom: wvOptions.all,
+                      left: wvOptions.all,
+                  }
+                : wvOptions
+
+        $boxes.forEach(function (box) {
+            withinviewportAsync(box, options).then((result) => {
+                if (result) {
+                    box.innerHTML = 'in'
+                    box.setAttribute('aria-hidden', 'false')
+                    box.classList.add('inview')
+                } else {
+                    box.innerHTML = 'out'
+                    box.setAttribute('aria-hidden', 'true')
+                    box.classList.remove('inview')
+                }
+            })
         })
     }
 

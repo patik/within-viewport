@@ -34,12 +34,12 @@ export function determineConfig(elem: HTMLElement, options?: Side | Partial<Opti
     if (isSide(options)) {
         settings = {
             ...defaultOptions,
-            sides: [options],
+            // sides: [options],
         }
     } else if (isSides(options)) {
         settings = {
             ...defaultOptions,
-            sides: options,
+            // sides: options,
         }
     } else {
         settings = Object.assign({}, defaultOptions, options)
@@ -57,4 +57,12 @@ export function determineConfig(elem: HTMLElement, options?: Side | Partial<Opti
     }
 
     return config
+}
+
+export function determineRootMargin(config: Options): string {
+    // if (config.sides.includes('all')) {
+    return `${-config.top}px ${-config.right}px ${-config.bottom}px ${-config.left}px`
+    // }
+
+    // if (config.sides.includes('all')) {
 }

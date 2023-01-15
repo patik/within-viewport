@@ -1,4 +1,4 @@
-import { determineConfig } from './options'
+import { determineConfig, determineRootMargin } from './options'
 
 /**
  * Determines whether an element is within the viewport
@@ -21,7 +21,7 @@ export async function withinviewportAsync(elem: HTMLElement, options?: Side | Pa
 
         new IntersectionObserver(callback, {
             root: config.container,
-            rootMargin: `${-config.top}px ${-config.right}px ${-config.bottom}px ${-config.left}px`,
+            rootMargin: determineRootMargin(config),
             threshold: 1.0,
         }).observe(elem)
     })
