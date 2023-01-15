@@ -289,9 +289,8 @@ export default (function () {
 
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
-        $boxes.forEach(function (box) {
-            // @ts-ignore
-            if (withinviewport(box)) {
+        $boxes.forEach(async function (box) {
+            if (await withinviewport(box)) {
                 box.innerHTML = 'in'
                 box.setAttribute('aria-hidden', 'false')
                 box.classList.add('inview')

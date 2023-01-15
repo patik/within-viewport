@@ -29,7 +29,7 @@ function isSides(sides: string | string[] | Options | Partial<Options> | undefin
  * @param  {Object}  options    Optional settings
  * @return {Boolean}            Whether the element was completely within the viewport
  */
-export function withinviewport(elem: HTMLElement, options?: Side | Partial<Options>): boolean {
+export async function withinviewport(elem: HTMLElement, options?: Side | Partial<Options>): Promise<boolean> {
     let settings: Options
     // let containerBoundingRect: DOMRect
     // let containerScrollTop = 0
@@ -66,29 +66,32 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         config.container = null
     }
 
-    const callback = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-        console.log('matched! ', { entries, observer })
-        entries.forEach((entry) => {
-            console.log('entry ', entry)
-            // Each entry describes an intersection change for one observed
-            // target element:
-            //   entry.boundingClientRect
-            //   entry.intersectionRatio
-            //   entry.intersectionRect
-            //   entry.isIntersecting
-            //   entry.rootBounds
-            //   entry.target
-            //   entry.time
+    return await new Promise((resolve) => {
+        const callback = async (entries: IntersectionObserverEntry[] /* , observer: IntersectionObserver */) => {
+            // console.log('matched! ', entries.length, { entries })
+            entries.forEach((entry) => {
+                resolve(entry.isIntersecting)
+
+                // Each entry describes an intersection change for one observed
+                // target element:
+                //   entry.boundingClientRect
+                //   entry.intersectionRatio
+                //   entry.intersectionRect
+                //   entry.isIntersecting
+                //   entry.rootBounds
+                //   entry.target
+                //   entry.time
+            })
+        }
+
+        const observer = new IntersectionObserver(callback, {
+            root: config.container,
+            rootMargin: `${config.top}px ${config.right}px ${config.bottom}px ${config.left}px`,
+            threshold: 1.0,
         })
-    }
 
-    const observer = new IntersectionObserver(callback, {
-        root: config.container,
-        rootMargin: `${config.top}px ${config.right}px ${config.bottom}px ${config.left}px`,
-        threshold: 1.0,
+        observer.observe(elem)
     })
-
-    observer.observe(elem)
 
     // // Get the element's bounding rectangle with respect to the viewport
     // const elemBoundingRect = elem.getBoundingClientRect()
@@ -112,8 +115,6 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
     // if (containerScrollTop) {
     //     scrollBarWidths[1] = 16
     // }
-
-    return false
 }
 
 /**
@@ -122,20 +123,20 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
  * @description Uncomment or comment these pieces as they apply to your project and coding preferences
  */
 
-// // Shortcut methods for each side of the viewport
-// // Example: `withinviewport.top(elem)` is the same as `withinviewport(elem, 'top')`
-// export function top(element: HTMLElement): boolean {
-//     return withinviewport(element, 'top')
-// }
+// Shortcut methods for each side of the viewport
+// Example: `withinviewport.top(elem)` is the same as `withinviewport(elem, 'top')`
+export async function top(element: HTMLElement): Promise<boolean> {
+    return await withinviewport(element, 'top')
+}
 
-// export function right(element: HTMLElement): boolean {
-//     return withinviewport(element, 'right')
-// }
+export async function right(element: HTMLElement): Promise<boolean> {
+    return await Promise.resolve(withinviewport(element, 'right'))
+}
 
-// export function bottom(element: HTMLElement): boolean {
-//     return withinviewport(element, 'bottom')
-// }
+export async function bottom(element: HTMLElement): Promise<boolean> {
+    return await Promise.resolve(withinviewport(element, 'bottom'))
+}
 
-// export function left(element: HTMLElement): boolean {
-//     return withinviewport(element, 'left')
-// }
+export async function left(element: HTMLElement): Promise<boolean> {
+    return await Promise.resolve(withinviewport(element, 'left'))
+}
