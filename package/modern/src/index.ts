@@ -6,7 +6,7 @@ import { determineConfig } from './options'
  * @param  {String | Object}  options    Optional settings
  * @return {Boolean}                     Whether the element was completely within the viewport
  */
-export async function withinviewport(elem: HTMLElement, options?: Side | Partial<Options>): Promise<boolean> {
+export async function withinviewportAsync(elem: HTMLElement, options?: Side | Partial<Options>): Promise<boolean> {
     const config = determineConfig(elem, options)
 
     return new Promise((resolve) => {
@@ -35,18 +35,18 @@ export async function withinviewport(elem: HTMLElement, options?: Side | Partial
 
 // Shortcut methods for each side of the viewport
 // Example: `withinviewport.top(elem)` is the same as `withinviewport(elem, 'top')`
-export async function top(element: HTMLElement): Promise<boolean> {
-    return await withinviewport(element, 'top')
+export async function topAsync(element: HTMLElement): Promise<boolean> {
+    return await withinviewportAsync(element, 'top')
 }
 
-export async function right(element: HTMLElement): Promise<boolean> {
-    return await Promise.resolve(withinviewport(element, 'right'))
+export async function rightAsync(element: HTMLElement): Promise<boolean> {
+    return await Promise.resolve(withinviewportAsync(element, 'right'))
 }
 
-export async function bottom(element: HTMLElement): Promise<boolean> {
-    return await Promise.resolve(withinviewport(element, 'bottom'))
+export async function bottomAsync(element: HTMLElement): Promise<boolean> {
+    return await Promise.resolve(withinviewportAsync(element, 'bottom'))
 }
 
-export async function left(element: HTMLElement): Promise<boolean> {
-    return await Promise.resolve(withinviewport(element, 'left'))
+export async function leftAsync(element: HTMLElement): Promise<boolean> {
+    return await Promise.resolve(withinviewportAsync(element, 'left'))
 }

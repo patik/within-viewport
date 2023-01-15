@@ -1,4 +1,4 @@
-import { withinviewport } from '../../package/modern/src/index'
+import { withinviewportAsync } from '../../package/modern/src/index'
 import { isSide } from '../../package/modern/src/options'
 
 const wvOptions: Record<Side, number> = {
@@ -61,46 +61,90 @@ function triggerEvent(node: HTMLElement, eventName: string) {
     }
 }
 
+const areViewportUnitsSupported = (function () {
+    try {
+        const div = document.createElement('div')
+        div.style.width = '50vw'
+        document.body.appendChild(div)
+
+        const elemWidth = parseInt(getComputedStyle(div, null).width, 10)
+        const halfWidth = parseInt(String(window.innerWidth / 2), 10)
+
+        console.log('areViewportUnitsSupported ', elemWidth === halfWidth, elemWidth, halfWidth)
+
+        return elemWidth === halfWidth
+    } catch (e) {
+        console.log('e ', e)
+        return false
+    }
+})()
+
+function determineBoxWidth() {
+    if (areViewportUnitsSupported) {
+        return '23vw'
+    }
+
+    let boxWidth = 20
+
+    // Make sure the demo will be wider than the device's screen so that vertical scroll bars appear
+    //    but not so wide that you can't see at least four on screen at a time with a maximized browser window
+    if (screen.width >= screen.height) {
+        // Screen is wide/landscape
+        boxWidth = parseInt(String((screen.width + 400) / 10), 10)
+    } else {
+        boxWidth = parseInt(String((screen.height + 400) / 10), 10)
+    }
+
+    return `${boxWidth}px`
+}
+
+function isFlexboxSupported() {
+    return document.createElement('p').style.flex === ''
+}
+
 // Demo code
 function demo() {
     let $boxes: HTMLElement[] = []
     let showBoundsCheck: HTMLInputElement | null = null
 
     function init() {
-        const boxCount = 100
-        let boxWidth = 20
+        const boxCount = 200
         let boxHTML = ''
-        let i
-
-        // Make sure the demo will be wider than the device's screen so that vertical scroll bars appear
-        //    but not so wide that you can't see at least four on screen at a time with a maximized browser window
-        if (screen.width >= screen.height) {
-            // Screen is wide/landscape
-            boxWidth = parseInt(String((screen.width + 400) / 10), 10)
-        } else {
-            boxWidth = parseInt(String((screen.height + 400) / 10), 10)
-        }
-
-        // Generate boxes which will each be tested for their viewport within-ness
-        i = 0
-        while (i < boxCount) {
-            // Set the styles so everything is nice and proportional to this device's screen
-            boxHTML +=
-                '<div aria-hidden="false" style="width:' +
-                boxWidth +
-                'px;height:' +
-                boxWidth +
-                'px;line-height:' +
-                boxWidth +
-                'px;">&nbsp;</div>'
-            i++
-        }
+        const boxWidth = determineBoxWidth()
 
         // Add a container and put the boxes inside
         const boxContainer = document.createElement('div')
-
         boxContainer.id = 'boxContainer'
-        boxContainer.style.cssText = 'width:' + (boxWidth * 10 + 20) + 'px;'
+
+        if (isFlexboxSupported()) {
+            let i = 0
+            // Generate boxes which will each be tested for their viewport within-ness
+            while (i < boxCount) {
+                boxHTML += '<div aria-hidden="false">&nbsp;</div>'
+
+                i++
+            }
+
+            boxContainer.classList.add('flex')
+        } else {
+            let i = 0
+            while (i < boxCount) {
+                // Set the styles so everything is nice and proportional to this device's screen
+                boxHTML +=
+                    '<div aria-hidden="false" style="width:' +
+                    boxWidth +
+                    ';height:' +
+                    boxWidth +
+                    ';line-height:' +
+                    boxWidth +
+                    ';">&nbsp;</div>'
+                i++
+            }
+
+            boxContainer.classList.add('no-flex')
+            boxContainer.style.cssText = 'width:' + (parseInt(boxWidth, 10) * 10 + 20) + 'px;'
+        }
+
         boxContainer.innerHTML = boxHTML
         document.body.appendChild(boxContainer)
 
@@ -355,7 +399,7 @@ function demo() {
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
         $boxes.forEach(async function (box) {
-            if (await withinviewport(box, wvOptions)) {
+            if (await withinviewportAsync(box, wvOptions)) {
                 box.innerHTML = 'in'
                 box.setAttribute('aria-hidden', 'false')
                 box.classList.add('inview')

@@ -1,5 +1,5 @@
 body {
-    font: 1em/1.2em "Segoe UI", "Myriad Pro", Tahoma, sans-serif;
+    font: 1em/1.2em -apple-system, BlinkMacSystemFont, 'Segoe UI', Calibri, 'Myriad Pro', Tahoma, sans-serif;
     overflow: scroll;
     background-color: lightblue;
     margin: 0;
@@ -7,12 +7,12 @@ body {
 }
 
 a {
-    color: #36C;
-}
+    color: #36c;
 
-a:hover {
-    color: #036;
-    text-decoration: none;
+    &:hover {
+        color: #036;
+        text-decoration: none;
+    }
 }
 
 h1,
@@ -25,41 +25,58 @@ h1 {
     margin-top: 0;
 }
 
-
-/* Oversized container that holds the boxes */
-
+// Oversized container that holds the boxes
 #boxContainer {
     background-color: #fff;
     z-index: 1;
+
+    // The boxes that we're monitoring
+    div {
+        border: 1px solid #036;
+        color: #444;
+        background-color: #ddd;
+        text-align: center;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    &.flex {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: calc(230vw + 21px);
+
+        div {
+            flex: 1 0 23vw;
+            width: 23vw;
+            min-width: 23vw;
+            max-width: 23vw;
+            height: 23vw;
+            line-height: calc(23vw - 1rem);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    }
+
+    &.no-flex div {
+        float: left;
+        display: block;
+        border: 1px solid #036;
+        color: #444;
+        background-color: #ddd;
+        text-align: center;
+        line-height: auto;
+        // vertical-align: middle;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &:nth-child(11n) {
+            clear: right;
+        }
+    }
+
+    // A box that's within the viewport
+    .inview {
+        color: #ddd;
+        background-color: #36c;
+    }
 }
-
-
-/* The boxes that we're monitoring color */
-
-#boxContainer div {
-    float: left;
-    display: block;
-    border: 1px solid #036;
-    color: #444;
-    background-color: #ddd;
-    text-align: center;
-    line-height: auto;
-    vertical-align: middle;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-#boxContainer div:nth-child(11n) {
-    clear: right;
-}
-
-
-/* A box that's within the viewport */
-
-#boxContainer .inview {
-    color: #ddd;
-    background-color: #36C;
-}
-
 
 /* Floating intro and controls window */
 
@@ -77,15 +94,13 @@ h1 {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
     z-index: 3;
-}
 
-#explanation.collapsed {
-    opacity: 0.6;
-    max-width: 400px;
-    margin-left: -205px;
+    &.collapsed {
+        opacity: 0.6;
+        max-width: 400px;
+        margin-left: -205px;
+    }
 }
-
-#explanation.collapsed p {}
 
 #toggler {
     position: absolute;
@@ -97,41 +112,38 @@ h1 {
     width: 70%;
     padding: 5px;
     margin: 0 auto;
-}
 
-.collapsed #thresholds {
-    display: none;
-}
+    .collapsed & {
+        display: none;
+    }
 
-#thresholds p {
-    margin-top: 4px;
-    text-align: center;
+    p {
+        margin-top: 4px;
+        text-align: center;
+    }
 }
 
 form {
     width: 90%;
     margin: 0 auto;
-}
 
-form input[type="number"] {
-    width: 4em;
-}
+    input[type='number'] {
+        width: 4em;
+    }
 
-form div {
-    float: none;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-#threshold-top {
+    div {
+        float: none;
+        text-align: center;
+        margin-bottom: 5px;
+    }
 }
 
 #threshold-left {
     float: left;
-}
 
-#threshold-left input {
-    display: inline-block;
+    input {
+        display: inline-block;
+    }
 }
 
 #threshold-right {
@@ -152,8 +164,8 @@ form div {
 
 .boundary {
     position: fixed;
-    border: 0 dashed #03C;
-    background-color: #3CF;
+    border: 0 dashed #03c;
+    background-color: #3cf;
     background-color: rgba(51, 153, 255, 0.3);
     overflow: hidden;
     z-index: 2;
@@ -162,34 +174,28 @@ form div {
 .boundary-top {
     left: 0;
     width: 100%;
-    /*margin-left: -10px;*/
     border-bottom-width: 1px;
 }
 
 .boundary-right {
     top: 0;
     height: 100%;
-    /*margin-left: -10px;*/
     border-left-width: 1px;
 }
 
 .boundary-bottom {
     left: 0;
     width: 100%;
-    /*margin-left: -10px;*/
     border-top-width: 1px;
 }
 
 .boundary-left {
     top: 0;
     height: 100%;
-    /*margin-top: -10px;*/
     border-right-width: 1px;
 }
 
-
 /* Buttons */
-
 
 /* http://www.red-team-design.com/just-another-awesome-css3-buttons */
 
@@ -197,31 +203,29 @@ form div {
     display: inline-block;
     white-space: nowrap;
     background-color: #ccc;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ccc));
     background-image: linear-gradient(top, #eee, #ccc);
     border: 1px solid #777;
     padding: 0 1.5em;
     margin: 0.5em;
-    font: bold 1em/2em Arial, Helvetica;
+    font: bold 1em/2em inherit;
     text-decoration: none;
     color: #333;
     cursor: pointer;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 1px 1px rgba(255, 255, 255, .8) inset, 0 1px 0 rgba(0, 0, 0, .3);
-    border-radius: .2em;
+    box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.8) inset, 0 1px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 0.2em;
     background-clip: padding-box;
 }
 
 .button:hover {
     background-color: #ddd;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#ddd));
     background-image: linear-gradient(top, #fafafa, #ddd);
 }
 
 .button:active {
     position: relative;
     top: 1px;
-    box-shadow: 0 0 4px 2px rgba(0, 0, 0, .3) inset;
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.3) inset;
 }
 
 .button:focus {
@@ -231,42 +235,37 @@ form div {
 
 .button:before {
     background: #ccc;
-    background: rgba(0, 0, 0, .1);
+    background: rgba(0, 0, 0, 0.1);
     float: left;
     width: 1em;
     text-align: center;
     font-size: 1.5em;
     margin: 0 1em 0 -1em;
-    padding: 0 .2em;
+    padding: 0 0.2em;
     box-shadow: 1px 0 0 rgba(0, 0, 0, 0.5), 2px 0 0 rgba(255, 255, 255, 0.5);
-    border-radius: .15em 0 0 .15em;
+    border-radius: 0.15em 0 0 0.15em;
     background-clip: padding-box;
 }
 
-
 /* Hexadecimal entities for the icons  */
 
+// plus sign
 .plus:before {
-    content: "\271A";
+    content: '\271A';
 }
 
-/* plus sign */
-
+// minus sign
 .minus:before {
-    content: "\2013";
+    content: '\2013';
 }
 
-/* minus sign */
-
-
-/* Smaller buttons */
-
+// Smaller buttons
 .button.small {
-    font: bold 12px/20px Arial, Helvetica;
+    font: bold 12px/20px inherit;
     padding: 0 1em;
-}
 
-.button.small:before {
-    font-size: 1em;
-    margin: 0 0.5em 0 -1em;
+    &:before {
+        font-size: 1em;
+        margin: 0 0.5em 0 -1em;
+    }
 }
