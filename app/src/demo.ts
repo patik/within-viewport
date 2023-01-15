@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { ChangeEvent } from 'react'
 import { withinviewport } from '../../package/modern/src/index'
+import { isSide } from '../../package/modern/src/options'
 
 type Side = 'top' | 'right' | 'bottom' | 'left'
+
+const wvOptions: Record<Side, number> = {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+}
 
 // Demo code
 export default (function () {
     let $boxes: HTMLElement[] = []
-    let showBoundsCheck: HTMLElement | null = null
+    let showBoundsCheck: HTMLInputElement | null = null
 
     function init() {
         const boxCount = 100
@@ -49,7 +56,13 @@ export default (function () {
         $boxes = query('div', boxContainer)
         $boxes[4].id = 'test'
 
-        showBoundsCheck = document.getElementById('show-boundary')
+        const checkbox = document.getElementById('show-boundary')
+
+        // FIXME
+        if (checkbox && (checkbox as HTMLInputElement).type === 'checkbox') {
+            showBoundsCheck = checkbox as HTMLInputElement
+        }
+
         eventsInit()
 
         // Update the <div>s for the first time
@@ -65,14 +78,15 @@ export default (function () {
         return [].slice.call(node.querySelectorAll(selector))
     }
 
-    function show(selector: string) {
-        query(selector).forEach(function (elem) {
+    function showAll(selector: string) {
+        console.log('selector ', selector, query(selector))
+        query(selector).forEach((elem) => {
             elem.style.display = 'block'
         })
     }
 
-    function hide(selector: string) {
-        query(selector).forEach(function (elem) {
+    function hideAll(selector: string) {
+        query(selector).forEach((elem) => {
             elem.style.display = 'none'
         })
     }
@@ -80,17 +94,22 @@ export default (function () {
     function trigger(node: HTMLElement, eventName: string) {
         if (document.createEvent) {
             const evt = document.createEvent('HTMLEvents')
+
             evt.initEvent(eventName, true, true)
-            // @ts-ignore
-            evt.eventName = eventName
+
+            if ('eventName' in evt) {
+                evt.eventName = eventName
+            }
+
             node.dispatchEvent(evt)
-        } else {
-            // @ts-ignore
+        } else if ('createEventObject' in document && typeof document.createEventObject === 'function') {
             const evt = document.createEventObject()
+
             evt.eventType = eventName
-            evt.eventName = eventName
-            // @ts-ignore
-            node.fireEvent('on' + evt.eventType, evt)
+
+            if ('fireEvent' in node && typeof node.fireEvent === 'function') {
+                node.fireEvent('on' + evt.eventType, evt)
+            }
         }
     }
 
@@ -126,7 +145,7 @@ export default (function () {
                 /Firefox|Trident|Safari|Presto/.test(navigator.userAgent)) ||
             (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))
         ) {
-            show('#thresholds p')
+            showAll('#thresholds p')
             document.body.addEventListener('keydown', onNudge)
         }
 
@@ -136,37 +155,45 @@ export default (function () {
 
     // When a boundary value changes
     function onBoundaryChange(evt: Event) {
-        // @ts-ignore
-        const val = parseInt(evt.target?.getAttribute('value') ?? '', 10)
-        // @ts-ignore
-        const id = evt.target?.id
+        // Annoying that I can't get something so basic to be typed correctly
+        const target = evt.target as HTMLInputElement | null
+        const val = parseInt(target?.value ?? '', 10)
+
+        const id = target?.id
+
+        if (!isSide(id)) {
+            throw new Error('Input ID must be a valid side')
+        }
+
+        const side = id as Side
 
         // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
         if (val > 0) {
             // @ts-ignore
             if (showBoundsCheck?.checked) {
-                show('.boundary-' + id)
+                showAll('.boundary-' + id)
 
-                drawBound(id, val)
+                drawBound(side, val)
             } else {
-                hide('.boundary-' + id)
+                hideAll('.boundary-' + id)
             }
         }
         // Hide boundaries
         else {
-            hide('.boundary-' + id)
+            hideAll('.boundary-' + id)
         }
 
         // Update the page
-        // @ts-ignore
-        withinviewport.defaults[id] = val
+        wvOptions[side] = val
         updateBoxes()
         toggleBoundaryToggle()
     }
 
     // When the boundary toggle box is checked/unchecked
-    function onBoundaryToggle(evt: MouseEvent | ChangeEvent | KeyboardEvent) {
-        // @ts-ignore
+    function onBoundaryToggle(evt: Event) {
+        // Annoying that I can't get something so basic to be typed correctly
+        const target = evt.target as HTMLInputElement | null
+
         if (showBoundsCheck?.checked) {
             // Fire the change event so onBoundaryChange() will apply any values
             query('input[type="number"]').forEach(function (elem) {
@@ -175,16 +202,17 @@ export default (function () {
 
             toggleBoundaryToggle()
         } else {
-            // @ts-ignore
-            hide('.boundary, .boundary-' + (evt.target?.id ?? ''))
+            hideAll('.boundary, .boundary-' + (target?.id ?? ''))
         }
     }
 
     // When shift + arrow key is pressed, nudge the page by 1px
     function onNudge(evt: KeyboardEvent) {
+        // Annoying that I can't get something so basic to be typed correctly
+        const target = evt.target as HTMLInputElement | null
+
         // Ignore input fields
-        // @ts-ignore
-        if (evt.target?.nodeName === 'INPUT') {
+        if (target?.nodeName === 'INPUT') {
             return true
         }
 
@@ -290,7 +318,7 @@ export default (function () {
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
         $boxes.forEach(async function (box) {
-            if (await withinviewport(box)) {
+            if (await withinviewport(box, wvOptions)) {
                 box.innerHTML = 'in'
                 box.setAttribute('aria-hidden', 'false')
                 box.classList.add('inview')

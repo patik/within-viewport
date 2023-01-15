@@ -7,7 +7,7 @@ const defaultOptions: Options = {
     left: 0,
 }
 
-function isSide(side: string | Options | Partial<Options> | undefined): side is Side {
+export function isSide(side: string | Options | Partial<Options> | undefined): side is Side {
     return Boolean(side) && typeof side === 'string' && ['all', 'top', 'right', 'bottom', 'left'].includes(side)
 }
 
