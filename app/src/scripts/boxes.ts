@@ -68,12 +68,6 @@ export function setSideStrategy(value: 'all' | 'independent') {
     }
 }
 
-export function setMethod(value: 'async' | 'sync') {
-    store.setState({
-        method: value,
-    })
-}
-
 export function createBoxHtml() {
     const boxCount = 200
     let boxHTML = ''

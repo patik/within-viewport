@@ -100,7 +100,7 @@ export function addEventHandlers() {
     document.getElementById('toggler')?.addEventListener('click', onControlsToggle)
 }
 
-export function removeEventHandlers() {
+function removeEventHandlers() {
     const { containerForEvents } = store.getState()
 
     // Scroll or resize the viewport
