@@ -17,5 +17,8 @@
         "@types/jquery": "^3.5.16",
         "eslint-plugin-prettier": "^4.2.1",
         "parcel": "^2.8.2"
+    },
+    "lint-staged": {
+        "*.ts": "eslint --cache --cache-location .eslintcache --fix"
     }
 }
