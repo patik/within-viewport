@@ -7,7 +7,7 @@
         <script src="demo.ts" type="module"></script>
     </head>
     <body>
-        <div id="explanation" class="" role="main">
+        <div class="explanation" role="main">
             <h1>Within Viewport</h1>
             <div id="toggler" class="button minus small">Collapse</div>
             <p>
@@ -16,29 +16,32 @@
                     Press <code>shift + arrow key</code> to nudge the page by 1 pixel at a time.
                 </span>
             </p>
-            <hr />
-            <div class="thresholds">
-                <form action="." method="post">
-                    <fieldset>
-                        <legend>Set your own thresholds (in pixels):</legend>
+            <hr class="hide-when-collapsed" />
 
+            <form action="." method="post" class="thresholds hide-when-collapsed">
+                <fieldset>
+                    <legend>Set your own thresholds (in pixels)</legend>
+
+                    <div class="side-strategy-group-1 selected">
                         <div class="side-strategy-item">
                             <input type="radio" name="side-strategy" value="same-all" id="same-all-sides" checked />
                             <label for="same-all-sides">Same value for all sides</label>
                         </div>
 
                         <div class="side-strategy-item all-sides-wrapper">
-                            <label for="all-sides">Threshold for all sides, in pixels</label>
+                            <label for="all-sides" class="sr-only">Threshold for all sides, in pixels</label>
                             <input type="number" value="0" min="0" id="all" step="1" tabindex="1" />
                         </div>
+                    </div>
 
+                    <div class="side-strategy-group-2">
                         <div class="side-strategy-item">
                             <input type="radio" name="side-strategy" value="independent" id="independent-sides" />
                             <label for="independent-sides">Custom values for each side</label>
                         </div>
 
                         <fieldset class="independent-sides-wrapper" style="display: none">
-                            <legend>Thresholds for each side (in pixels):</legend>
+                            <legend class="sr-only">Thresholds for each side (in pixels):</legend>
                             <div id="threshold-top">
                                 <label for="top">Top:</label>
                                 <input type="number" size="3" id="top" value="0" min="0" tabindex="1" />
@@ -60,11 +63,12 @@
                                 <label for="show-boundary">Show boundary regions</label>
                             </div>
                         </fieldset>
-                    </fieldset>
-                </form>
-            </div>
-            <hr />
-            <p>
+                    </div>
+                </fieldset>
+            </form>
+
+            <hr class="hide-when-collapsed" />
+            <p class="hide-when-collapsed">
                 See the <a href="https://github.com/patik/within-viewport">code on GitHub</a> and the
                 <a href="http://patik.com/blog/within-viewport-javascript-and-jquery-plugin/">blog post</a> for more
                 info.

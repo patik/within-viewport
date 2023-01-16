@@ -1,5 +1,5 @@
 body {
-    font: 1em/1.2em -apple-system, BlinkMacSystemFont, 'Segoe UI', Calibri, 'Myriad Pro', Tahoma, sans-serif;
+    font: 1em/1.2em -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Calibri, 'Myriad Pro', Tahoma, sans-serif;
     overflow: scroll;
     background-color: lightblue;
     margin: 0;
@@ -15,12 +15,8 @@ a {
     }
 }
 
-h1,
-h2 {
-    text-align: center;
-}
-
 h1 {
+    text-align: center;
     font-size: 24px;
     margin-top: 0;
 }
@@ -80,7 +76,7 @@ h1 {
 
 /* Floating intro and controls window */
 
-#explanation {
+.explanation {
     position: fixed;
     top: 40px;
     left: 50%;
@@ -108,24 +104,19 @@ h1 {
     right: 0;
 }
 
-.thresholds {
-    // width: 70%;
-    // padding: 5px;
-    // margin: 0 auto;
-
+.hide-when-collapsed {
     .collapsed & {
         display: none;
     }
-
-    p {
-        margin-top: 4px;
-        text-align: center;
-    }
 }
 
-form {
+.thresholds {
     input[type='number'] {
         width: 4em;
+    }
+
+    fieldset {
+        border: none;
     }
 
     div {
@@ -135,6 +126,15 @@ form {
 
     .independent-sides-wrapper div {
         text-align: center;
+    }
+}
+
+.side-strategy-group-1,
+.side-strategy-group-2 {
+    padding: 1rem;
+
+    &.selected {
+        background-color: #3366cc22;
     }
 }
 
@@ -207,29 +207,23 @@ form {
     display: inline-block;
     white-space: nowrap;
     background-color: #ccc;
-    background-image: linear-gradient(top, #eee, #ccc);
     border: 1px solid #777;
-    padding: 0 1.5em;
+    padding: 0 1em;
     margin: 0.5em;
-    font: bold 1em/2em inherit;
     text-decoration: none;
     color: #333;
     cursor: pointer;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.8) inset, 0 1px 0 rgba(0, 0, 0, 0.3);
     border-radius: 0.2em;
     background-clip: padding-box;
 }
 
 .button:hover {
     background-color: #ddd;
-    background-image: linear-gradient(top, #fafafa, #ddd);
 }
 
 .button:active {
     position: relative;
     top: 1px;
-    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.3) inset;
 }
 
 .button:focus {
@@ -246,7 +240,6 @@ form {
     font-size: 1.5em;
     margin: 0 1em 0 -1em;
     padding: 0 0.2em;
-    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.5), 2px 0 0 rgba(255, 255, 255, 0.5);
     border-radius: 0.15em 0 0 0.15em;
     background-clip: padding-box;
 }
@@ -265,11 +258,17 @@ form {
 
 // Smaller buttons
 .button.small {
-    font: bold 12px/20px inherit;
-    padding: 0 1em;
-
     &:before {
         font-size: 1em;
         margin: 0 0.5em 0 -1em;
     }
+}
+
+.sr-only {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }

@@ -227,11 +227,15 @@ function demo() {
             sides.forEach((side) => {
                 triggerEvent(document.getElementById(side), 'change')
             })
+            query('.side-strategy-group-1')[0].classList.remove('selected')
+            query('.side-strategy-group-2')[0].classList.add('selected')
         } else {
             sideStrategy = 'all'
             hideAll('.independent-sides-wrapper')
             showAll('.all-sides-wrapper')
             triggerEvent(document.getElementById('all'), 'change')
+            query('.side-strategy-group-2')[0].classList.remove('selected')
+            query('.side-strategy-group-1')[0].classList.add('selected')
         }
 
         // Update the page
@@ -353,7 +357,7 @@ function demo() {
     }
 
     function onControlsToggle() {
-        document.getElementById('explanation')?.classList.toggle('collapsed')
+        document.querySelector('.explanation')?.classList.toggle('collapsed')
 
         const toggler = document.getElementById('toggler')
 
