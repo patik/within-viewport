@@ -1,6 +1,6 @@
-import { Side } from '../common/types'
-import { determineConfig } from '../common/utilities'
-import { AsyncOptions } from './types'
+import { Side } from '../common/common.types'
+import { determineConfig } from '../common/options'
+import { AsyncOptions } from './async.types'
 
 const defaultOptions: AsyncOptions = {
     container: typeof document !== 'undefined' ? document.body : null,

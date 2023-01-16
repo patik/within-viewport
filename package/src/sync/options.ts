@@ -1,6 +1,6 @@
-import { Side } from '../common/types'
-import { determineConfig } from '../common/utilities'
-import { SyncOptions } from './types'
+import { Side } from '../common/common.types'
+import { determineConfig } from '../common/options'
+import { SyncOptions } from './sync.types'
 
 const defaultOptions: SyncOptions = {
     container: typeof document !== 'undefined' ? document.body : null,

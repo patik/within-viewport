@@ -1,6 +1,6 @@
-import { Side } from '../common/types'
+import { Side } from '../common/common.types'
 import { getConfig } from './options'
-import { SyncOptions } from './types'
+import { SyncOptions } from './sync.types'
 
 declare global {
     interface Window {

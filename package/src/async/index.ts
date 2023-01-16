@@ -1,6 +1,6 @@
-import { Side } from '../common/types'
+import { Side } from '../common/common.types'
 import { getConfig, determineRootMargin } from './options'
-import { AsyncOptions } from './types'
+import { AsyncOptions } from './async.types'
 
 /**
  * Determines whether an element is within the viewport
