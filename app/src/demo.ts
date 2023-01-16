@@ -112,7 +112,16 @@ function demo() {
     let $boxes: HTMLElement[] = []
     let sideStrategy: 'all' | 'independent' = 'all'
 
+    // This is the container that we're using as the viewport. If it's some DOM element, these are both the same. But if it's the whole window, then we need to use either `window` or `document.body` for certain tasks.
+    let containerForDOM: HTMLElement = document.body
+    let containerForEvents: Window | HTMLElement = window
+
     function init() {
+        createBoxHtml()
+        eventsInit()
+    }
+
+    function createBoxHtml() {
         const boxCount = 200
         let boxHTML = ''
         const boxWidth = determineBoxWidth()
@@ -151,7 +160,7 @@ function demo() {
         }
 
         boxContainer.innerHTML = boxHTML
-        document.body.appendChild(boxContainer)
+        containerForDOM.appendChild(boxContainer)
 
         $boxes = query('div', boxContainer)
 
@@ -167,16 +176,21 @@ function demo() {
 
     // Setup event listeners
     function eventsInit() {
-        // Scroll or window resize
-        window.addEventListener('resize', updateBoxes)
-        window.addEventListener('scroll', updateBoxes)
+        // Scroll or resize the viewport
+        containerForEvents.addEventListener('resize', updateBoxes)
+        containerForEvents.addEventListener('scroll', updateBoxes)
 
-        // Radio buttons
+        // Container radio buttons
+        query('[name="container-form"]').forEach((elem) => {
+            elem.addEventListener('change', onContainerFormChange)
+        })
+
+        // Threshold radio buttons
         query('[name="side-strategy"]').forEach((elem) => {
             elem.addEventListener('change', onSideStrategyChange)
         })
 
-        // User entry
+        // Threshold number entry
         query('input[type="number"]').forEach((elem) => {
             elem.addEventListener('keyup', onBoundaryChange)
             elem.addEventListener('change', onBoundaryChange)
@@ -203,7 +217,80 @@ function demo() {
         document.getElementById('toggler')?.addEventListener('click', onControlsToggle)
     }
 
-    // When the radio buttons change
+    function removeEvents() {
+        // Scroll or resize the viewport
+        containerForEvents.removeEventListener('resize', updateBoxes)
+        containerForEvents.removeEventListener('scroll', updateBoxes)
+
+        // Radio buttons
+        query('[name="side-strategy"]').forEach((elem) => {
+            elem.removeEventListener('change', onSideStrategyChange)
+        })
+
+        // User entry
+        query('input[type="number"]').forEach((elem) => {
+            elem.removeEventListener('keyup', onBoundaryChange)
+            elem.removeEventListener('change', onBoundaryChange)
+            // 'click' is for spinners on input[number] control
+            elem.removeEventListener('click', onBoundaryChange)
+        })
+
+        // Nudge controls
+        // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
+        // Windows: Firefox, Trident, Safari, Opera; Mac: Chrome, Safari, Opera; Not Firefox
+        if (
+            ('oscpu' in navigator &&
+                navigator.oscpu &&
+                typeof navigator.oscpu === 'string' &&
+                /Windows/.test(navigator.oscpu) &&
+                /Firefox|Trident|Safari|Presto/.test(navigator.userAgent)) ||
+            (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))
+        ) {
+            document.body.removeEventListener('keydown', onNudge)
+            showAll('.nudge-instructions')
+        }
+
+        // Controls toggler
+        document.getElementById('toggler')?.removeEventListener('click', onControlsToggle)
+    }
+
+    // When the container radio buttons change
+    function onContainerFormChange(evt: Event) {
+        // FIXME - Make TS work properly with DOM events
+        const target = evt.target as HTMLInputElement | null
+        const whichRadio = target?.value ?? ''
+
+        removeEvents()
+
+        // Remove any previously-existing box containers
+        const boxContainer = document.getElementById('boxContainer')
+
+        if (boxContainer) {
+            boxContainer.parentNode?.removeChild(boxContainer)
+        }
+
+        const viewportContainer = document.getElementById('container')
+
+        if (whichRadio === 'window') {
+            containerForDOM = document.body
+            containerForEvents = window
+
+            if (viewportContainer) {
+                viewportContainer.style.display = 'none'
+            }
+        } else {
+            if (viewportContainer) {
+                containerForDOM = viewportContainer
+                containerForEvents = viewportContainer
+                containerForDOM.style.display = 'block'
+            }
+        }
+
+        // Update the page
+        createBoxHtml()
+    }
+
+    // When the threshold radio buttons change
     function onSideStrategyChange(evt: Event) {
         // FIXME - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
@@ -267,6 +354,7 @@ function demo() {
 
     // When shift + arrow key is pressed, nudge the page by 1px
     function onNudge(evt: KeyboardEvent) {
+        console.log('onNudge 1')
         // FIXME - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
 
@@ -281,6 +369,7 @@ function demo() {
 
         let code = evt.code
 
+        console.log('onNudge 2')
         if (typeof code === 'undefined' && 'keyCode' in evt) {
             switch (evt.keyCode) {
                 case 37: {
@@ -317,7 +406,7 @@ function demo() {
             ArrowDown: [0, 1],
         }
 
-        window.scrollBy(scrollVals[code][0], scrollVals[code][1])
+        containerForEvents.scrollBy(scrollVals[code][0], scrollVals[code][1])
 
         evt.preventDefault()
     }

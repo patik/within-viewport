@@ -16,6 +16,25 @@
                     Press <code>shift + arrow key</code> to nudge the page by 1 pixel at a time.
                 </span>
             </p>
+
+            <hr class="hide-when-collapsed" />
+
+            <form action="." method="post" class="container-form hide-when-collapsed">
+                <fieldset>
+                    <legend>Define the viewport</legend>
+
+                    <div class="container-form -item">
+                        <input type="radio" name="container-form" value="window" id="container-window" checked />
+                        <label for="container-window">The whole window</label>
+                    </div>
+
+                    <div class="container-form -item">
+                        <input type="radio" name="container-form" value="div" id="container-div" />
+                        <label for="container-div">A &lt;div&gt;</label>
+                    </div>
+                </fieldset>
+            </form>
+
             <hr class="hide-when-collapsed" />
 
             <form action="." method="post" class="thresholds hide-when-collapsed">
@@ -70,6 +89,7 @@
                 info.
             </p>
         </div>
+        <div style="display: none" id="container"></div>
         <!-- Boundary lines -->
         <div style="display: none" class="boundary boundary-top"></div>
         <div style="display: none" class="boundary boundary-right"></div>
