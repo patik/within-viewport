@@ -32,13 +32,11 @@ export function determineConfig<O extends CommonOptions & { container: HTMLEleme
     const config: O = Object.assign({}, defaultOptions, settings)
 
     // Use the window as the container if the user specified the body or a non-element
-    if (version === 'sync') {
-        if (
-            config.container === document.body ||
-            (config.container && 'nodeType' in config.container && config.container.nodeType !== 1)
-        ) {
-            config.container = window
-        }
+    if (
+        config.container === document.body ||
+        (config.container && 'nodeType' in config.container && config.container.nodeType !== 1)
+    ) {
+        config.container = version === 'sync' ? window : null
     }
 
     return config

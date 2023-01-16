@@ -1,6 +1,6 @@
-import { withinviewportAsync } from '../../package/src/async/index'
-import { isSide } from '../../package/src/async/options'
-import { Side } from '../../package/src/async/types'
+import { withinViewportAsync } from '../../package/src/async/index'
+import { isSide } from '../../package/src/common/sides'
+import { Side } from '../../package/src/common/common.types'
 
 const wvOptions: Record<Side, number> = {
     all: 0,
@@ -256,7 +256,7 @@ function demo() {
 
     // When the container radio buttons change
     function onContainerFormChange(evt: Event) {
-        // FIXME - Make TS work properly with DOM events
+        // TODO - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
         const whichRadio = target?.value ?? ''
 
@@ -292,7 +292,7 @@ function demo() {
 
     // When the threshold radio buttons change
     function onSideStrategyChange(evt: Event) {
-        // FIXME - Make TS work properly with DOM events
+        // TODO - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
         const whichRadio = target?.value ?? ''
 
@@ -320,7 +320,7 @@ function demo() {
 
     // When a boundary value changes
     function onBoundaryChange(evt: Event) {
-        // FIXME - Make TS work properly with DOM events
+        // TODO - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
         const val = parseInt(target?.value ?? '', 10)
         const side = target?.id
@@ -354,8 +354,7 @@ function demo() {
 
     // When shift + arrow key is pressed, nudge the page by 1px
     function onNudge(evt: KeyboardEvent) {
-        console.log('onNudge 1')
-        // FIXME - Make TS work properly with DOM events
+        // TODO - Make TS work properly with DOM events
         const target = evt.target as HTMLInputElement | null
 
         // Ignore input fields
@@ -369,7 +368,6 @@ function demo() {
 
         let code = evt.code
 
-        console.log('onNudge 2')
         if (typeof code === 'undefined' && 'keyCode' in evt) {
             switch (evt.keyCode) {
                 case 37: {
@@ -510,7 +508,7 @@ function demo() {
                 : wvOptions
 
         $boxes.forEach(function (box) {
-            withinviewportAsync(box, options).then((result) => {
+            withinViewportAsync(box, options).then((result) => {
                 if (result) {
                     box.innerHTML = 'in'
                     box.setAttribute('aria-hidden', 'false')
