@@ -110,7 +110,6 @@ function isFlexboxSupported() {
 // Demo code
 function demo() {
     let $boxes: HTMLElement[] = []
-    let showBoundsCheck: HTMLInputElement | null = null
     let sideStrategy: 'all' | 'independent' = 'all'
 
     function init() {
@@ -156,14 +155,6 @@ function demo() {
 
         $boxes = query('div', boxContainer)
 
-        const checkbox = document.getElementById('show-boundary')
-
-        // FIXME
-        if (checkbox && (checkbox as HTMLInputElement).type === 'checkbox') {
-            // FIXME
-            showBoundsCheck = checkbox as HTMLInputElement
-        }
-
         eventsInit()
 
         // Update the <div>s for the first time
@@ -192,9 +183,6 @@ function demo() {
             // 'click' is for spinners on input[number] control
             elem.addEventListener('click', onBoundaryChange)
         })
-
-        // Boundary toggle
-        showBoundsCheck?.addEventListener('change', onBoundaryToggle)
 
         // Nudge controls
         // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
@@ -241,7 +229,6 @@ function demo() {
 
         // Update the page
         updateBoxes()
-        toggleBoundaryToggle()
     }
 
     // When a boundary value changes
@@ -257,20 +244,16 @@ function demo() {
 
         // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
         if (val > 0) {
-            if (showBoundsCheck?.checked) {
-                if (side === 'all') {
-                    showAll(`.boundary-top`)
-                    showAll(`.boundary-right`)
-                    showAll(`.boundary-bottom`)
-                    showAll(`.boundary-left`)
-                } else {
-                    showAll(`.boundary-${side}`)
-                }
-
-                drawBound(side, val)
+            if (side === 'all') {
+                showAll(`.boundary-top`)
+                showAll(`.boundary-right`)
+                showAll(`.boundary-bottom`)
+                showAll(`.boundary-left`)
             } else {
-                hideAll(`.boundary-${side}`)
+                showAll(`.boundary-${side}`)
             }
+
+            drawBound(side, val)
         }
         // Hide boundaries
         else {
@@ -280,24 +263,6 @@ function demo() {
         // Update the page
         wvOptions[side] = val
         updateBoxes()
-        toggleBoundaryToggle()
-    }
-
-    // When the boundary toggle box is checked/unchecked
-    function onBoundaryToggle(evt: Event) {
-        // FIXME - Make TS work properly with DOM events
-        const target = evt.target as HTMLInputElement | null
-
-        if (showBoundsCheck?.checked) {
-            // Fire the change event so onBoundaryChange() will apply any values
-            query('input[type="number"]').forEach(function (elem) {
-                triggerEvent(elem, 'change')
-            })
-
-            toggleBoundaryToggle()
-        } else {
-            hideAll('.boundary, .boundary-' + (target?.id ?? ''))
-        }
     }
 
     // When shift + arrow key is pressed, nudge the page by 1px
@@ -373,27 +338,6 @@ function demo() {
             toggler.innerHTML = 'Expand'
         } else {
             toggler.innerHTML = 'Collapse'
-        }
-    }
-
-    // Display or hide the "show boundaries" check box if any values are set (non-zero)
-    function toggleBoundaryToggle() {
-        if (!showBoundsCheck || !showBoundsCheck.parentNode) {
-            return
-        }
-
-        const somethingEntered = query('input[type="number"]').some(
-            (elem) => parseInt(elem.getAttribute('value') ?? '', 10) !== 0,
-        )
-
-        if (somethingEntered) {
-            if (showBoundsCheck.parentElement) {
-                showBoundsCheck.parentElement.style.display = 'block'
-            }
-        } else {
-            if (showBoundsCheck.parentElement) {
-                showBoundsCheck.parentElement.style.display = 'none'
-            }
         }
     }
 

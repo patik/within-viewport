@@ -7,7 +7,6 @@ type Side = 'top' | 'right' | 'bottom' | 'left'
 // Demo code
 export default (function ($) {
     let $boxes: JQuery | null = null
-    let $showBoundsCheck: JQuery | null = null
     let container: HTMLElement | null = null
 
     const _init = function _init() {
@@ -61,8 +60,6 @@ export default (function ($) {
             twentyFifth.id = 'test2'
         }
 
-        $showBoundsCheck = $('#show-boundary')
-
         events.init()
 
         // Update the <div>s for the first time
@@ -84,10 +81,6 @@ export default (function ($) {
             // User entry
             // @ts-ignore
             $('input[type="number"]').on('keyup change click', events.onBoundaryChange) // 'click' is for spinners on input[number] control
-            // Boundary toggle
-            if ($showBoundsCheck) {
-                $showBoundsCheck.on('change', events.onBoundaryToggle)
-            }
 
             // Nudge controls
             // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
@@ -117,12 +110,8 @@ export default (function ($) {
 
             // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
             if (val > 0) {
-                if ($showBoundsCheck?.is(':checked')) {
-                    $('.boundary-' + id).show()
-                    _drawBound(id, val)
-                } else {
-                    $('.boundary-' + id).hide()
-                }
+                $('.boundary-' + id).show()
+                _drawBound(id, val)
             }
             // Hide boundaries
             else {
@@ -133,20 +122,6 @@ export default (function ($) {
             // @ts-ignore
             withinviewport.defaults[id] = val
             _updateBoxes()
-            _toggleBoundaryToggle()
-        },
-
-        // When the boundary toggle box is checked/unchecked
-        onBoundaryToggle() {
-            if ($showBoundsCheck?.is(':checked')) {
-                // Fire the change event so events.onBoundaryChange() will apply any values
-                $('input[type="number"]').change()
-                _toggleBoundaryToggle()
-            } else {
-                $('.boundary').hide()
-                // @ts-ignore
-                $('.boundary-' + this.id).hide()
-            }
         },
 
         // When shift + arrow key is pressed, nudge the page by 1px
@@ -188,23 +163,6 @@ export default (function ($) {
     /////////
     // GUI //
     /////////
-
-    // Display or hide the "show boundaries" check box if any values are set (non-zero)
-    const _toggleBoundaryToggle = function _toggleBoundaryToggle() {
-        let somethingEntered = false
-
-        $('input[type="number"]').each(function () {
-            if (parseInt(this.getAttribute('value') ?? '', 10) !== 0) {
-                somethingEntered = true
-            }
-        })
-
-        if (somethingEntered) {
-            $showBoundsCheck?.parent().slideDown()
-        } else {
-            $showBoundsCheck?.parent().slideUp()
-        }
-    }
 
     // Overlay a boundary line on the viewport when one is set by the user
     const _drawBound = function _drawBound(side: Side, dist: number) {
