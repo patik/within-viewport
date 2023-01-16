@@ -1,33 +1,89 @@
-import { Side } from '../../../package/src/common/common.types'
 import { isSide } from '../../../package/src/common/sides'
 import { drawBound } from './boundaries'
 import { createBoxHtml, setSideStrategy, updateBoxes } from './boxes'
-import { hideAll, query, showAll, triggerEvent } from './dom'
+import { hideAll, query, showAll } from './dom'
 import store from './store'
 
+export function triggerEvent(node: HTMLElement | null, eventName: string) {
+    if (!node) {
+        return
+    }
+
+    // Modern browsers (as of the 2020s)
+    if (typeof Event !== 'undefined') {
+        node.dispatchEvent(new Event(eventName, { bubbles: true, cancelable: true }))
+    }
+    // The first generation of standards-compliant browsers (not IE) from the 2010s
+    else if (document.createEvent) {
+        const evt = document.createEvent('HTMLEvents')
+
+        if ('initEvent' in evt) {
+            evt.initEvent(eventName, true, true)
+        }
+
+        if ('eventName' in evt) {
+            evt.eventName = eventName
+        }
+
+        node.dispatchEvent(evt)
+    }
+    // Old IE
+    else if ('createEventObject' in document && typeof document.createEventObject === 'function') {
+        const evt = document.createEventObject()
+
+        evt.eventType = eventName
+
+        if ('fireEvent' in node && typeof node.fireEvent === 'function') {
+            node.fireEvent('on' + evt.eventType, evt)
+        }
+    }
+}
+
+// Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
+// Windows: Firefox, Trident, Safari, Opera; Mac: Chrome, Safari, Opera; Not Firefox
+function areNudgeControlsSupported() {
+    return (
+        ('oscpu' in navigator &&
+            navigator.oscpu &&
+            typeof navigator.oscpu === 'string' &&
+            /Windows/.test(navigator.oscpu) &&
+            /Firefox|Trident|Safari|Presto/.test(navigator.userAgent)) ||
+        (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))
+    )
+}
+
+const selectors = {
+    methodRadios: '[name="method-form"]',
+    containerRadios: '[name="container-form"]',
+    sideStrategyRadios: '[name="side-strategy"]',
+    boundaryThresholds: 'input[type="number"]',
+}
+
 // Setup event listeners
-export function eventsInit() {
+export function addEventHandlers() {
+    const { containerForEvents } = store.getState()
+
     // Scroll or resize the viewport
-    store.getState().containerForEvents.addEventListener('resize', updateBoxes)
-    store.getState().containerForEvents.addEventListener('scroll', updateBoxes)
+    containerForEvents.addEventListener('resize', updateBoxes)
+    containerForEvents.addEventListener('scroll', updateBoxes)
 
     // Method radio buttons
-    query('[name="method-form"]').forEach((elem) => {
+    query(selectors.methodRadios).forEach((elem) => {
         elem.addEventListener('change', onMethodChange)
     })
 
     // Container radio buttons
-    query('[name="container-form"]').forEach((elem) => {
+    query(selectors.containerRadios).forEach((elem) => {
         elem.addEventListener('change', onContainerFormChange)
     })
 
     // Threshold radio buttons
-    query('[name="side-strategy"]').forEach((elem) => {
+    query(selectors.sideStrategyRadios).forEach((elem) => {
         elem.addEventListener('change', onSideStrategyChange)
     })
 
     // Threshold number entry
-    query('input[type="number"]').forEach((elem) => {
+    query(selectors.boundaryThresholds).forEach((elem) => {
         elem.addEventListener('keyup', onBoundaryChange)
         elem.addEventListener('change', onBoundaryChange)
         // 'click' is for spinners on input[number] control
@@ -35,16 +91,7 @@ export function eventsInit() {
     })
 
     // Nudge controls
-    // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
-    // Windows: Firefox, Trident, Safari, Opera; Mac: Chrome, Safari, Opera; Not Firefox
-    if (
-        ('oscpu' in navigator &&
-            navigator.oscpu &&
-            typeof navigator.oscpu === 'string' &&
-            /Windows/.test(navigator.oscpu) &&
-            /Firefox|Trident|Safari|Presto/.test(navigator.userAgent)) ||
-        (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))
-    ) {
+    if (areNudgeControlsSupported()) {
         document.body.addEventListener('keydown', onNudge)
         showAll('.nudge-instructions')
     }
@@ -53,28 +100,30 @@ export function eventsInit() {
     document.getElementById('toggler')?.addEventListener('click', onControlsToggle)
 }
 
-export function removeEvents() {
+export function removeEventHandlers() {
+    const { containerForEvents } = store.getState()
+
     // Scroll or resize the viewport
-    store.getState().containerForEvents.removeEventListener('resize', updateBoxes)
-    store.getState().containerForEvents.removeEventListener('scroll', updateBoxes)
+    containerForEvents.removeEventListener('resize', updateBoxes)
+    containerForEvents.removeEventListener('scroll', updateBoxes)
 
     // Method radio buttons
-    query('[name="method-form"]').forEach((elem) => {
+    query(selectors.methodRadios).forEach((elem) => {
         elem.removeEventListener('change', onMethodChange)
     })
 
     // Container radio buttons
-    query('[name="container-form"]').forEach((elem) => {
+    query(selectors.containerRadios).forEach((elem) => {
         elem.removeEventListener('change', onContainerFormChange)
     })
 
     // Threshold radio buttons
-    query('[name="side-strategy"]').forEach((elem) => {
+    query(selectors.sideStrategyRadios).forEach((elem) => {
         elem.removeEventListener('change', onSideStrategyChange)
     })
 
-    // User entry
-    query('input[type="number"]').forEach((elem) => {
+    // Threshold number entry
+    query(selectors.boundaryThresholds).forEach((elem) => {
         elem.removeEventListener('keyup', onBoundaryChange)
         elem.removeEventListener('change', onBoundaryChange)
         // 'click' is for spinners on input[number] control
@@ -82,18 +131,9 @@ export function removeEvents() {
     })
 
     // Nudge controls
-    // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
-    // Windows: Firefox, Trident, Safari, Opera; Mac: Chrome, Safari, Opera; Not Firefox
-    if (
-        ('oscpu' in navigator &&
-            navigator.oscpu &&
-            typeof navigator.oscpu === 'string' &&
-            /Windows/.test(navigator.oscpu) &&
-            /Firefox|Trident|Safari|Presto/.test(navigator.userAgent)) ||
-        (/Macintosh/.test(navigator.userAgent) && /Chrome|Safari|Presto/.test(navigator.userAgent))
-    ) {
+    if (areNudgeControlsSupported()) {
         document.body.removeEventListener('keydown', onNudge)
-        showAll('.nudge-instructions')
+        hideAll('.nudge-instructions')
     }
 
     // Controls toggler
@@ -122,11 +162,11 @@ function onMethodChange(evt: Event) {
 
 // When the container radio buttons change
 function onContainerFormChange(evt: Event) {
+    removeEventHandlers()
+
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const whichRadio = target?.value ?? ''
-
-    removeEvents()
 
     // Remove any previously-existing box containers
     const boxContainer = document.getElementById('boxContainer')
@@ -159,9 +199,9 @@ function onContainerFormChange(evt: Event) {
 
     // Update the page
     createBoxHtml()
-}
 
-const sides: Side[] = ['top', 'left', 'bottom', 'right']
+    addEventHandlers()
+}
 
 // When the threshold radio buttons change
 function onSideStrategyChange(evt: Event) {
@@ -171,20 +211,8 @@ function onSideStrategyChange(evt: Event) {
 
     if (whichRadio === 'independent') {
         setSideStrategy('independent')
-        hideAll('.all-sides-wrapper')
-        showAll('.independent-sides-wrapper')
-        sides.forEach((side) => {
-            triggerEvent(document.getElementById(side), 'change')
-        })
-        query('.side-strategy-group-1')[0].classList.remove('selected')
-        query('.side-strategy-group-2')[0].classList.add('selected')
     } else {
         setSideStrategy('all')
-        hideAll('.independent-sides-wrapper')
-        showAll('.all-sides-wrapper')
-        triggerEvent(document.getElementById('all'), 'change')
-        query('.side-strategy-group-2')[0].classList.remove('selected')
-        query('.side-strategy-group-1')[0].classList.add('selected')
     }
 
     // Update the page
@@ -220,7 +248,6 @@ function onBoundaryChange(evt: Event) {
         hideAll(`.boundary-${side}`)
     }
 
-    // Update the page
     store.setState((state) => ({
         wvOptions: {
             ...state.wvOptions,
@@ -228,6 +255,7 @@ function onBoundaryChange(evt: Event) {
         },
     }))
 
+    // Update the page
     updateBoxes()
 }
 

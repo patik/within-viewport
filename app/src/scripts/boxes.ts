@@ -1,6 +1,8 @@
 import { withinViewportAsync } from '../../../package/src/async/index'
+import { Side } from '../../../package/src/common/common.types'
 import { withinViewport } from '../../../package/src/sync/index'
-import { query } from './dom'
+import { hideAll, query, showAll } from './dom'
+import { triggerEvent } from './events'
 import store from './store'
 
 const areViewportUnitsSupported = (function () {
@@ -42,10 +44,28 @@ function isFlexboxSupported() {
     return document.createElement('p').style.flex === ''
 }
 
+const sides: Side[] = ['top', 'left', 'bottom', 'right']
+
 export function setSideStrategy(value: 'all' | 'independent') {
     store.setState({
         sideStrategy: value,
     })
+
+    if (value === 'independent') {
+        hideAll('.all-sides-wrapper')
+        showAll('.independent-sides-wrapper')
+        sides.forEach((side) => {
+            triggerEvent(document.getElementById(side), 'change')
+        })
+        query('.side-strategy-group-1')[0].classList.remove('selected')
+        query('.side-strategy-group-2')[0].classList.add('selected')
+    } else {
+        hideAll('.independent-sides-wrapper')
+        showAll('.all-sides-wrapper')
+        triggerEvent(document.getElementById('all'), 'change')
+        query('.side-strategy-group-2')[0].classList.remove('selected')
+        query('.side-strategy-group-1')[0].classList.add('selected')
+    }
 }
 
 export function setMethod(value: 'async' | 'sync') {

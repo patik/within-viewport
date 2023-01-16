@@ -1,11 +1,11 @@
 import { createBoxHtml } from './scripts/boxes'
-import { eventsInit } from './scripts/events'
+import { addEventHandlers } from './scripts/events'
 
 // Demo code
 function demo() {
     function init() {
         createBoxHtml()
-        eventsInit()
+        addEventHandlers()
     }
 
     window.addEventListener('load', init)

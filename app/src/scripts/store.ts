@@ -7,9 +7,9 @@ interface State {
     sideStrategy: 'all' | 'independent'
     method: 'async' | 'sync'
 
-    // This is the container that we're using as the viewport. If it's some DOM element, these are both the same. But if it's the whole window, then we need to use either `window` or `document.body` for certain tasks.
+    // These represent the (singular) container that we're using as the viewport. If it's some DOM element, these values are both the same. But if it's the whole window, then we need to use either `window` or `document.body` for certain tasks, hence the two separate variables.
     containerForDOM: HTMLElement
-    containerForEvents: Window | HTMLElement
+    containerForEvents: HTMLElement | Window
 }
 
 export default createStore<State>()(() => ({
