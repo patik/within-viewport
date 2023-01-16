@@ -12,7 +12,9 @@
         "test": "yarn jest",
         "unused-exports": "ts-prune -p ./tsconfig.json"
     },
-    "dependencies": {},
+    "dependencies": {
+        "zustand": "^4.3.2"
+    },
     "devDependencies": {
         "@types/jquery": "^3.5.16",
         "eslint-plugin-prettier": "^4.2.1",
