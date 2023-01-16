@@ -19,16 +19,36 @@
 
             <hr class="hide-when-collapsed" />
 
+            <form action="." method="post" class="method-form hide-when-collapsed">
+                <fieldset>
+                    <legend>Module version</legend>
+
+                    <div>
+                        <input type="radio" name="method-form" value="async" id="method-async" checked />
+                        <label for="method-async"
+                            >Asynchronous (uses <code>IntersectionObserver</code>, more performant)</label
+                        >
+                    </div>
+
+                    <div>
+                        <input type="radio" name="method-form" value="sync" id="method-sync" />
+                        <label for="method-sync">Synchronous (uses old school DOM measurements, less performant)</label>
+                    </div>
+                </fieldset>
+            </form>
+
+            <hr class="hide-when-collapsed" />
+
             <form action="." method="post" class="container-form hide-when-collapsed">
                 <fieldset>
                     <legend>Define the viewport</legend>
 
-                    <div class="container-form -item">
+                    <div>
                         <input type="radio" name="container-form" value="window" id="container-window" checked />
                         <label for="container-window">The whole window</label>
                     </div>
 
-                    <div class="container-form -item">
+                    <div>
                         <input type="radio" name="container-form" value="div" id="container-div" />
                         <label for="container-div">A &lt;div&gt;</label>
                     </div>

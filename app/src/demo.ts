@@ -1,4 +1,5 @@
 import { withinViewportAsync } from '../../package/src/async/index'
+import { withinViewport } from '../../package/src/sync/index'
 import { isSide } from '../../package/src/common/sides'
 import { Side } from '../../package/src/common/common.types'
 
@@ -111,6 +112,7 @@ function isFlexboxSupported() {
 function demo() {
     let $boxes: HTMLElement[] = []
     let sideStrategy: 'all' | 'independent' = 'all'
+    let method: 'async' | 'sync' = 'async'
 
     // This is the container that we're using as the viewport. If it's some DOM element, these are both the same. But if it's the whole window, then we need to use either `window` or `document.body` for certain tasks.
     let containerForDOM: HTMLElement = document.body
@@ -180,6 +182,11 @@ function demo() {
         containerForEvents.addEventListener('resize', updateBoxes)
         containerForEvents.addEventListener('scroll', updateBoxes)
 
+        // Method radio buttons
+        query('[name="method-form"]').forEach((elem) => {
+            elem.addEventListener('change', onMethodChange)
+        })
+
         // Container radio buttons
         query('[name="container-form"]').forEach((elem) => {
             elem.addEventListener('change', onContainerFormChange)
@@ -222,7 +229,17 @@ function demo() {
         containerForEvents.removeEventListener('resize', updateBoxes)
         containerForEvents.removeEventListener('scroll', updateBoxes)
 
-        // Radio buttons
+        // Method radio buttons
+        query('[name="method-form"]').forEach((elem) => {
+            elem.removeEventListener('change', onMethodChange)
+        })
+
+        // Container radio buttons
+        query('[name="container-form"]').forEach((elem) => {
+            elem.removeEventListener('change', onContainerFormChange)
+        })
+
+        // Threshold radio buttons
         query('[name="side-strategy"]').forEach((elem) => {
             elem.removeEventListener('change', onSideStrategyChange)
         })
@@ -252,6 +269,22 @@ function demo() {
 
         // Controls toggler
         document.getElementById('toggler')?.removeEventListener('click', onControlsToggle)
+    }
+
+    // When the method/version radio buttons change
+    function onMethodChange(evt: Event) {
+        // TODO - Make TS work properly with DOM events
+        const target = evt.target as HTMLInputElement | null
+        const whichRadio = target?.value ?? ''
+
+        if (whichRadio === 'async') {
+            method = 'async'
+        } else {
+            method = 'sync'
+        }
+
+        // Update the page
+        updateBoxes()
     }
 
     // When the container radio buttons change
@@ -495,6 +528,18 @@ function demo() {
         }
     }
 
+    function setBoxIsIn(box: HTMLElement) {
+        box.innerHTML = 'in'
+        box.setAttribute('aria-hidden', 'false')
+        box.classList.add('inview')
+    }
+
+    function setBoxIsOut(box: HTMLElement) {
+        box.innerHTML = 'out'
+        box.setAttribute('aria-hidden', 'true')
+        box.classList.remove('inview')
+    }
+
     // Update each box's class to reflect whether it was determined to be within the viewport or not
     function updateBoxes() {
         const options =
@@ -507,19 +552,25 @@ function demo() {
                   }
                 : wvOptions
 
-        $boxes.forEach(function (box) {
-            withinViewportAsync(box, options).then((result) => {
-                if (result) {
-                    box.innerHTML = 'in'
-                    box.setAttribute('aria-hidden', 'false')
-                    box.classList.add('inview')
+        if (method === 'async') {
+            $boxes.forEach(function (box) {
+                withinViewportAsync(box, options).then((result) => {
+                    if (result) {
+                        setBoxIsIn(box)
+                    } else {
+                        setBoxIsOut(box)
+                    }
+                })
+            })
+        } else {
+            $boxes.forEach(function (box) {
+                if (withinViewport(box, options)) {
+                    setBoxIsIn(box)
                 } else {
-                    box.innerHTML = 'out'
-                    box.setAttribute('aria-hidden', 'true')
-                    box.classList.remove('inview')
+                    setBoxIsOut(box)
                 }
             })
-        })
+        }
     }
 
     window.addEventListener('load', init)
