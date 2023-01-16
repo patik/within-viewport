@@ -4,44 +4,27 @@
 
 Includes:
 
-- A standalone, plain JavaScript function, `withinviewport()`
-- AMD and Node/CommonJS support
+- A synchronous function, `withinViewport()`
+  - Also supports [legacy browsers](#browser-support)
+- An asynchronous, promise-based function, `withinViewportAsync()`
+  - Only for [modern browsers](https://caniuse.com/intersectionobserver) (e.g. post IE 11)
 - Optional jQuery plugin with handy selectors and shorthand methods
 
 All of the above offer the same features.
 
-## Next generation
+## Install
 
-- New version
-  - Uses IntersectionObserver, TypeScript
-  - Tests, e.g. with Cypress
-  - New demo page (but still vanilla JS/HTML)
-  - Also available as a React hook?
-- Legacy version still available for environments without IntersectionObserver
-  - Available from the same package, e.g. `import from 'within-viewport/legacy`
-  - also exports types
-  - Tests, e.g. with Cypress
-  - Same old demos
+`yarn add withinviewport`
 
-## Note
-
-Although this plugin is still actively maintained, it will eventually be made obsolete by the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API). You can check the current state of browser compatibility at [caniuse.com](https://caniuse.com/#feat=intersectionobserver). Meanwhile, withinviewport will continue to work on current and [legacy browsers](#browser-support).
-
-## Installation
-
-### AMD, Node.js, CommonJS
-
-#### [NPM](https://www.npmjs.com/package/withinviewport)
+or
 
 `npm install withinviewport`
 
 And then:
 
-`import withinViewport from 'withinviewport'`
+`import { withinViewport /* or withinViewportAsync */ } from 'withinviewport'`
 
-### Legacy include
-
-Checkout the [legacy](https://github.com/patik/within-viewport/tree/legacy) branch of this repository for an older version that can be used as a CommonJS module or as a jQuery plugin.
+## Get started
 
 Standalone (no jQuery):
 
@@ -64,25 +47,26 @@ jQuery plugin:
 ```js
 // Returns true if the element is entirely within view of the window
 const elem = document.getElementById('#myElement')
-withinviewport(elem)
+
+withinViewport(elem) // returns a boolean
 ```
 
 ### Advanced
 
 ```js
 // Test against only some sides of the window for faster performance
-withinviewport(elem, {sides: 'left'})
+withinViewport(elem, { sides: 'left' })
 ```
 
 ```js
 // Pick another element to act as the viewport (instead of `window`)
-withinviewport(elem, { container: document.getElementById('myElem') })
+withinViewport(elem, { container: document.getElementById('myElem') })
 ```
 
 ```js
 // Define your own viewport crop by specifying thresholds for each side
 // Example: element is at least 12px inside the top and right of the viewport
-withinviewport(elem, { top: 12, right: 12 })
+withinViewport(elem, { top: 12, right: 12 })
 ```
 
 For more options, see [Settings](#settings) section below.
@@ -91,15 +75,21 @@ For more options, see [Settings](#settings) section below.
 
 ```js
 // These will use the default thresholds; see 'Settings' section below
-withinviewport(elem, 'bottom right')
-withinviewport.left(elem)
+withinViewport(elem, 'bottom right')
+withinViewport.left(elem)
 ```
 
 ## jQuery plugin
 
-### Usage
+Be sure to include the full version of the script as well
 
-#### Basic
+```js
+<script src="withinviewport.js"></script>
+<script src="jquery.js"></script>
+<script src="jquery.withinviewport.js"></script>
+```
+
+### Basic usage
 
 ```js
 // Returns true if the element is entirely within the viewport
@@ -108,27 +98,27 @@ $('#myElement').is(':within-viewport')
 
 ```js
 // Returns a jQuery object of all <div>s that are within the viewport
-$('div').withinviewport()
+$('div').withinViewport()
 ```
 
-#### Advanced
+### Advanced usage
 
 There are shorthand selectors and methods for testing against only one edge of the viewport.
 
 ```js
 // Returns true if the element is within the left edge of the viewport
 // Also works with 'top', 'right', and 'bottom'
-$('#myElement').is(':within-viewport-left');
+$('#myElement').is(':within-viewport-left')
 ```
 
 ```js
 // Returns a jQuery collection of all <div>s within the left edge of the viewport
-$('div').withinviewportleft();
+$('div').withinViewportleft()
 ```
 
 ```js
 // Same as above, but only elements that are at least 12px inside the left edge
-$('div').withinviewportleft({left: 12});
+$('div').withinViewportleft({ left: 12 })
 ```
 
 These shortcuts will result in slightly better performance if you're testing hundreds or thousands of elements.
@@ -155,14 +145,12 @@ $(window).on('resize scrollStop', function() {
 
 This applies to both the jQuery plugin and standalone function.
 
-Use the object `withinviewport.defaults` to define your page's practical viewport compared to the actual browser window.
-
 ### Custom viewport element
 
-If you want to test whether an element is within a scrollable parent element (e.g. which has `overflow: auto`), assign the parent element to the `container` property:
+If you want to test whether an element is within a scrollable parent element (e.g. which has `overflow: auto` or `scroll`), assign the parent element to the `container` property:
 
 ```js
-$('.child-element').withinviewport({
+$('.child-element').withinViewport({
     container: $('.parent-element')
 });
 ```
@@ -172,42 +160,47 @@ $('.child-element').withinviewport({
 For example, a fixed header with a height of 100px that spans the entire width of the page effectively lowers the viewport by 100px from the top edge of the browser window:
 
 ```js
-withinviewport.defaults.top = 100;
+withinViewport.defaults.top = 100
 ```
 
 If you only care about some edges of the viewport, you can specify them to improve performance:
 
 ```js
-withinviewport.defaults.sides = 'left bottom';
+withinViewport.defaults.sides = 'left bottom'
 ```
 
 You can also pass settings on the fly to temporarily override the defaults:
 
 ```js
-withinviewport(elem, {sides:'left bottom', left: 40});
-$('div').withinviewport({sides:'left bottom', left: 40});
-```
-
-Individual elements may have their own settings embedded in a `data` attribute using object notation. These will override both the defaults any any settings passed to the function on the fly (like the example above).
-
-```html
-<div data-withinviewport-settings="{sides: 'left', top: 40}">
+withinViewport(elem, { sides:'left bottom', left: 40 })
+$('div').withinViewport({ sides:'left bottom', left: 40 })
 ```
 
 You can specify *negative threshold values* to allow elements to reside outside the viewport.
 
+## Browser Support
+
+For the synchronous functions:
+
+- IE 7(?) and higher
+- All the others except Opera Mini
+  - Tested in the latest stable Chrome, Firefox, Safari, and Edge
+
+The asynchronous functions work in any browser that supports promises and [IntersectionObserver](https://caniuse.com/intersectionobserver).
+
+All functions (both versions) are transpiled to ES5.
 
 ## Credit
 
 Within Viewport is inspired by these similar utilities which only reflect whether an element is at least partially in view:
 
-* Remy Sharp's [Element 'in view' Event Plugin](http://remysharp.com/2009/01/26/element-in-view-event-plugin/)
-* Mike Tuupola's [Viewport Selectors for jQuery](http://www.appelsiini.net/projects/viewport)
+- Remy Sharp's [Element 'in view' Event Plugin](http://remysharp.com/2009/01/26/element-in-view-event-plugin/)
+- Mike Tuupola's [Viewport Selectors for jQuery](http://www.appelsiini.net/projects/viewport)
 
 ## License
 
-Have fun with it &mdash; [ISC](http://choosealicense.com/licenses/isc/). See included [LICENSE](LICENSE) file.
+Have fun with it &mdash; [BSD-3-Clause](https://choosealicense.com/licenses/bsd-3-clause/). See included [LICENSE](LICENSE) file.
 
 ## Author
 
-Craig Patik, [patik.com](http://patik.com/) &amp; [@craigpatik](https://twitter.com/craigpatik)
+[Craig Patik](https://patik.com)

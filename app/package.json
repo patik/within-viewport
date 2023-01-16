@@ -20,5 +20,11 @@
     },
     "lint-staged": {
         "*.ts": "eslint --cache --cache-location .eslintcache --fix"
-    }
+    },
+    "author": {
+        "name": "Craig Patik",
+        "email": "craig@patik.com",
+        "url": "https://patik.com"
+    },
+    "license": "BSD-3-Clause"
 }

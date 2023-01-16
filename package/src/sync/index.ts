@@ -1,13 +1,6 @@
-import { Options, Side } from './types'
-
-const defaultOptions: Options = {
-    container: typeof document !== 'undefined' ? document.body : window,
-    sides: ['all'],
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-}
+import { Side } from '../common/types'
+import { getConfig } from './options'
+import { SyncOptions } from './types'
 
 declare global {
     interface Window {
@@ -17,69 +10,24 @@ declare global {
     }
 }
 
-function isSide(side: string | Options | Partial<Options> | undefined): side is Side {
-    return Boolean(side) && typeof side === 'string' && ['all', 'top', 'right', 'bottom', 'left'].includes(side)
-}
-
-function isSides(sides: string | string[] | Options | Partial<Options> | undefined): sides is Side[] {
-    if (Array.isArray(sides)) {
-        return sides.every((side) => ['all', 'top', 'right', 'bottom', 'left'].includes(side))
-    }
-
-    if (typeof sides !== 'string') {
-        return false
-    }
-
-    return sides.split(' ').every((side) => ['all', 'top', 'right', 'bottom', 'left'].includes(side))
-}
-
 /**
  * Determines whether an element is within the viewport
  * @param  {Object}  elem       DOM Element (required)
  * @param  {Object}  options    Optional settings
  * @return {Boolean}            Whether the element was completely within the viewport
  */
-export function withinviewport(elem: HTMLElement, options?: Side | Partial<Options>): boolean {
-    let settings: Options
+export function withinViewport(elem?: HTMLElement, options?: Side | Partial<SyncOptions>): boolean {
     let containerBoundingRect: DOMRect
     let containerScrollTop = 0
     let containerScrollLeft = 0
     const scrollBarWidths = [0, 0]
 
-    if (typeof elem !== 'object' || elem.nodeType !== 1) {
-        throw new Error('First argument must be an element')
-    }
-
-    // Settings argument may be a simple string (`top`, `right`, etc)
-    if (isSide(options)) {
-        settings = {
-            ...defaultOptions,
-            sides: [options],
-        }
-    } else if (isSides(options)) {
-        settings = {
-            ...defaultOptions,
-            sides: options,
-        }
-    } else {
-        settings = Object.assign({}, defaultOptions, options)
-    }
-
-    // Build configuration from defaults and user-provided settings and metadata
-    const config: Options = Object.assign({}, defaultOptions, settings)
-
-    // Use the window as the container if the user specified the body or a non-element
-    if (
-        config.container === document.body ||
-        (config.container && 'nodeType' in config.container && config.container.nodeType !== 1)
-    ) {
-        config.container = window
-    }
+    const config = getConfig(elem ?? window, options)
 
     const isContainerTheWindow = config.container === window
 
     // Get the element's bounding rectangle with respect to the viewport
-    const elemBoundingRect = elem.getBoundingClientRect()
+    const elemBoundingRect = (elem ?? window).getBoundingClientRect()
 
     // Get viewport dimensions and offsets
     if (config.container === window) {
@@ -165,28 +113,4 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
 
     // Test the element against each side of the viewport that was requested
     return config.sides.every((side) => isWithin[side]())
-}
-
-/**
- * Optional enhancements and shortcuts
- *
- * @description Uncomment or comment these pieces as they apply to your project and coding preferences
- */
-
-// Shortcut methods for each side of the viewport
-// Example: `withinviewport.top(elem)` is the same as `withinviewport(elem, 'top')`
-export function top(element: HTMLElement): boolean {
-    return withinviewport(element, 'top')
-}
-
-export function right(element: HTMLElement): boolean {
-    return withinviewport(element, 'right')
-}
-
-export function bottom(element: HTMLElement): boolean {
-    return withinviewport(element, 'bottom')
-}
-
-export function left(element: HTMLElement): boolean {
-    return withinviewport(element, 'left')
 }

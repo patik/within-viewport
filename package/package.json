@@ -32,7 +32,7 @@
         "./dist/"
     ],
     "scripts": {
-        "build": "rm -rf dist/* && yarn tsc --project ./tsconfig.export.json && cp ../README.md ./README.md",
+        "build": "rm -rf dist/* && yarn tsc --project ./tsconfig.export.json && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
         "clean": "git clean -fdx",
         "cover": "yarn test --collectCoverage",
         "typecheck": "tsc --noEmit",

@@ -1,10 +1,5 @@
-export type Side = 'all' | 'top' | 'right' | 'bottom' | 'left'
+import { CommonOptions } from '../common/types'
 
-export type Options = {
+export type SyncOptions = CommonOptions & {
     container: HTMLElement | null | Window
-    sides: Side[]
-    top: number
-    right: number
-    bottom: number
-    left: number
 }

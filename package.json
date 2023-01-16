@@ -51,6 +51,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/patik/dof.git"
-    }
+        "url": "https://github.com/patik/within-viewport.git"
+    },
+    "author": {
+        "name": "Craig Patik",
+        "email": "craig@patik.com",
+        "url": "https://patik.com"
+    },
+    "license": "BSD-3-Clause"
 }

@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/dom'
-import { withinviewportAsync } from '../../async/index'
+import { withinViewportAsync } from '../../async/index'
 
 test('uses jest-dom', () => {
     document.body.innerHTML = `
@@ -23,7 +23,7 @@ describe('uses within-viewport', () => {
         const elem = screen.getByText('Visible Example')
         expect(elem).toBeVisible()
 
-        expect(withinviewportAsync(elem)).toBe(true)
+        expect(withinViewportAsync(elem)).toBe(true)
     })
 
     test('out of viewport', () => {
@@ -50,7 +50,7 @@ describe('uses within-viewport', () => {
         const elem: HTMLElement | null = window.document.querySelector('[data-testid="visible"]')
 
         if (elem) {
-            expect(withinviewportAsync(elem)).toBe(false)
+            expect(withinViewportAsync(elem)).toBe(false)
         }
     })
 })
