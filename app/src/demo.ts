@@ -1,5 +1,6 @@
-import { withinviewportAsync } from '../../package/modern/src/index'
-import { isSide } from '../../package/modern/src/options'
+import { withinviewportAsync } from '../../package/src/async/index'
+import { isSide } from '../../package/src/async/options'
+import { Side } from '../../package/src/async/types'
 
 const wvOptions: Record<Side, number> = {
     all: 0,

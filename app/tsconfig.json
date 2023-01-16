@@ -15,6 +15,6 @@
         "jsx": "preserve",
         "incremental": true
     },
-    "include": ["src/**/*.ts", "../package/**/*.d.ts"],
+    "include": ["src/**/*.ts", "../package/**/*.d.ts", "../package/src/async/types.ts", "../package/src/sync/types.ts"],
     "exclude": ["node_modules", "./cypress"]
 }

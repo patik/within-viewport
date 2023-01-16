@@ -1,3 +1,5 @@
+import { Options, Side } from './types'
+
 const defaultOptions: Options = {
     container: typeof document !== 'undefined' ? document.body : window,
     sides: ['all'],
@@ -5,6 +7,14 @@ const defaultOptions: Options = {
     right: 0,
     bottom: 0,
     left: 0,
+}
+
+declare global {
+    interface Window {
+        scrollTop: HTMLElement['scrollTop']
+        scrollLeft: HTMLElement['scrollLeft']
+        getBoundingClientRect: HTMLElement['getBoundingClientRect']
+    }
 }
 
 function isSide(side: string | Options | Partial<Options> | undefined): side is Side {
@@ -59,7 +69,10 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
     const config: Options = Object.assign({}, defaultOptions, settings)
 
     // Use the window as the container if the user specified the body or a non-element
-    if (config.container === document.body || ('nodeType' in config.container && config.container.nodeType !== 1)) {
+    if (
+        config.container === document.body ||
+        (config.container && 'nodeType' in config.container && config.container.nodeType !== 1)
+    ) {
         config.container = window
     }
 
@@ -73,7 +86,7 @@ export function withinviewport(elem: HTMLElement, options?: Side | Partial<Optio
         containerBoundingRect = document.documentElement.getBoundingClientRect()
         containerScrollTop = document.body.scrollTop
         containerScrollLeft = window.scrollX || document.body.scrollLeft
-    } else if (config.container !== window) {
+    } else if (config.container && config.container !== window) {
         containerBoundingRect = config.container.getBoundingClientRect()
         containerScrollTop = config.container.scrollTop
         containerScrollLeft = config.container.scrollLeft

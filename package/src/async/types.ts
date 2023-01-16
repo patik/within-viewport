@@ -1,6 +1,6 @@
-type Side = 'all' | 'top' | 'right' | 'bottom' | 'left'
+export type Side = 'all' | 'top' | 'right' | 'bottom' | 'left'
 
-type Options = {
+export type Options = {
     container: HTMLElement | null
     sides: Side[]
     top: number

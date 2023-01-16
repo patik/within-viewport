@@ -1,3 +1,5 @@
+import { Options, Side } from './types'
+
 const defaultOptions: Options = {
     container: typeof document !== 'undefined' ? document.body : null,
     sides: ['all'],

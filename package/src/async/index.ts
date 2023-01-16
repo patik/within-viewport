@@ -1,4 +1,5 @@
 import { determineConfig, determineRootMargin } from './options'
+import { Options, Side } from './types'
 
 /**
  * Determines whether an element is within the viewport

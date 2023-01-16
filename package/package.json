@@ -28,9 +28,6 @@
     "homepage": "https://github.com/patik/within-viewport",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
-    "exports": {
-        "./legacy": "./dist-legacy/index.js"
-    },
     "files": [
         "./dist/"
     ],
