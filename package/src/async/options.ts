@@ -1,9 +1,9 @@
-import { Side } from '../common/common.types'
+import { Side, SideOption } from '../common/common.types'
 import { determineConfig } from '../common/options'
 import { AsyncOptions } from './async.types'
 
 const defaultOptions: AsyncOptions = {
-    container: typeof document !== 'undefined' ? document.body : null,
+    container: document.body,
     sides: ['all'],
     top: 0,
     right: 0,
@@ -11,7 +11,7 @@ const defaultOptions: AsyncOptions = {
     left: 0,
 }
 
-export function getConfig(elem?: AsyncOptions['container'], userOptions?: Side | Partial<AsyncOptions>) {
+export function getConfig(elem: HTMLElement, userOptions?: Side | SideOption | Partial<AsyncOptions>) {
     return determineConfig('async', defaultOptions, elem, userOptions)
 }
 

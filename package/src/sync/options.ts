@@ -1,9 +1,9 @@
-import { Side } from '../common/common.types'
+import { Side, SideOption } from '../common/common.types'
 import { determineConfig } from '../common/options'
 import { SyncOptions } from './sync.types'
 
 const defaultSettings: SyncOptions = {
-    container: typeof document !== 'undefined' ? document.body : null,
+    container: window,
     sides: ['all'],
     top: 0,
     right: 0,
@@ -11,6 +11,6 @@ const defaultSettings: SyncOptions = {
     left: 0,
 }
 
-export function getConfig(elem: SyncOptions['container'], userOptions?: Side | Partial<SyncOptions>) {
+export function getConfig(elem: HTMLElement, userOptions?: Side | SideOption | Partial<SyncOptions>) {
     return determineConfig('sync', defaultSettings, elem, userOptions)
 }

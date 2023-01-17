@@ -1,4 +1,5 @@
-import { CommonOptions, Side } from './common.types'
+import { defaults } from 'lodash'
+import { CommonOptions, Side, SideOption } from './common.types'
 import { isSide, isSides } from './sides'
 
 /**
@@ -7,8 +8,8 @@ import { isSide, isSides } from './sides'
 export function determineConfig<O extends CommonOptions & { container: HTMLElement | Window | null }>(
     methodType: 'sync' | 'async',
     defaultSettings: O,
-    elem?: O['container'],
-    userOptions?: Side | Partial<CommonOptions>,
+    elem: HTMLElement,
+    userOptions?: Side | SideOption | Partial<CommonOptions>,
 ) {
     if (typeof elem !== 'object' || (elem && 'nodeType' in elem && elem.nodeType !== 1)) {
         throw new Error('First argument must be an element')
@@ -25,22 +26,32 @@ export function determineConfig<O extends CommonOptions & { container: HTMLEleme
     } else if (isSides(userOptions)) {
         settings = {
             ...defaultSettings,
-            sides: userOptions,
+            sides: userOptions.split(' '),
         }
     } else {
-        settings = Object.assign({}, defaultSettings, userOptions)
+        settings = defaults({}, userOptions, defaultSettings)
     }
 
     // Build configuration from defaults and user-provided settings and metadata
-    const config: O = Object.assign({}, defaultSettings, settings)
+    const config: O = defaults({}, settings, defaultSettings)
+    console.log(
+        'config.container ',
+        config.container && 'nodeName' in config.container
+            ? config.container.nodeName
+            : config.container === window
+            ? 'window'
+            : 'not sure',
+    )
 
     // Use the window as the container if the user specified the body or a non-element
     if (
         config.container === document.body ||
+        (config.container && 'nodeName' in config.container && config.container.nodeName === 'BODY') ||
         (config.container && 'nodeType' in config.container && config.container.nodeType !== 1)
     ) {
-        config.container = methodType === 'sync' ? window : null
+        config.container = methodType === 'sync' ? window : document.body
     }
 
+    // console.log('here ', config)
     return config
 }

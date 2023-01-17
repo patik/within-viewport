@@ -76,7 +76,7 @@ For more options, see [Settings](#settings) section below.
 ```js
 // These will use the default thresholds; see 'Settings' section below
 withinViewport(elem, 'bottom right')
-withinViewport.left(elem)
+left(elem)
 ```
 
 ## jQuery plugin
@@ -113,12 +113,12 @@ $('#myElement').is(':within-viewport-left')
 
 ```js
 // Returns a jQuery collection of all <div>s within the left edge of the viewport
-$('div').withinViewportleft()
+$('div').withinViewportLeft()
 ```
 
 ```js
 // Same as above, but only elements that are at least 12px inside the left edge
-$('div').withinViewportleft({ left: 12 })
+$('div').withinViewportLeft({ left: 12 })
 ```
 
 These shortcuts will result in slightly better performance if you're testing hundreds or thousands of elements.

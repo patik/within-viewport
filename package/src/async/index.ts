@@ -1,4 +1,4 @@
-import { Side } from '../common/common.types'
+import { Side, SideOption } from '../common/common.types'
 import { getConfig, determineRootMargin } from './options'
 import { AsyncOptions } from './async.types'
 
@@ -10,7 +10,7 @@ import { AsyncOptions } from './async.types'
  */
 export async function withinViewportAsync(
     elem: HTMLElement,
-    userOptions?: Side | Partial<AsyncOptions>,
+    userOptions?: Side | SideOption | Partial<AsyncOptions>,
 ): Promise<boolean> {
     const config = getConfig(elem, userOptions)
 
