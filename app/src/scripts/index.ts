@@ -1,5 +1,5 @@
-import { createBoxHtml } from './scripts/boxes'
-import { addEventHandlers } from './scripts/events'
+import { createBoxHtml } from './boxes'
+import { addEventHandlers } from './events'
 
 // Demo code
 function demo() {

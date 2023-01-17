@@ -152,7 +152,7 @@ function onContainerFormChange(evt: Event) {
         boxContainer.parentNode?.removeChild(boxContainer)
     }
 
-    const viewportContainer = document.getElementById('container')
+    const viewportContainer = document.getElementById('arbitrary-viewport-container')
 
     const previousContainerForEvens = store.getState().containerForEvents
 
@@ -336,7 +336,7 @@ function onNudge(evt: KeyboardEvent) {
 }
 
 function onControlsToggle() {
-    document.querySelector('.explanation')?.classList.toggle('collapsed')
+    document.querySelector('.control-panel')?.classList.toggle('collapsed')
 
     const toggler = document.getElementById('toggler')
 

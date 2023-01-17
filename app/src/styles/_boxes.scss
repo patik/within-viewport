@@ -1,0 +1,54 @@
+$boxWidth: 18vw;
+
+// Oversized container that holds the boxes
+#boxContainer {
+    background-color: #fff;
+    z-index: 1;
+
+    // The boxes that we're monitoring
+    div {
+        border: 1px solid #036;
+        color: #444;
+        background-color: #ddd;
+        text-align: center;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    &.flex {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: calc(10 * $boxWidth + 21px);
+
+        div {
+            flex: 1 0 $boxWidth;
+            width: $boxWidth;
+            min-width: $boxWidth;
+            max-width: $boxWidth;
+            height: $boxWidth;
+            line-height: calc($boxWidth - 1em);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    }
+
+    &.no-flex div {
+        float: left;
+        display: block;
+        border: 1px solid #036;
+        color: #444;
+        background-color: #ddd;
+        text-align: center;
+        line-height: auto;
+        // vertical-align: middle;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &:nth-child(11n) {
+            clear: right;
+        }
+    }
+
+    // A box that's within the viewport
+    .inview {
+        color: #ddd;
+        background-color: #36c;
+    }
+}

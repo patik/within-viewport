@@ -3,15 +3,15 @@
     <head>
         <meta charset="utf-8" />
         <title>Within Viewport Demo</title>
-        <link href="demo.scss" rel="stylesheet" media="all" />
-        <script src="index.ts" type="module"></script>
+        <link href="styles/index.scss" rel="stylesheet" media="all" />
+        <script src="scripts/index.ts" type="module"></script>
     </head>
     <body>
-        <div class="explanation" role="main">
+        <div class="control-panel" role="main">
             <h1>Within Viewport</h1>
             <div id="toggler" class="button minus small">Collapse</div>
             <p>
-                Scroll around the page. Boxes completely within the viewport will darken.
+                Scroll around the page. Boxes that are completely within the viewport will darken.
                 <span class="nudge-instructions" style="display: none">
                     Press <code>shift + arrow key</code> to nudge the page by 1 pixel at a time.
                 </span>
@@ -23,14 +23,14 @@
                         <summary>Which element is the viewport?</summary>
                         <legend class="sr-only">Which element is the viewport?</legend>
 
-                        <div>
+                        <div class="form-field">
                             <input type="radio" name="container-form" value="window" id="container-window" checked />
                             <label for="container-window">The whole window</label>
                         </div>
 
                         <div>
                             <input type="radio" name="container-form" value="div" id="container-div" />
-                            <label for="container-div">A &lt;div&gt;</label>
+                            <label for="container-div">An arbitrary <code>&lt;div&gt;</code></label>
                         </div>
                     </details>
                 </fieldset>
@@ -43,7 +43,7 @@
                         <legend class="sr-only">Adjust the boundaries</legend>
 
                         <div class="side-strategy-group-all selected">
-                            <div class="side-strategy-item">
+                            <div class="form-field side-strategy-item">
                                 <input type="radio" name="side-strategy" value="same-all" id="same-all-sides" checked />
                                 <label for="same-all-sides">Same value for all sides</label>
                             </div>
@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="side-strategy-group-independent">
-                            <div class="side-strategy-item">
+                            <div class="form-field side-strategy-item">
                                 <input type="radio" name="side-strategy" value="independent" id="independent-sides" />
                                 <label for="independent-sides">Custom values for each side</label>
                             </div>
@@ -129,15 +129,13 @@
                     <details>
                         <summary>Module version</summary>
                         <legend class="sr-only">Module version</legend>
-
-                        <div>
+                        <div class="form-field">
                             <input type="radio" name="method-form" value="async" id="method-async" checked />
                             <label for="method-async"
                                 >Asynchronous (uses <code>IntersectionObserver</code>, more performant)</label
                             >
                         </div>
-
-                        <div>
+                        <div class="form-field">
                             <input type="radio" name="method-form" value="sync" id="method-sync" />
                             <label for="method-sync"
                                 >Synchronous (uses old school DOM measurements, less performant)</label
@@ -153,7 +151,7 @@
                 info.
             </p>
         </div>
-        <div style="display: none" id="container"></div>
+        <div style="display: none" id="arbitrary-viewport-container"></div>
         <!-- Boundary lines -->
         <div style="display: none" class="boundary boundary-top"></div>
         <div style="display: none" class="boundary boundary-right"></div>

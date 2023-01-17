@@ -4,7 +4,6 @@
         "module": "CommonJS",
         "lib": ["dom", "dom.iterable", "esnext"],
         "outDir": "dist",
-        "rootDir": "../",
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,

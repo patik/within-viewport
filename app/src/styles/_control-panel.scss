@@ -1,0 +1,120 @@
+/* Floating intro and controls window */
+
+.control-panel {
+    $padding: 0.75em;
+    $width: 500px;
+    $verticalMargin: 3em;
+
+    position: fixed;
+    top: $verticalMargin;
+
+    max-width: 500px;
+    max-height: calc(100vh - $verticalMargin - $verticalMargin);
+    overflow: scroll;
+
+    padding: $padding;
+
+    // Center it
+    left: 50%;
+    margin-left: calc(-1 * ($width / 2 + $padding + $padding));
+
+    background-color: white;
+    opacity: 1;
+    border: 1px solid navy;
+    border-radius: 6px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    z-index: 3;
+
+    &.collapsed {
+        opacity: 0.6;
+        // max-width: 400px;
+        // margin-left: -205px;
+    }
+}
+
+#toggler {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.hide-when-collapsed {
+    .collapsed & {
+        display: none;
+    }
+}
+
+fieldset {
+    border: none;
+}
+
+.form-field {
+    margin-bottom: 1em;
+}
+
+.boundary-form {
+    input[type='number'] {
+        width: 4em;
+    }
+
+    div {
+        float: none;
+        margin-bottom: 5px;
+    }
+
+    .independent-sides-wrapper div {
+        text-align: center;
+    }
+}
+
+.side-strategy-group-all,
+.side-strategy-group-independent {
+    padding: 1em;
+
+    &.selected {
+        background-color: #3366cc22;
+    }
+}
+
+.all-sides-wrapper {
+    margin-left: 1.5em;
+}
+
+.directional-input-wrapper {
+    text-align: center;
+
+    .directional-input-left {
+        float: left;
+
+        input {
+            display: inline-block;
+        }
+    }
+
+    .directional-input-right {
+        float: right;
+    }
+
+    .directional-input-bottom {
+        clear: both;
+    }
+}
+
+details {
+    & > summary {
+        cursor: pointer;
+
+        legend {
+            display: inline;
+        }
+    }
+
+    &[open] > summary {
+        margin-bottom: 1em;
+    }
+
+    padding: 1em;
+
+    border: 1px solid #036;
+}

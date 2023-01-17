@@ -21,7 +21,7 @@ jobs:
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
           start: yarn start:ci
           project: ./app
-          wait-on: 'http://localhost:3000/dof' # Waits for above
+          wait-on: 'http://localhost:1234' # Waits for above
           # Records to Cypress Dashboard
           # https://docs.cypress.io/guides/dashboard/projects#Set-up-a-project-to-record
           record: true
