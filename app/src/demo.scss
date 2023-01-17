@@ -112,13 +112,13 @@ $boxWidth: 18vw;
     }
 }
 
-.thresholds {
+fieldset {
+    border: none;
+}
+
+.boundary-form {
     input[type='number'] {
         width: 4em;
-    }
-
-    fieldset {
-        border: none;
     }
 
     div {
@@ -144,20 +144,24 @@ $boxWidth: 18vw;
     margin-left: 1.5em;
 }
 
-#threshold-left {
-    float: left;
+.directional-input-wrapper {
+    text-align: center;
 
-    input {
-        display: inline-block;
+    .directional-input-left {
+        float: left;
+
+        input {
+            display: inline-block;
+        }
     }
-}
 
-#threshold-right {
-    float: right;
-}
+    .directional-input-right {
+        float: right;
+    }
 
-#threshold-bottom {
-    clear: both;
+    .directional-input-bottom {
+        clear: both;
+    }
 }
 
 #container {
@@ -200,6 +204,20 @@ $boxWidth: 18vw;
     top: 0;
     height: 100%;
     border-right-width: 1px;
+}
+
+details {
+    & > summary {
+        cursor: pointer;
+
+        legend {
+            display: inline;
+        }
+    }
+
+    padding: 1em;
+
+    border: 1px solid #036;
 }
 
 /* Buttons */

@@ -17,92 +17,136 @@
                 </span>
             </p>
 
-            <hr class="hide-when-collapsed" />
+            <form action="." method="post" class="container-form hide-when-collapsed">
+                <fieldset>
+                    <details>
+                        <summary>Which element is the viewport?</summary>
+                        <legend class="sr-only">Which element is the viewport?</legend>
+
+                        <div>
+                            <input type="radio" name="container-form" value="window" id="container-window" checked />
+                            <label for="container-window">The whole window</label>
+                        </div>
+
+                        <div>
+                            <input type="radio" name="container-form" value="div" id="container-div" />
+                            <label for="container-div">A &lt;div&gt;</label>
+                        </div>
+                    </details>
+                </fieldset>
+            </form>
+
+            <form action="." method="post" class="boundary-form hide-when-collapsed">
+                <fieldset>
+                    <details>
+                        <summary>Adjust the boundaries</summary>
+                        <legend class="sr-only">Adjust the boundaries</legend>
+
+                        <div class="side-strategy-group-all selected">
+                            <div class="side-strategy-item">
+                                <input type="radio" name="side-strategy" value="same-all" id="same-all-sides" checked />
+                                <label for="same-all-sides">Same value for all sides</label>
+                            </div>
+
+                            <div class="side-strategy-item all-sides-wrapper">
+                                <label for="all-sides" class="sr-only">Threshold for all sides, in pixels</label>
+                                <input type="number" value="0" id="all" step="1" tabindex="1" />
+                            </div>
+                        </div>
+
+                        <div class="side-strategy-group-independent">
+                            <div class="side-strategy-item">
+                                <input type="radio" name="side-strategy" value="independent" id="independent-sides" />
+                                <label for="independent-sides">Custom values for each side</label>
+                            </div>
+
+                            <fieldset class="independent-sides-wrapper" style="display: none">
+                                <legend class="sr-only">Thresholds for each side (in pixels):</legend>
+                                <div class="directional-input-wrapper">
+                                    <div class="directional-input-top">
+                                        <label for="boundary-top">Top:</label>
+                                        <input type="number" size="3" id="boundary-top" value="0" tabindex="1" />
+                                    </div>
+                                    <div class="directional-input-left">
+                                        <label for="boundary-left">Left:</label>
+                                        <input type="number" size="3" id="boundary-left" value="0" tabindex="1" />
+                                    </div>
+                                    <div class="directional-input-right">
+                                        <label for="boundary-right">Right:</label>
+                                        <input type="number" size="3" id="boundary-right" value="0" tabindex="1" />
+                                    </div>
+                                    <div class="directional-input-bottom">
+                                        <label for="boundary-bottom">Bottom:</label>
+                                        <input type="number" size="3" id="boundary-bottom" value="0" tabindex="1" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </details>
+                </fieldset>
+            </form>
+
+            <form action="." method="post" class="sides-form hide-when-collapsed">
+                <fieldset>
+                    <details>
+                        <summary>Which sides do we care about?</summary>
+                        <legend class="sr-only">Which sides do we care about?</legend>
+
+                        <p>
+                            For all sides that are selected, elements must be completely within those sides to be
+                            considered "in" the viewport.
+                        </p>
+                        <p>
+                            If you unselect a side, then elements will be allowed to run off that side of the viewport
+                            and still be considered "inside".
+                        </p>
+                        <p>Typically, all sides should be selected.</p>
+
+                        <div class="directional-input-wrapper">
+                            <div class="directional-input-top">
+                                <input type="checkbox" id="side-top" value="top" checked tabindex="1" />
+                                <label for="side-top">Top</label>
+                            </div>
+                            <div class="directional-input-left">
+                                <input type="checkbox" id="side-left" value="left" checked tabindex="1" />
+                                <label for="side-left">Left</label>
+                            </div>
+                            <div class="directional-input-right">
+                                <input type="checkbox" id="side-right" value="right" checked tabindex="1" />
+                                <label for="side-right">Right</label>
+                            </div>
+                            <div class="directional-input-bottom">
+                                <input type="checkbox" id="side-bottom" value="bottom" checked tabindex="1" />
+                                <label for="side-bottom">Bottom</label>
+                            </div>
+                        </div>
+                    </details>
+                </fieldset>
+            </form>
 
             <form action="." method="post" class="method-form hide-when-collapsed">
                 <fieldset>
-                    <legend>Module version</legend>
+                    <details>
+                        <summary>Module version</summary>
+                        <legend class="sr-only">Module version</legend>
 
-                    <div>
-                        <input type="radio" name="method-form" value="async" id="method-async" checked />
-                        <label for="method-async"
-                            >Asynchronous (uses <code>IntersectionObserver</code>, more performant)</label
-                        >
-                    </div>
+                        <div>
+                            <input type="radio" name="method-form" value="async" id="method-async" checked />
+                            <label for="method-async"
+                                >Asynchronous (uses <code>IntersectionObserver</code>, more performant)</label
+                            >
+                        </div>
 
-                    <div>
-                        <input type="radio" name="method-form" value="sync" id="method-sync" />
-                        <label for="method-sync">Synchronous (uses old school DOM measurements, less performant)</label>
-                    </div>
+                        <div>
+                            <input type="radio" name="method-form" value="sync" id="method-sync" />
+                            <label for="method-sync"
+                                >Synchronous (uses old school DOM measurements, less performant)</label
+                            >
+                        </div>
+                    </details>
                 </fieldset>
             </form>
 
-            <hr class="hide-when-collapsed" />
-
-            <form action="." method="post" class="container-form hide-when-collapsed">
-                <fieldset>
-                    <legend>Define the viewport</legend>
-
-                    <div>
-                        <input type="radio" name="container-form" value="window" id="container-window" checked />
-                        <label for="container-window">The whole window</label>
-                    </div>
-
-                    <div>
-                        <input type="radio" name="container-form" value="div" id="container-div" />
-                        <label for="container-div">A &lt;div&gt;</label>
-                    </div>
-                </fieldset>
-            </form>
-
-            <hr class="hide-when-collapsed" />
-
-            <form action="." method="post" class="thresholds hide-when-collapsed">
-                <fieldset>
-                    <legend>Set your own thresholds (in pixels)</legend>
-
-                    <div class="side-strategy-group-all selected">
-                        <div class="side-strategy-item">
-                            <input type="radio" name="side-strategy" value="same-all" id="same-all-sides" checked />
-                            <label for="same-all-sides">Same value for all sides</label>
-                        </div>
-
-                        <div class="side-strategy-item all-sides-wrapper">
-                            <label for="all-sides" class="sr-only">Threshold for all sides, in pixels</label>
-                            <input type="number" value="0" min="0" id="all" step="1" tabindex="1" />
-                        </div>
-                    </div>
-
-                    <div class="side-strategy-group-independent">
-                        <div class="side-strategy-item">
-                            <input type="radio" name="side-strategy" value="independent" id="independent-sides" />
-                            <label for="independent-sides">Custom values for each side</label>
-                        </div>
-
-                        <fieldset class="independent-sides-wrapper" style="display: none">
-                            <legend class="sr-only">Thresholds for each side (in pixels):</legend>
-                            <div id="threshold-top">
-                                <label for="top">Top:</label>
-                                <input type="number" size="3" id="top" value="0" min="0" tabindex="1" />
-                            </div>
-                            <div id="threshold-left">
-                                <label for="left">Left:</label>
-                                <input type="number" size="3" id="left" value="0" min="0" tabindex="1" />
-                            </div>
-                            <div id="threshold-right">
-                                <label for="right">Right:</label>
-                                <input type="number" size="3" id="right" value="0" min="0" tabindex="1" />
-                            </div>
-                            <div id="threshold-bottom">
-                                <label for="bottom">Bottom:</label>
-                                <input type="number" size="3" id="bottom" value="0" min="0" tabindex="1" />
-                            </div>
-                        </fieldset>
-                    </div>
-                </fieldset>
-            </form>
-
-            <hr class="hide-when-collapsed" />
             <p class="hide-when-collapsed">
                 See the <a href="https://github.com/patik/within-viewport">code on GitHub</a> and the
                 <a href="http://patik.com/blog/within-viewport-javascript-and-jquery-plugin/">blog post</a> for more

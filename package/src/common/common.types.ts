@@ -1,11 +1,11 @@
-export type Side = 'all' | 'top' | 'right' | 'bottom' | 'left'
+export type Side = 'top' | 'right' | 'bottom' | 'left'
 
-export type SideOption = `${Side} ${Side}`
+export type MultipleSides = `${Side} ${Side}`
+
+export type Boundaries = {
+    [b in Side]: number
+}
 
 export type CommonOptions = {
     sides: Side[]
-    top: number
-    right: number
-    bottom: number
-    left: number
-}
+} & Boundaries

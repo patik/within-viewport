@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash'
-import { Side, SideOption } from '../../common/common.types'
+import { Side, MultipleSides } from '../../common/common.types'
 import { SyncOptions } from '../../sync/sync.types'
 import { getConfig as getConfigSync } from '../../sync/options'
 import { getConfig as getConfigAsync } from '../../async/options'
@@ -19,22 +19,26 @@ const fakeBody = {
 }
 
 const syncTestCases: Array<{
-    userOptions: undefined | Side | SideOption | Partial<SyncOptions>
+    userOptions: undefined | Side | MultipleSides | Partial<SyncOptions>
     name: string
     result: { sides: Array<Side>; container: HTMLElement | Window | { nodeName: string } }
 }> = [
-    { name: 'undefined', userOptions: undefined, result: { sides: ['all'], container: window } },
+    {
+        name: 'undefined',
+        userOptions: undefined,
+        result: { sides: ['top', 'right', 'bottom', 'left'], container: window },
+    },
     { name: '`left`', userOptions: 'left', result: { sides: ['left'], container: window } },
     { name: '`right bottom`', userOptions: 'right bottom', result: { sides: ['right', 'bottom'], container: window } },
     {
         name: 'container is the body',
         userOptions: { container: fakeBody },
-        result: { sides: ['all'], container: window },
+        result: { sides: ['top', 'right', 'bottom', 'left'], container: window },
     },
     {
         name: 'container is an arbitary div',
         userOptions: { container: arbitraryFakeDiv },
-        result: { sides: ['all'], container: arbitraryFakeDiv },
+        result: { sides: ['top', 'right', 'bottom', 'left'], container: arbitraryFakeDiv },
     },
     {
         name: 'sides=left; container is an arbitary div',
@@ -65,11 +69,15 @@ describe.each(syncTestCases)('Synchronous getConfig', (testCase) => {
 })
 
 const asyncTestCases: Array<{
-    userOptions: undefined | Side | SideOption | Partial<AsyncOptions>
+    userOptions: undefined | Side | MultipleSides | Partial<AsyncOptions>
     name: string
     result: { sides: Array<Side>; container: HTMLElement | Window | { nodeName: string } }
 }> = [
-    { name: 'undefined', userOptions: undefined, result: { sides: ['all'], container: document } },
+    {
+        name: 'undefined',
+        userOptions: undefined,
+        result: { sides: ['top', 'right', 'bottom', 'left'], container: document },
+    },
     { name: '`left`', userOptions: 'left', result: { sides: ['left'], container: document } },
     {
         name: '`right bottom`',
@@ -79,12 +87,12 @@ const asyncTestCases: Array<{
     {
         name: 'container is the body',
         userOptions: { container: fakeBody },
-        result: { sides: ['all'], container: document },
+        result: { sides: ['top', 'right', 'bottom', 'left'], container: document },
     },
     {
         name: 'container is an arbitary div',
         userOptions: { container: arbitraryFakeDiv },
-        result: { sides: ['all'], container: arbitraryFakeDiv },
+        result: { sides: ['top', 'right', 'bottom', 'left'], container: arbitraryFakeDiv },
     },
     {
         name: 'sides=left; container is an arbitary div',

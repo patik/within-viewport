@@ -1,4 +1,4 @@
-import { Side, SideOption } from '../common/common.types'
+import { Side, MultipleSides } from '../common/common.types'
 import { getConfig } from './options'
 import { SyncOptions } from './sync.types'
 
@@ -16,7 +16,7 @@ declare global {
  * @param  {Object}  userOptions    Optional settings
  * @return {Boolean}                Whether the element was completely within the viewport
  */
-export function withinViewport(elem: HTMLElement, userOptions?: Side | SideOption | Partial<SyncOptions>): boolean {
+export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleSides | Partial<SyncOptions>): boolean {
     console.log('sync version')
     let containerBoundingRect: DOMRect
     let containerScrollTop = 0

@@ -34,7 +34,7 @@ function drawLeftBoundary(distStr: string) {
 }
 
 // Overlay a boundary line on the viewport when one is set by the user
-export function drawBound(side: Side, dist: number) {
+export function drawBound(side: Side | 'all', dist: number) {
     const distStr = `${dist}px`
 
     switch (side) {

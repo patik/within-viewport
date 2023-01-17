@@ -1,7 +1,7 @@
 import { defaults } from 'lodash'
 import { AsyncOptions } from '../async/async.types'
 import { SyncOptions } from '../sync/sync.types'
-import { CommonOptions, Side, SideOption } from './common.types'
+import { CommonOptions, Side, MultipleSides } from './common.types'
 import { isSide, isSides } from './sides'
 
 type Options = SyncOptions | AsyncOptions
@@ -13,7 +13,7 @@ export function determineConfig<O extends Options>(
     methodType: 'sync' | 'async',
     defaultSettings: O,
     elem: HTMLElement,
-    userOptions?: Side | SideOption | Partial<CommonOptions>,
+    userOptions?: Side | MultipleSides | Partial<CommonOptions>,
 ) {
     if (typeof elem !== 'object' || (elem && 'nodeType' in elem && elem.nodeType !== 1)) {
         throw new Error('First argument must be an element')

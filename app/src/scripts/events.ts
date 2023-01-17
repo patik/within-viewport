@@ -56,7 +56,21 @@ const selectors = {
     methodRadios: '[name="method-form"]',
     containerRadios: '[name="container-form"]',
     sideStrategyRadios: '[name="side-strategy"]',
-    boundaryThresholds: 'input[type="number"]',
+    boundaryNumberInputs: '#all, #boundary-top, #boundary-left, #boundary-right, #boundary-bottom',
+    sidesCheckboxes: '.sides-form input[type="checkbox"]',
+}
+
+/**
+ * When we changed which element is used as the viewport, we need to 'move' the event handlers to the correct element
+ */
+function resetContainerEventHandlers(previousContainer: HTMLElement | Window, nextContainer: HTMLElement | Window) {
+    // Remove handlers from the old container
+    previousContainer.removeEventListener('resize', updateBoxes)
+    previousContainer.removeEventListener('scroll', updateBoxes)
+
+    // Add handlers to the new container
+    nextContainer.addEventListener('resize', updateBoxes)
+    nextContainer.addEventListener('scroll', updateBoxes)
 }
 
 // Setup event listeners
@@ -77,17 +91,22 @@ export function addEventHandlers() {
         elem.addEventListener('change', onContainerFormChange)
     })
 
-    // Threshold radio buttons
+    // Boundary radio buttons
     query(selectors.sideStrategyRadios).forEach((elem) => {
         elem.addEventListener('change', onSideStrategyChange)
     })
 
-    // Threshold number entry
-    query(selectors.boundaryThresholds).forEach((elem) => {
+    // Boundary number entry
+    query(selectors.boundaryNumberInputs).forEach((elem) => {
         elem.addEventListener('keyup', onBoundaryChange)
         elem.addEventListener('change', onBoundaryChange)
         // 'click' is for spinners on input[number] control
         elem.addEventListener('click', onBoundaryChange)
+    })
+
+    // Sides checkboxes
+    query(selectors.sidesCheckboxes).forEach((elem) => {
+        elem.addEventListener('change', onSideSelectionChange)
     })
 
     // Nudge controls
@@ -98,46 +117,6 @@ export function addEventHandlers() {
 
     // Controls toggler
     document.getElementById('toggler')?.addEventListener('click', onControlsToggle)
-}
-
-function removeEventHandlers() {
-    const { containerForEvents } = store.getState()
-
-    // Scroll or resize the viewport
-    containerForEvents.removeEventListener('resize', updateBoxes)
-    containerForEvents.removeEventListener('scroll', updateBoxes)
-
-    // Method radio buttons
-    query(selectors.methodRadios).forEach((elem) => {
-        elem.removeEventListener('change', onMethodChange)
-    })
-
-    // Container radio buttons
-    query(selectors.containerRadios).forEach((elem) => {
-        elem.removeEventListener('change', onContainerFormChange)
-    })
-
-    // Threshold radio buttons
-    query(selectors.sideStrategyRadios).forEach((elem) => {
-        elem.removeEventListener('change', onSideStrategyChange)
-    })
-
-    // Threshold number entry
-    query(selectors.boundaryThresholds).forEach((elem) => {
-        elem.removeEventListener('keyup', onBoundaryChange)
-        elem.removeEventListener('change', onBoundaryChange)
-        // 'click' is for spinners on input[number] control
-        elem.removeEventListener('click', onBoundaryChange)
-    })
-
-    // Nudge controls
-    if (areNudgeControlsSupported()) {
-        document.body.removeEventListener('keydown', onNudge)
-        hideAll('.nudge-instructions')
-    }
-
-    // Controls toggler
-    document.getElementById('toggler')?.removeEventListener('click', onControlsToggle)
 }
 
 // When the method/version radio buttons change
@@ -162,8 +141,6 @@ function onMethodChange(evt: Event) {
 
 // When the container radio buttons change
 function onContainerFormChange(evt: Event) {
-    removeEventHandlers()
-
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const whichRadio = target?.value ?? ''
@@ -177,11 +154,14 @@ function onContainerFormChange(evt: Event) {
 
     const viewportContainer = document.getElementById('container')
 
+    const previousContainerForEvens = store.getState().containerForEvents
+
     if (whichRadio === 'window') {
         store.setState({
             containerForDOM: document.body,
             containerForEvents: window,
         })
+        resetContainerEventHandlers(previousContainerForEvens, window)
 
         if (viewportContainer) {
             viewportContainer.style.display = 'none'
@@ -194,20 +174,25 @@ function onContainerFormChange(evt: Event) {
                 containerForDOM: viewportContainer,
                 containerForEvents: viewportContainer,
             })
+
+            resetContainerEventHandlers(previousContainerForEvens, viewportContainer)
         }
     }
 
     // Update the page
     createBoxHtml()
-
-    addEventHandlers()
 }
 
 // When the threshold radio buttons change
 function onSideStrategyChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
-    const whichRadio = target?.value ?? ''
+
+    if (!target) {
+        return
+    }
+
+    const whichRadio = target.value
 
     if (whichRadio === 'independent') {
         setSideStrategy('independent')
@@ -219,14 +204,38 @@ function onSideStrategyChange(evt: Event) {
     updateBoxes()
 }
 
+// When different sides are chosen to be relevant
+function onSideSelectionChange(evt: Event) {
+    // TODO - Make TS work properly with DOM events
+    const target = evt.target as HTMLInputElement | null
+    const side = target?.value
+
+    if (!isSide(side)) {
+        throw new Error('Input value must be a valid side')
+    }
+
+    console.log('whichCheckbox', side, target?.checked)
+    // To avoid de-duping, immediately filter out this particular side
+    const sides = store.getState().sides.filter((s) => s !== side)
+
+    if (target?.checked) {
+        sides.push(side)
+    }
+
+    store.setState({ sides })
+
+    // Update the page
+    updateBoxes()
+}
+
 // When a boundary value changes
 function onBoundaryChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const val = parseInt(target?.value ?? '', 10)
-    const side = target?.id
+    const side = target?.id.replace(/^boundary-/, '')
 
-    if (!isSide(side)) {
+    if (!isSide(side) && side !== 'all') {
         throw new Error('Input ID must be a valid side')
     }
 
@@ -237,8 +246,25 @@ function onBoundaryChange(evt: Event) {
             showAll(`.boundary-right`)
             showAll(`.boundary-bottom`)
             showAll(`.boundary-left`)
+
+            store.setState((state) => ({
+                boundaries: {
+                    ...state.boundaries,
+                    top: val,
+                    right: val,
+                    bottom: val,
+                    left: val,
+                },
+            }))
         } else {
             showAll(`.boundary-${side}`)
+
+            store.setState((state) => ({
+                boundaries: {
+                    ...state.boundaries,
+                    [side]: val,
+                },
+            }))
         }
 
         drawBound(side, val)
@@ -247,13 +273,6 @@ function onBoundaryChange(evt: Event) {
     else {
         hideAll(`.boundary-${side}`)
     }
-
-    store.setState((state) => ({
-        boundaries: {
-            ...state.boundaries,
-            [side]: val,
-        },
-    }))
 
     // Update the page
     updateBoxes()

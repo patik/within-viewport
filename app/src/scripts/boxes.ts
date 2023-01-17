@@ -48,10 +48,6 @@ function isFlexboxSupported() {
 const sides: Side[] = ['top', 'left', 'bottom', 'right']
 
 export function setSideStrategy(value: 'all' | 'independent') {
-    store.setState({
-        sideStrategy: value,
-    })
-
     if (value === 'independent') {
         hideAll('.all-sides-wrapper')
         showAll('.independent-sides-wrapper')
@@ -132,17 +128,11 @@ function setBoxIsOut(box: HTMLElement) {
 
 // Update each box's class to reflect whether it was determined to be within the viewport or not
 export function updateBoxes() {
-    const { sideStrategy, boundaries, methodType, $boxes } = store.getState()
-    const options =
-        sideStrategy === 'all'
-            ? {
-                  ...boundaries,
-                  top: boundaries.all,
-                  right: boundaries.all,
-                  bottom: boundaries.all,
-                  left: boundaries.all,
-              }
-            : boundaries
+    const { boundaries, methodType, $boxes, sides } = store.getState()
+    const options = {
+        ...boundaries,
+        sides,
+    }
 
     if (methodType === 'async') {
         $boxes.forEach(function (box) {

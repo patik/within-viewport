@@ -14,30 +14,20 @@ All of the above offer the same features.
 
 ## Install
 
-`yarn add withinviewport`
+```sh
+yarn add withinviewport
+```
 
 or
 
-`npm install withinviewport`
-
-And then:
-
-`import { withinViewport /* or withinViewportAsync */ } from 'withinviewport'`
-
-## Get started
-
-Standalone (no jQuery):
-
-```js
-<script src="withinviewport.js"></script>
+```sh
+npm install withinviewport
 ```
 
-jQuery plugin:
+And then in your JavaScript or TypeScript:
 
 ```js
-<script src="withinviewport.js"></script>
-<script src="jquery.js"></script>
-<script src="jquery.withinviewport.js"></script>
+import { withinViewport /* or withinViewportAsync */ } from 'withinviewport'
 ```
 
 ## Usage
@@ -172,8 +162,8 @@ withinViewport.defaults.sides = 'left bottom'
 You can also pass settings on the fly to temporarily override the defaults:
 
 ```js
-withinViewport(elem, { sides:'left bottom', left: 40 })
-$('div').withinViewport({ sides:'left bottom', left: 40 })
+withinViewport(elem, { sides: 'left bottom', left: 40 })
+$('div').withinViewport({ sides: 'left bottom', left: 40 })
 ```
 
 You can specify *negative threshold values* to allow elements to reside outside the viewport.

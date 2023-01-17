@@ -4,8 +4,7 @@ import { Side } from '../../../package/src/common/common.types'
 interface State {
     $boxes: HTMLElement[]
     boundaries: Record<Side, number>
-    // Whether we use the same boundaries for all sides or set them separately
-    sideStrategy: 'all' | 'independent'
+    sides: Side[]
     // Which version of `withinViewport` should be called
     methodType: 'async' | 'sync'
 
@@ -18,8 +17,8 @@ export default createStore<State>()(() => ({
     containerForDOM: document.body,
     containerForEvents: window,
     $boxes: [],
-    sideStrategy: 'all',
     methodType: 'async',
+    sides: ['top', 'right', 'bottom', 'left'],
     boundaries: {
         all: 0,
         top: 0,

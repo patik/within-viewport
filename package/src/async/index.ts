@@ -1,4 +1,4 @@
-import { Side, SideOption } from '../common/common.types'
+import { Side, MultipleSides } from '../common/common.types'
 import { getConfig, determineRootMargin } from './options'
 import { AsyncOptions } from './async.types'
 
@@ -10,10 +10,10 @@ import { AsyncOptions } from './async.types'
  */
 export async function withinViewportAsync(
     elem: HTMLElement,
-    userOptions?: Side | SideOption | Partial<AsyncOptions>,
+    userOptions?: Side | MultipleSides | Partial<AsyncOptions>,
 ): Promise<boolean> {
-    console.log('async version')
     const config = getConfig(elem, userOptions)
+    console.log('async version ', determineRootMargin(config), config)
 
     return new Promise((resolve) => {
         const callback = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
