@@ -69,17 +69,17 @@ const asyncTestCases: Array<{
     name: string
     result: { sides: Array<Side>; container: HTMLElement | Window | { nodeName: string } }
 }> = [
-    { name: 'undefined', userOptions: undefined, result: { sides: ['all'], container: document.body } },
-    { name: '`left`', userOptions: 'left', result: { sides: ['left'], container: document.body } },
+    { name: 'undefined', userOptions: undefined, result: { sides: ['all'], container: document } },
+    { name: '`left`', userOptions: 'left', result: { sides: ['left'], container: document } },
     {
         name: '`right bottom`',
         userOptions: 'right bottom',
-        result: { sides: ['right', 'bottom'], container: document.body },
+        result: { sides: ['right', 'bottom'], container: document },
     },
     {
         name: 'container is the body',
         userOptions: { container: fakeBody },
-        result: { sides: ['all'], container: document.body },
+        result: { sides: ['all'], container: document },
     },
     {
         name: 'container is an arbitary div',

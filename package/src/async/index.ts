@@ -12,6 +12,7 @@ export async function withinViewportAsync(
     elem: HTMLElement,
     userOptions?: Side | SideOption | Partial<AsyncOptions>,
 ): Promise<boolean> {
+    console.log('async version')
     const config = getConfig(elem, userOptions)
 
     return new Promise((resolve) => {

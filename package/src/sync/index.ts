@@ -17,6 +17,7 @@ declare global {
  * @return {Boolean}                Whether the element was completely within the viewport
  */
 export function withinViewport(elem: HTMLElement, userOptions?: Side | SideOption | Partial<SyncOptions>): boolean {
+    console.log('sync version')
     let containerBoundingRect: DOMRect
     let containerScrollTop = 0
     let containerScrollLeft = 0

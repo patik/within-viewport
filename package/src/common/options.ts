@@ -53,7 +53,7 @@ export function determineConfig<O extends Options>(
         (config.container && 'nodeName' in config.container && config.container.nodeName === 'BODY') ||
         (config.container && 'nodeType' in config.container && config.container.nodeType !== 1)
     ) {
-        config.container = methodType === 'sync' ? window : document.body
+        config.container = methodType === 'sync' ? window : document
     }
 
     return config
