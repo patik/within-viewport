@@ -53,10 +53,7 @@ export function determineConfig<O extends Options>(
         (config.container && 'nodeName' in config.container && config.container.nodeName === 'BODY') ||
         (config.container && 'nodeType' in config.container && config.container.nodeType !== 1)
     ) {
-        // console.log('IS THE BODY!')
         config.container = methodType === 'sync' ? window : document.body
-    } else {
-        // console.log('not the body ', config.container)
     }
 
     return config
