@@ -2,9 +2,11 @@ import { createStore } from 'zustand/vanilla'
 import { Side } from '../../../package/src/common/common.types'
 
 interface State {
-    wvOptions: Record<Side, number>
     $boxes: HTMLElement[]
+    boundaries: Record<Side, number>
+    // Whether we use the same boundaries for all sides or set them separately
     sideStrategy: 'all' | 'independent'
+    // Which version of `withinViewport` should be called
     methodType: 'async' | 'sync'
 
     // These represent the (singular) container that we're using as the viewport. If it's some DOM element, these values are both the same. But if it's the whole window, then we need to use either `window` or `document.body` for certain tasks, hence the two separate variables.
@@ -18,7 +20,7 @@ export default createStore<State>()(() => ({
     $boxes: [],
     sideStrategy: 'all',
     methodType: 'async',
-    wvOptions: {
+    boundaries: {
         all: 0,
         top: 0,
         right: 0,

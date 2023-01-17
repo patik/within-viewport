@@ -249,8 +249,8 @@ function onBoundaryChange(evt: Event) {
     }
 
     store.setState((state) => ({
-        wvOptions: {
-            ...state.wvOptions,
+        boundaries: {
+            ...state.boundaries,
             [side]: val,
         },
     }))

@@ -58,14 +58,14 @@ export function setSideStrategy(value: 'all' | 'independent') {
         sides.forEach((side) => {
             triggerEvent(document.getElementById(side), 'change')
         })
-        query('.side-strategy-group-1')[0].classList.remove('selected')
-        query('.side-strategy-group-2')[0].classList.add('selected')
+        query('.side-strategy-group-all')[0].classList.remove('selected')
+        query('.side-strategy-group-independent')[0].classList.add('selected')
     } else {
         hideAll('.independent-sides-wrapper')
         showAll('.all-sides-wrapper')
         triggerEvent(document.getElementById('all'), 'change')
-        query('.side-strategy-group-2')[0].classList.remove('selected')
-        query('.side-strategy-group-1')[0].classList.add('selected')
+        query('.side-strategy-group-independent')[0].classList.remove('selected')
+        query('.side-strategy-group-all')[0].classList.add('selected')
     }
 }
 
@@ -110,12 +110,11 @@ export function createBoxHtml() {
     boxContainer.innerHTML = boxHTML
     store.getState().containerForDOM.appendChild(boxContainer)
 
-    // Update the <div>s for the first time
-
     store.setState({
         $boxes: query('div', boxContainer),
     })
 
+    // Update the <div>s for the first time
     updateBoxes()
 }
 
@@ -133,17 +132,17 @@ function setBoxIsOut(box: HTMLElement) {
 
 // Update each box's class to reflect whether it was determined to be within the viewport or not
 export function updateBoxes() {
-    const { sideStrategy, wvOptions, methodType, $boxes } = store.getState()
+    const { sideStrategy, boundaries, methodType, $boxes } = store.getState()
     const options =
         sideStrategy === 'all'
             ? {
-                  ...wvOptions,
-                  top: wvOptions.all,
-                  right: wvOptions.all,
-                  bottom: wvOptions.all,
-                  left: wvOptions.all,
+                  ...boundaries,
+                  top: boundaries.all,
+                  right: boundaries.all,
+                  bottom: boundaries.all,
+                  left: boundaries.all,
               }
-            : wvOptions
+            : boundaries
 
     if (methodType === 'async') {
         $boxes.forEach(function (box) {
