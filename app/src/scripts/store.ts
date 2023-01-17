@@ -1,11 +1,10 @@
 import { createStore } from 'zustand/vanilla'
-import { Side } from '../../../package/src/common/common.types'
+import { Config } from '../../../package/src/common/types'
 
 interface State {
     $boxes: HTMLElement[]
     $codeOutput: HTMLElement | Element
-    boundaries: Record<Side, number>
-    sides: Side[]
+    boundaries: Omit<Config, 'container'> // Just the boundaries
     // Which version of `withinViewport` should be called
     methodType: 'async' | 'sync'
 
@@ -20,9 +19,7 @@ export default createStore<State>()(() => ({
     $codeOutput: document.body.lastElementChild ?? document.body,
     $boxes: [],
     methodType: 'async',
-    sides: ['top', 'right', 'bottom', 'left'],
     boundaries: {
-        all: 0,
         top: 0,
         right: 0,
         bottom: 0,

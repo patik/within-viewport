@@ -1,15 +1,15 @@
-import { CommonOptions, Side, MultipleSides } from './common.types'
+import { MultipleSides, Side, UserOptions } from './types'
 
-export function isSide(side: string | CommonOptions | Partial<CommonOptions> | undefined): side is Side {
-    return Boolean(side) && typeof side === 'string' && ['all', 'top', 'right', 'bottom', 'left'].includes(side)
+export const sides: Side[] = ['top', 'right', 'bottom', 'left']
+
+export function isSide(side: string | Partial<UserOptions> | undefined): side is Side {
+    return Boolean(side) && typeof side === 'string' && (sides as string[]).includes(side)
 }
 
-export function isSides(
-    sides: string | string | CommonOptions | Partial<CommonOptions> | undefined,
-): sides is MultipleSides {
-    if (typeof sides !== 'string') {
+export function isMultipleSides(sideList: string | Partial<UserOptions> | undefined): sideList is MultipleSides {
+    if (typeof sideList !== 'string') {
         return false
     }
 
-    return sides.split(' ').every((side) => ['all', 'top', 'right', 'bottom', 'left'].includes(side))
+    return sideList.split(' ').every((side) => sideList.includes(side))
 }

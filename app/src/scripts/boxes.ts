@@ -1,8 +1,6 @@
 import { withinViewportAsync } from '../../../package/src/async/index'
-import { Side } from '../../../package/src/common/common.types'
 import { withinViewport } from '../../../package/src/sync/index'
-import { hideAll, query, showAll } from './dom'
-import { triggerEvent } from './events'
+import { query } from './dom'
 import store from './store'
 
 const areViewportUnitsSupported = (function () {
@@ -43,26 +41,6 @@ function determineBoxWidth() {
 
 function isFlexboxSupported() {
     return document.createElement('p').style.flex === ''
-}
-
-const sides: Side[] = ['top', 'left', 'bottom', 'right']
-
-export function setSideStrategy(value: 'all' | 'independent') {
-    if (value === 'independent') {
-        hideAll('.all-sides-wrapper')
-        showAll('.independent-sides-wrapper')
-        sides.forEach((side) => {
-            triggerEvent(document.getElementById(side), 'change')
-        })
-        query('.side-strategy-group-all')[0].classList.remove('selected')
-        query('.side-strategy-group-independent')[0].classList.add('selected')
-    } else {
-        hideAll('.independent-sides-wrapper')
-        showAll('.all-sides-wrapper')
-        triggerEvent(document.getElementById('all'), 'change')
-        query('.side-strategy-group-independent')[0].classList.remove('selected')
-        query('.side-strategy-group-all')[0].classList.add('selected')
-    }
 }
 
 export function createBoxHtml() {
@@ -128,10 +106,10 @@ function setBoxIsOut(box: HTMLElement) {
 
 // Update each box's class to reflect whether it was determined to be within the viewport or not
 export function updateBoxes() {
-    const { boundaries, methodType, $boxes, sides } = store.getState()
+    const { boundaries, methodType, $boxes, containerForDOM } = store.getState()
     const options = {
         ...boundaries,
-        sides,
+        container: containerForDOM,
     }
 
     if (methodType === 'async') {

@@ -1,4 +1,4 @@
-import { CommonOptions } from '../../../package/src/common/common.types'
+import { Boundaries } from '../../../package/src/common/types'
 import store from './store'
 import { highlightElement } from 'prismjs'
 import 'prismjs/themes/prism-okaidia.min.css'
@@ -16,7 +16,7 @@ function getContainerName(elem: HTMLElement) {
     return `my${elem.nodeName.charAt(0)}${elem.nodeName.slice(1).toLowerCase()}`
 }
 
-type UserOptions = Partial<CommonOptions & { container: string }>
+type UserOptions = Partial<Boundaries & { container: string }>
 
 // Cleanup some JSON stuff that wouldn't appear in regular JS
 function getCleanJson(options: UserOptions) {
@@ -28,19 +28,15 @@ function getCleanJson(options: UserOptions) {
             // Right-hand side property names
             .replace(/"(sides|container|top|right|bottom|left)":/g, '$1:')
             //
-            .replace(/"(top|right|bottom|left)"/g, `'$1'`)
+            .replace(/"(top|right|bottom|left|ignore)"/g, `'$1'`)
             // Container element's var name
             .replace(/container:\s"(my\w+)"/g, `container: $1`)
     )
 }
 
 export function updateCodeOutput() {
-    const { boundaries, methodType, sides, $codeOutput, containerForDOM } = store.getState()
+    const { boundaries, methodType, $codeOutput, containerForDOM } = store.getState()
     const options: UserOptions = {}
-
-    if (sides.length < 4) {
-        options.sides = sides
-    }
 
     objectKeysArray(boundaries).forEach((side) => {
         if (boundaries[side] !== 0) {

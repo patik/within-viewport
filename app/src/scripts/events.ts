@@ -1,6 +1,6 @@
 import { isSide } from '../../../package/src/common/sides'
 import { drawBound } from './boundaries'
-import { createBoxHtml, setSideStrategy, updateBoxes } from './boxes'
+import { createBoxHtml, updateBoxes } from './boxes'
 import { hideAll, query, showAll } from './dom'
 import { updateCodeOutput } from './output'
 import store from './store'
@@ -56,9 +56,8 @@ function areNudgeControlsSupported() {
 const selectors = {
     methodRadios: '[name="method-form"]',
     containerRadios: '[name="container-form"]',
-    sideStrategyRadios: '[name="side-strategy"]',
-    boundaryNumberInputs: '#all, #boundary-top, #boundary-left, #boundary-right, #boundary-bottom',
-    sidesCheckboxes: '.sides-form input[type="checkbox"]',
+    boundaryRadios: '.boundary-form input[type="radio"]',
+    boundaryNumberInputs: '.boundary-form input[type="number"]',
 }
 
 // Setup event listeners
@@ -80,8 +79,8 @@ export function addEventHandlers() {
     })
 
     // Boundary radio buttons
-    query(selectors.sideStrategyRadios).forEach((elem) => {
-        elem.addEventListener('change', onSideStrategyChange)
+    query(selectors.boundaryRadios).forEach((elem) => {
+        elem.addEventListener('change', onBoundaryRadioChange)
     })
 
     // Boundary number entry
@@ -90,11 +89,6 @@ export function addEventHandlers() {
         elem.addEventListener('change', onBoundaryChange)
         // 'click' is for spinners on input[number] control
         elem.addEventListener('click', onBoundaryChange)
-    })
-
-    // Sides checkboxes
-    query(selectors.sidesCheckboxes).forEach((elem) => {
-        elem.addEventListener('change', onSideSelectionChange)
     })
 
     // Nudge controls
@@ -186,49 +180,44 @@ function onContainerFormChange(evt: Event) {
     updateCodeOutput()
 }
 
-// When the threshold radio buttons change
-function onSideStrategyChange(evt: Event) {
+// When the boundary radio buttons change, e.g. choosing whether to ignore a side
+function onBoundaryRadioChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
 
     if (!target) {
-        return
+        throw new Error('Could not get event target')
+    }
+
+    const side = target.name.replace(/boundary-/, '')
+
+    if (!isSide(side)) {
+        throw new Error('Could not get side from input name')
     }
 
     const whichRadio = target.value
 
-    if (whichRadio === 'independent') {
-        setSideStrategy('independent')
+    if (whichRadio === 'threshold') {
+        const input = document.querySelector<HTMLInputElement>(`input[id="boundary-${side}-value"]`)
+
+        if (!input) {
+            throw new Error('Could not find numeric input')
+        }
+
+        store.setState((state) => ({
+            boundaries: {
+                ...state.boundaries,
+                [side]: parseInt(input.value, 10),
+            },
+        }))
     } else {
-        setSideStrategy('all')
+        store.setState((state) => ({
+            boundaries: {
+                ...state.boundaries,
+                [side]: 'ignore',
+            },
+        }))
     }
-
-    // Update the page
-    updateBoxes()
-    updateCodeOutput()
-}
-
-/**
- * When different sides are chosen to be relevant
- */
-function onSideSelectionChange(evt: Event) {
-    // TODO - Make TS work properly with DOM events
-    const target = evt.target as HTMLInputElement | null
-    const side = target?.value
-
-    if (!isSide(side)) {
-        throw new Error('Input value must be a valid side')
-    }
-
-    console.log('whichCheckbox', side, target?.checked)
-    // To avoid de-duping, immediately filter out this particular side
-    const sides = store.getState().sides.filter((s) => s !== side)
-
-    if (target?.checked) {
-        sides.push(side)
-    }
-
-    store.setState({ sides })
 
     // Update the page
     updateBoxes()
@@ -240,44 +229,34 @@ function onBoundaryChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const val = parseInt(target?.value ?? '', 10)
-    const side = target?.id.replace(/^boundary-/, '')
+    const side = target?.id.replace(/^boundary-(\w+)-value/, '$1')
 
-    if (!isSide(side) && side !== 'all') {
+    if (!isSide(side)) {
         throw new Error('Input ID must be a valid side')
     }
 
     // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
     if (val > 0) {
-        if (side === 'all') {
-            showAll(`.boundary-top`)
-            showAll(`.boundary-right`)
-            showAll(`.boundary-bottom`)
-            showAll(`.boundary-left`)
+        showAll(`.boundary-${side}`)
 
-            store.setState((state) => ({
-                boundaries: {
-                    ...state.boundaries,
-                    top: val,
-                    right: val,
-                    bottom: val,
-                    left: val,
-                },
-            }))
-        } else {
-            showAll(`.boundary-${side}`)
-
-            store.setState((state) => ({
-                boundaries: {
-                    ...state.boundaries,
-                    [side]: val,
-                },
-            }))
-        }
+        store.setState((state) => ({
+            boundaries: {
+                ...state.boundaries,
+                [side]: val,
+            },
+        }))
 
         drawBound(side, val)
     }
-    // Hide boundaries
+    // Hide visual boundary, but store the negative value
     else {
+        store.setState((state) => ({
+            boundaries: {
+                ...state.boundaries,
+                [side]: val,
+            },
+        }))
+
         hideAll(`.boundary-${side}`)
     }
 

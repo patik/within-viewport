@@ -1,6 +1,6 @@
-import { Side, MultipleSides } from '../common/common.types'
-import { getConfig } from './options'
-import { SyncOptions } from './sync.types'
+import { determineConfig } from '../common/options'
+import { sides } from '../common/sides'
+import { MultipleSides, Side, UserOptions } from '../common/types'
 
 declare global {
     interface Window {
@@ -16,19 +16,18 @@ declare global {
  * @param  {Object}  userOptions    Optional settings
  * @return {Boolean}                Whether the element was completely within the viewport
  */
-export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleSides | Partial<SyncOptions>): boolean {
+export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleSides | Partial<UserOptions>): boolean {
     console.log('sync version')
     let containerBoundingRect: DOMRect
     let containerScrollTop = 0
     let containerScrollLeft = 0
     const scrollBarWidths = [0, 0]
 
-    const config = getConfig(elem ?? window, userOptions)
-
+    const config = determineConfig('sync', elem, userOptions)
     const isContainerTheWindow = config.container === window
 
     // Get the element's bounding rectangle with respect to the viewport
-    const elemBoundingRect = (elem ?? window).getBoundingClientRect()
+    const elemBoundingRect = elem.getBoundingClientRect()
 
     // Get viewport dimensions and offsets
     if (config.container === window) {
@@ -54,6 +53,10 @@ export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleS
     const isWithin = {
         // Element is below the top edge of the viewport
         top() {
+            if (config.top === 'ignore') {
+                return true
+            }
+
             if (isContainerTheWindow) {
                 return elemBoundingRect.top >= config.top
             }
@@ -66,6 +69,10 @@ export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleS
 
         // Element is to the left of the right edge of the viewport
         right() {
+            if (config.right === 'ignore') {
+                return true
+            }
+
             // Note that `elemBoundingRect.right` is the distance from the *left* of the viewport to the element's far right edge
 
             if (isContainerTheWindow) {
@@ -77,6 +84,10 @@ export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleS
 
         // Element is above the bottom edge of the viewport
         bottom() {
+            if (config.bottom === 'ignore') {
+                return true
+            }
+
             let containerHeight = 0
 
             if (config.container === window) {
@@ -92,6 +103,10 @@ export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleS
 
         // Element is to the right of the left edge of the viewport
         left() {
+            if (config.left === 'ignore') {
+                return true
+            }
+
             if (isContainerTheWindow) {
                 return elemBoundingRect.left >= config.left
             }
@@ -113,5 +128,5 @@ export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleS
     }
 
     // Test the element against each side of the viewport that was requested
-    return config.sides.every((side) => isWithin[side]())
+    return sides.every((side) => isWithin[side]())
 }

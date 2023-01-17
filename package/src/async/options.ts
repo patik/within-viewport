@@ -1,30 +1,23 @@
-import { Side, MultipleSides, Boundaries } from '../common/common.types'
-import { determineConfig } from '../common/options'
-import { AsyncOptions } from './async.types'
+import { Config } from '../common/types'
+import { sides } from '../common/sides'
 
-const defaultOptions: AsyncOptions = {
-    container: document.body,
-    sides: ['top', 'right', 'bottom', 'left'],
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-}
-
-export function getConfig(elem: HTMLElement, userOptions?: Side | MultipleSides | Partial<AsyncOptions>) {
-    return determineConfig('async', defaultOptions, elem, userOptions)
-}
-
-const sides: Array<keyof Boundaries> = ['top', 'right', 'bottom', 'left']
-
-export function determineRootMargin(config: AsyncOptions): string {
-    if (config.sides.length !== 4) {
-        const sidesToIgnore = sides.filter((side) => !config.sides.includes(side))
-
-        sidesToIgnore.forEach((side) => {
-            config[side] = -100000
-        })
+export function determineRootMargin(config: Config): string {
+    const margins = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
     }
 
-    return `${-config.top}px ${-config.right}px ${-config.bottom}px ${-config.left}px`
+    sides.forEach((side) => {
+        const value = config[side]
+
+        if (value === 'ignore' || value === null) {
+            margins[side] = -100000
+        } else {
+            margins[side] = value ?? 0
+        }
+    })
+
+    return `${-margins.top}px ${-margins.right}px ${-margins.bottom}px ${-margins.left}px`
 }

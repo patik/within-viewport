@@ -18,128 +18,155 @@
 
             <form action="." method="post" class="container-form hide-when-collapsed">
                 <fieldset>
-                    <details>
-                        <summary>Which element is the viewport?</summary>
-                        <legend class="sr-only">Which element is the viewport?</legend>
+                    <legend class="sr-only">Viewport element</legend>
+                    <div class="form-wrapper">
+                        <div class="form-name" aria-hidden="true">Viewport element:</div>
 
                         <div class="form-field">
                             <input type="radio" name="container-form" value="window" id="container-window" checked />
-                            <label for="container-window">The whole window</label>
+                            <label for="container-window">window</label>
                         </div>
 
-                        <div>
+                        <div class="form-field">
                             <input type="radio" name="container-form" value="div" id="container-div" />
                             <label for="container-div">An arbitrary <code>&lt;div&gt;</code></label>
                         </div>
-                    </details>
+                    </div>
                 </fieldset>
             </form>
 
             <form action="." method="post" class="boundary-form hide-when-collapsed">
                 <fieldset>
-                    <details>
-                        <summary>Adjust the boundaries</summary>
-                        <legend class="sr-only">Adjust the boundaries</legend>
+                    <details open>
+                        <summary>Boundaries</summary>
+                        <legend class="sr-only">Boundaries</legend>
 
-                        <div class="side-strategy-group-all selected">
-                            <div class="form-field side-strategy-item">
-                                <input type="radio" name="side-strategy" value="same-all" id="same-all-sides" checked />
-                                <label for="same-all-sides">Same value for all sides</label>
-                            </div>
+                        <fieldset>
+                            <legend class="sr-only">Top</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Top</div>
+                                <div class="boundary-item-threshold">
+                                    <input
+                                        type="radio"
+                                        name="boundary-top"
+                                        value="threshold"
+                                        id="boundary-top-threshold"
+                                        checked
+                                    />
+                                    <label for="boundary-top-threshold" class="sr-only">Set a threshold</label>
 
-                            <div class="side-strategy-item all-sides-wrapper">
-                                <label for="all-sides" class="sr-only">Threshold for all sides, in pixels</label>
-                                <input type="number" value="0" id="all" step="1" tabindex="1" />
-                            </div>
-                        </div>
-
-                        <div class="side-strategy-group-independent">
-                            <div class="form-field side-strategy-item">
-                                <input type="radio" name="side-strategy" value="independent" id="independent-sides" />
-                                <label for="independent-sides">Custom values for each side</label>
-                            </div>
-
-                            <fieldset class="independent-sides-wrapper" style="display: none">
-                                <legend class="sr-only">Thresholds for each side (in pixels):</legend>
-                                <div class="directional-input-wrapper">
-                                    <div class="directional-input-top">
-                                        <label for="boundary-top">Top:</label>
-                                        <input type="number" size="3" id="boundary-top" value="0" tabindex="1" />
-                                    </div>
-                                    <div class="directional-input-left">
-                                        <label for="boundary-left">Left:</label>
-                                        <input type="number" size="3" id="boundary-left" value="0" tabindex="1" />
-                                    </div>
-                                    <div class="directional-input-right">
-                                        <label for="boundary-right">Right:</label>
-                                        <input type="number" size="3" id="boundary-right" value="0" tabindex="1" />
-                                    </div>
-                                    <div class="directional-input-bottom">
-                                        <label for="boundary-bottom">Bottom:</label>
-                                        <input type="number" size="3" id="boundary-bottom" value="0" tabindex="1" />
-                                    </div>
+                                    <input type="number" value="0" id="boundary-top-value" step="1" tabindex="1" />
+                                    <label for="boundary-top-value">pixels from the edge</label>
                                 </div>
-                            </fieldset>
-                        </div>
-                    </details>
-                </fieldset>
-            </form>
 
-            <form action="." method="post" class="sides-form hide-when-collapsed">
-                <fieldset>
-                    <details>
-                        <summary>Which sides do we care about?</summary>
-                        <legend class="sr-only">Which sides should be monitored?</legend>
-                        <p>
-                            For all sides that are selected, elements must be completely within those sides to be
-                            considered "in" the viewport.
-                        </p>
-                        <p>
-                            If a side is unselected, then <code>withinViewport</code> will ignore whether an element
-                            runs out of that side, and the element will still be considered "in".
-                        </p>
-                        <p>Typically, all sides should be selected.</p>
+                                <div class="boundary-item-ignore">
+                                    <input type="radio" name="boundary-top" value="ignore" id="top-ignore" />
+                                    <label for="top-ignore">Ignore</label>
+                                </div>
+                            </div>
+                        </fieldset>
 
-                        <div class="directional-input-wrapper">
-                            <div class="directional-input-top">
-                                <input type="checkbox" id="side-top" value="top" checked tabindex="1" />
-                                <label for="side-top">Top</label>
+                        <fieldset>
+                            <legend class="sr-only">Right</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Right</div>
+
+                                <div class="boundary-item-threshold">
+                                    <input
+                                        type="radio"
+                                        name="boundary-right"
+                                        value="threshold"
+                                        id="boundary-right-threshold"
+                                        checked
+                                    />
+                                    <label for="boundary-right-threshold" class="sr-only">Set a threshold</label>
+
+                                    <input type="number" value="0" id="boundary-right-value" step="1" tabindex="1" />
+                                    <label for="boundary-right-value">pixels from the edge</label>
+                                </div>
+
+                                <div class="boundary-item-ignore">
+                                    <input type="radio" name="boundary-right" value="ignore" id="right-ignore" />
+                                    <label for="right-ignore">Ignore</label>
+                                </div>
                             </div>
-                            <div class="directional-input-left">
-                                <input type="checkbox" id="side-left" value="left" checked tabindex="1" />
-                                <label for="side-left">Left</label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="sr-only">Bottom</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Bottom</div>
+                                <div class="boundary-item-threshold">
+                                    <input
+                                        type="radio"
+                                        name="boundary-bottom"
+                                        value="threshold"
+                                        id="boundary-bottom-threshold"
+                                        checked
+                                    />
+                                    <label for="boundary-bottom-threshold" class="sr-only">Set a threshold</label>
+
+                                    <input type="number" value="0" id="boundary-bottom-value" step="1" tabindex="1" />
+                                    <label for="boundary-bottom-value">pixels from the edge</label>
+                                </div>
+
+                                <div class="boundary-item-ignore">
+                                    <input type="radio" name="boundary-bottom" value="ignore" id="bottom-ignore" />
+                                    <label for="bottom-ignore">Ignore</label>
+                                </div>
                             </div>
-                            <div class="directional-input-right">
-                                <input type="checkbox" id="side-right" value="right" checked tabindex="1" />
-                                <label for="side-right">Right</label>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="sr-only">Left</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Left</div>
+                                <div class="boundary-item-threshold">
+                                    <input
+                                        type="radio"
+                                        name="boundary-left"
+                                        value="threshold"
+                                        id="boundary-left-threshold"
+                                        checked
+                                    />
+                                    <label for="boundary-left-threshold" class="sr-only">Set a threshold</label>
+
+                                    <input type="number" value="0" id="boundary-left-value" step="1" tabindex="1" />
+                                    <label for="boundary-left-value">pixels from the edge</label>
+                                </div>
+
+                                <div class="boundary-item-ignore">
+                                    <input type="radio" name="boundary-left" value="ignore" id="left-ignore" />
+                                    <label for="left-ignore">Ignore</label>
+                                </div>
                             </div>
-                            <div class="directional-input-bottom">
-                                <input type="checkbox" id="side-bottom" value="bottom" checked tabindex="1" />
-                                <label for="side-bottom">Bottom</label>
-                            </div>
-                        </div>
+                        </fieldset>
                     </details>
                 </fieldset>
             </form>
 
             <form action="." method="post" class="method-form hide-when-collapsed">
                 <fieldset>
-                    <details>
-                        <summary>Module version</summary>
-                        <legend class="sr-only">Module version</legend>
+                    <legend class="sr-only">Method</legend>
+                    <div class="form-wrapper">
+                        <div class="form-name" aria-hidden="true">Method:</div>
+
                         <div class="form-field">
                             <input type="radio" name="method-form" value="async" id="method-async" checked />
                             <label for="method-async"
-                                >Asynchronous (uses <code>IntersectionObserver</code>, more performant)</label
+                                ><abbr title="Uses IntersectionObserver, more performant">Asynchronous</abbr></label
                             >
                         </div>
+
                         <div class="form-field">
                             <input type="radio" name="method-form" value="sync" id="method-sync" />
                             <label for="method-sync"
-                                >Synchronous (uses old school DOM measurements, less performant)</label
+                                ><abbr title="Uses old school DOM measurements, less performant"
+                                    >Synchronous</abbr
+                                ></label
                             >
                         </div>
-                    </details>
+                    </div>
                 </fieldset>
             </form>
 

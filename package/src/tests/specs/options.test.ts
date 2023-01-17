@@ -1,9 +1,6 @@
 import { cloneDeep } from 'lodash'
-import { Side, MultipleSides } from '../../common/common.types'
-import { SyncOptions } from '../../sync/sync.types'
-import { getConfig as getConfigSync } from '../../sync/options'
-import { getConfig as getConfigAsync } from '../../async/options'
-import { AsyncOptions } from '../../async/async.types'
+import { AsyncConfig, determineConfig, SyncConfig } from '../../common/options'
+import { MultipleSides, Side, UserOptions } from '../../common/types'
 
 const div = document.createElement('div')
 document.body.appendChild(div)
@@ -19,105 +16,105 @@ const fakeBody = {
 }
 
 const syncTestCases: Array<{
-    userOptions: undefined | Side | MultipleSides | Partial<SyncOptions>
+    userOptions: undefined | Side | MultipleSides | Partial<UserOptions>
     name: string
-    result: { sides: Array<Side>; container: HTMLElement | Window | { nodeName: string } }
+    result: SyncConfig // Boundaries & { container: HTMLElement | Window | { nodeName: string } }
 }> = [
     {
         name: 'undefined',
         userOptions: undefined,
-        result: { sides: ['top', 'right', 'bottom', 'left'], container: window },
+        result: { top: 0, right: 0, bottom: 0, left: 0, container: window },
     },
-    { name: '`left`', userOptions: 'left', result: { sides: ['left'], container: window } },
-    { name: '`right bottom`', userOptions: 'right bottom', result: { sides: ['right', 'bottom'], container: window } },
+    {
+        name: '`left`',
+        userOptions: 'left',
+        result: { top: 'ignore', right: 'ignore', bottom: 'ignore', left: 0, container: window },
+    },
+    {
+        name: '`right bottom`',
+        userOptions: 'right bottom',
+        result: { top: 'ignore', right: 0, bottom: 0, left: 'ignore', container: window },
+    },
     {
         name: 'container is the body',
         userOptions: { container: fakeBody },
-        result: { sides: ['top', 'right', 'bottom', 'left'], container: window },
+        result: { top: 0, right: 0, bottom: 0, left: 0, container: window },
     },
     {
         name: 'container is an arbitary div',
         userOptions: { container: arbitraryFakeDiv },
-        result: { sides: ['top', 'right', 'bottom', 'left'], container: arbitraryFakeDiv },
+        result: { top: 0, right: 0, bottom: 0, left: 0, container: arbitraryFakeDiv },
     },
     {
         name: 'sides=left; container is an arbitary div',
-        userOptions: { sides: ['left'], container: arbitraryFakeDiv },
-        result: { sides: ['left'], container: arbitraryFakeDiv },
+        userOptions: { top: 'ignore', right: 'ignore', bottom: 'ignore', left: 0, container: arbitraryFakeDiv },
+        result: { top: 'ignore', right: 'ignore', bottom: 'ignore', left: 0, container: arbitraryFakeDiv },
     },
     {
         name: 'sides=right,bottom; container is an arbitary div',
-        userOptions: { sides: ['right', 'bottom'], container: arbitraryFakeDiv },
-        result: { sides: ['right', 'bottom'], container: arbitraryFakeDiv },
+        userOptions: { top: 'ignore', right: 0, bottom: 0, left: 'ignore', container: arbitraryFakeDiv },
+        result: { top: 'ignore', right: 0, bottom: 0, left: 'ignore', container: arbitraryFakeDiv },
     },
 ]
 
 describe.each(syncTestCases)('Synchronous getConfig', (testCase) => {
     describe.each([fakeBody, arbitraryFakeDiv])(`user options: ${testCase.name}`, (targetElem) => {
-        test(`target elem: ${targetElem?.nodeName}`, () => {
-            const result = getConfigSync(arbitraryFakeDiv, testCase.userOptions)
+        test(`target elem: ${targetElem.nodeName}`, () => {
+            const result = determineConfig('sync', targetElem, testCase.userOptions)
 
-            expect(result).toStrictEqual({
-                ...testCase.result,
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-            })
+            expect(result).toStrictEqual(testCase.result)
         })
     })
 })
 
 const asyncTestCases: Array<{
-    userOptions: undefined | Side | MultipleSides | Partial<AsyncOptions>
+    userOptions: undefined | Side | MultipleSides | Partial<UserOptions>
     name: string
-    result: { sides: Array<Side>; container: HTMLElement | Window | { nodeName: string } }
+    result: AsyncConfig
 }> = [
     {
         name: 'undefined',
         userOptions: undefined,
-        result: { sides: ['top', 'right', 'bottom', 'left'], container: document },
+        result: { top: 0, right: 0, bottom: 0, left: 0, container: document },
     },
-    { name: '`left`', userOptions: 'left', result: { sides: ['left'], container: document } },
+    {
+        name: '`left`',
+        userOptions: 'left',
+        result: { top: 'ignore', right: 'ignore', bottom: 'ignore', left: 0, container: document },
+    },
     {
         name: '`right bottom`',
         userOptions: 'right bottom',
-        result: { sides: ['right', 'bottom'], container: document },
+        result: { top: 'ignore', right: 0, bottom: 0, left: 'ignore', container: document },
     },
     {
         name: 'container is the body',
         userOptions: { container: fakeBody },
-        result: { sides: ['top', 'right', 'bottom', 'left'], container: document },
+        result: { top: 0, right: 0, bottom: 0, left: 0, container: document },
     },
     {
         name: 'container is an arbitary div',
         userOptions: { container: arbitraryFakeDiv },
-        result: { sides: ['top', 'right', 'bottom', 'left'], container: arbitraryFakeDiv },
+        result: { top: 0, right: 0, bottom: 0, left: 0, container: arbitraryFakeDiv },
     },
     {
         name: 'sides=left; container is an arbitary div',
-        userOptions: { sides: ['left'], container: arbitraryFakeDiv },
-        result: { sides: ['left'], container: arbitraryFakeDiv },
+        userOptions: { top: 'ignore', right: 'ignore', bottom: 'ignore', left: 0, container: arbitraryFakeDiv },
+        result: { top: 'ignore', right: 'ignore', bottom: 'ignore', left: 0, container: arbitraryFakeDiv },
     },
     {
         name: 'sides=right,bottom; container is an arbitary div',
-        userOptions: { sides: ['right', 'bottom'], container: arbitraryFakeDiv },
-        result: { sides: ['right', 'bottom'], container: arbitraryFakeDiv },
+        userOptions: { top: 'ignore', right: 0, bottom: 0, left: 'ignore', container: arbitraryFakeDiv },
+        result: { top: 'ignore', right: 0, bottom: 0, left: 'ignore', container: arbitraryFakeDiv },
     },
 ]
 
 describe.each(asyncTestCases)('Asynchronous getConfig', (testCase) => {
     describe.each([fakeBody, arbitraryFakeDiv])(`user options: ${testCase.name}`, (targetElem) => {
-        test(`target elem: ${targetElem?.nodeName}`, () => {
-            const result = getConfigAsync(arbitraryFakeDiv, testCase.userOptions)
+        test(`target elem: ${targetElem.nodeName}`, () => {
+            const result = determineConfig('async', targetElem, testCase.userOptions)
 
-            expect(result).toStrictEqual({
-                ...testCase.result,
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-            })
+            expect(result).toStrictEqual(testCase.result)
         })
     })
 })

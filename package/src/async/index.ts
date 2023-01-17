@@ -1,19 +1,18 @@
-import { Side, MultipleSides } from '../common/common.types'
-import { getConfig, determineRootMargin } from './options'
-import { AsyncOptions } from './async.types'
+import { determineConfig } from '../common/options'
+import { MultipleSides, Side, UserOptions } from '../common/types'
+import { determineRootMargin } from './options'
 
 /**
  * Determines whether an element is within the viewport
  * @param  {HTMLElement}      elem           DOM Element (required)
  * @param  {String | Object}  userOptions    Optional settings
- * @return {Boolean}                         Whether the element was completely within the viewport
+ * @return {Promise<Boolean>}                Whether the element was completely within the viewport
  */
 export async function withinViewportAsync(
     elem: HTMLElement,
-    userOptions?: Side | MultipleSides | Partial<AsyncOptions>,
+    userOptions?: Side | MultipleSides | Partial<UserOptions>,
 ): Promise<boolean> {
-    const config = getConfig(elem, userOptions)
-    // console.log('async version ', determineRootMargin(config), config)
+    const config = determineConfig('async', elem, userOptions)
 
     return new Promise((resolve) => {
         const callback = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {

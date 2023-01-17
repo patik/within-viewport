@@ -1,4 +1,4 @@
-import { Side } from '../../../package/src/common/common.types'
+import { Side } from '../../../package/src/common/types'
 import { query } from './dom'
 
 function drawTopBoundary(distStr: string) {
