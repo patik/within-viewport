@@ -40,7 +40,7 @@
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
         "preversion": "yarn build && yarn cover",
         "test": "yarn jest --coverage",
-        "unused-exports": "ts-prune -p ./tsconfig.json",
+        "unused-exports": "ts-prune -p ./tsconfig.json --ignore 'src/index.ts|cypress.config.ts|jest.config.ts'",
         "cypress:open": "cypress open"
     },
     "keywords": [

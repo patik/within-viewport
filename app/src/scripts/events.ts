@@ -148,11 +148,11 @@ function onMethodChange(evt: Event) {
 
     if (whichRadio === 'async') {
         store.setState({
-            method: 'async',
+            methodType: 'async',
         })
     } else {
         store.setState({
-            method: 'sync',
+            methodType: 'sync',
         })
     }
 

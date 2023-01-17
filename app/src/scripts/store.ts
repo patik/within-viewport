@@ -5,7 +5,7 @@ interface State {
     wvOptions: Record<Side, number>
     $boxes: HTMLElement[]
     sideStrategy: 'all' | 'independent'
-    method: 'async' | 'sync'
+    methodType: 'async' | 'sync'
 
     // These represent the (singular) container that we're using as the viewport. If it's some DOM element, these values are both the same. But if it's the whole window, then we need to use either `window` or `document.body` for certain tasks, hence the two separate variables.
     containerForDOM: HTMLElement
@@ -17,7 +17,7 @@ export default createStore<State>()(() => ({
     containerForEvents: window,
     $boxes: [],
     sideStrategy: 'all',
-    method: 'async',
+    methodType: 'async',
     wvOptions: {
         all: 0,
         top: 0,

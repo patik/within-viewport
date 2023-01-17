@@ -12,17 +12,17 @@ declare global {
 
 /**
  * Determines whether an element is within the viewport
- * @param  {Object}  elem       DOM Element (required)
- * @param  {Object}  options    Optional settings
- * @return {Boolean}            Whether the element was completely within the viewport
+ * @param  {Object}  elem           DOM Element (required)
+ * @param  {Object}  userOptions    Optional settings
+ * @return {Boolean}                Whether the element was completely within the viewport
  */
-export function withinViewport(elem?: HTMLElement, options?: Side | Partial<SyncOptions>): boolean {
+export function withinViewport(elem: HTMLElement, userOptions?: Side | Partial<SyncOptions>): boolean {
     let containerBoundingRect: DOMRect
     let containerScrollTop = 0
     let containerScrollLeft = 0
     const scrollBarWidths = [0, 0]
 
-    const config = getConfig(elem ?? window, options)
+    const config = getConfig(elem ?? window, userOptions)
 
     const isContainerTheWindow = config.container === window
 

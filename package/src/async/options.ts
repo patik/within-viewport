@@ -11,8 +11,8 @@ const defaultOptions: AsyncOptions = {
     left: 0,
 }
 
-export function getConfig(elem?: AsyncOptions['container'], options?: Side | Partial<AsyncOptions>) {
-    return determineConfig('async', defaultOptions, elem, options)
+export function getConfig(elem?: AsyncOptions['container'], userOptions?: Side | Partial<AsyncOptions>) {
+    return determineConfig('async', defaultOptions, elem, userOptions)
 }
 
 export function determineRootMargin(config: AsyncOptions): string {

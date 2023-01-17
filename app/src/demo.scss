@@ -21,6 +21,8 @@ h1 {
     margin-top: 0;
 }
 
+$boxWidth: 18vw;
+
 // Oversized container that holds the boxes
 #boxContainer {
     background-color: #fff;
@@ -38,15 +40,15 @@ h1 {
     &.flex {
         display: flex;
         flex-wrap: wrap;
-        min-width: calc(230vw + 21px);
+        min-width: calc(10 * $boxWidth + 21px);
 
         div {
-            flex: 1 0 23vw;
-            width: 23vw;
-            min-width: 23vw;
-            max-width: 23vw;
-            height: 23vw;
-            line-height: calc(23vw - 1rem);
+            flex: 1 0 $boxWidth;
+            width: $boxWidth;
+            min-width: $boxWidth;
+            max-width: $boxWidth;
+            height: $boxWidth;
+            line-height: calc($boxWidth - 1em);
             transition: background-color 0.3s ease, color 0.3s ease;
         }
     }
@@ -131,7 +133,7 @@ h1 {
 
 .side-strategy-group-1,
 .side-strategy-group-2 {
-    padding: 1rem;
+    padding: 1em;
 
     &.selected {
         background-color: #3366cc22;
@@ -139,7 +141,7 @@ h1 {
 }
 
 .all-sides-wrapper {
-    margin-left: 1.5rem;
+    margin-left: 1.5em;
 }
 
 #threshold-left {

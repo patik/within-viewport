@@ -8,6 +8,7 @@ import store from './store'
 const areViewportUnitsSupported = (function () {
     try {
         const div = document.createElement('div')
+
         div.style.width = '50vw'
         document.body.appendChild(div)
 
@@ -23,7 +24,7 @@ const areViewportUnitsSupported = (function () {
 
 function determineBoxWidth() {
     if (areViewportUnitsSupported) {
-        return '23vw'
+        return '18vw'
     }
 
     let boxWidth = 20
@@ -132,10 +133,11 @@ function setBoxIsOut(box: HTMLElement) {
 
 // Update each box's class to reflect whether it was determined to be within the viewport or not
 export function updateBoxes() {
-    const { sideStrategy, wvOptions, method, $boxes } = store.getState()
+    const { sideStrategy, wvOptions, methodType, $boxes } = store.getState()
     const options =
         sideStrategy === 'all'
             ? {
+                  ...wvOptions,
                   top: wvOptions.all,
                   right: wvOptions.all,
                   bottom: wvOptions.all,
@@ -143,7 +145,7 @@ export function updateBoxes() {
               }
             : wvOptions
 
-    if (method === 'async') {
+    if (methodType === 'async') {
         $boxes.forEach(function (box) {
             withinViewportAsync(box, options).then((result) => {
                 if (result) {
