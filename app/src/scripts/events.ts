@@ -2,6 +2,7 @@ import { isSide } from '../../../package/src/common/sides'
 import { drawBound } from './boundaries'
 import { createBoxHtml, setSideStrategy, updateBoxes } from './boxes'
 import { hideAll, query, showAll } from './dom'
+import { updateCodeOutput } from './output'
 import store from './store'
 
 export function triggerEvent(node: HTMLElement | null, eventName: string) {
@@ -60,19 +61,6 @@ const selectors = {
     sidesCheckboxes: '.sides-form input[type="checkbox"]',
 }
 
-/**
- * When we changed which element is used as the viewport, we need to 'move' the event handlers to the correct element
- */
-function resetContainerEventHandlers(previousContainer: HTMLElement | Window, nextContainer: HTMLElement | Window) {
-    // Remove handlers from the old container
-    previousContainer.removeEventListener('resize', updateBoxes)
-    previousContainer.removeEventListener('scroll', updateBoxes)
-
-    // Add handlers to the new container
-    nextContainer.addEventListener('resize', updateBoxes)
-    nextContainer.addEventListener('scroll', updateBoxes)
-}
-
 // Setup event listeners
 export function addEventHandlers() {
     const { containerForEvents } = store.getState()
@@ -119,6 +107,19 @@ export function addEventHandlers() {
     document.getElementById('toggler')?.addEventListener('click', onControlsToggle)
 }
 
+/**
+ * When we changed which element is used as the viewport, we need to 'move' the event handlers to the correct element
+ */
+function resetContainerEventHandlers(previousContainer: HTMLElement | Window, nextContainer: HTMLElement | Window) {
+    // Remove handlers from the old container
+    previousContainer.removeEventListener('resize', updateBoxes)
+    previousContainer.removeEventListener('scroll', updateBoxes)
+
+    // Add handlers to the new container
+    nextContainer.addEventListener('resize', updateBoxes)
+    nextContainer.addEventListener('scroll', updateBoxes)
+}
+
 // When the method/version radio buttons change
 function onMethodChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
@@ -137,6 +138,7 @@ function onMethodChange(evt: Event) {
 
     // Update the page
     updateBoxes()
+    updateCodeOutput()
 }
 
 // When the container radio buttons change
@@ -181,6 +183,7 @@ function onContainerFormChange(evt: Event) {
 
     // Update the page
     createBoxHtml()
+    updateCodeOutput()
 }
 
 // When the threshold radio buttons change
@@ -202,9 +205,12 @@ function onSideStrategyChange(evt: Event) {
 
     // Update the page
     updateBoxes()
+    updateCodeOutput()
 }
 
-// When different sides are chosen to be relevant
+/**
+ * When different sides are chosen to be relevant
+ */
 function onSideSelectionChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
@@ -226,6 +232,7 @@ function onSideSelectionChange(evt: Event) {
 
     // Update the page
     updateBoxes()
+    updateCodeOutput()
 }
 
 // When a boundary value changes
@@ -276,6 +283,7 @@ function onBoundaryChange(evt: Event) {
 
     // Update the page
     updateBoxes()
+    updateCodeOutput()
 }
 
 // When shift + arrow key is pressed, nudge the page by 1px

@@ -3,6 +3,7 @@ import { Side } from '../../../package/src/common/common.types'
 
 interface State {
     $boxes: HTMLElement[]
+    $codeOutput: HTMLElement | Element
     boundaries: Record<Side, number>
     sides: Side[]
     // Which version of `withinViewport` should be called
@@ -16,6 +17,7 @@ interface State {
 export default createStore<State>()(() => ({
     containerForDOM: document.body,
     containerForEvents: window,
+    $codeOutput: document.body.lastElementChild ?? document.body,
     $boxes: [],
     methodType: 'async',
     sides: ['top', 'right', 'bottom', 'left'],

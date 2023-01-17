@@ -3,8 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>Within Viewport Demo</title>
-        <link href="styles/index.scss" rel="stylesheet" media="all" />
-        <script src="scripts/index.ts" type="module"></script>
+        <link href="styles/main.scss" rel="stylesheet" media="all" />
     </head>
     <body>
         <div class="control-panel" role="main">
@@ -90,15 +89,14 @@
                 <fieldset>
                     <details>
                         <summary>Which sides do we care about?</summary>
-                        <legend class="sr-only">Which sides do we care about?</legend>
-
+                        <legend class="sr-only">Which sides should be monitored?</legend>
                         <p>
                             For all sides that are selected, elements must be completely within those sides to be
                             considered "in" the viewport.
                         </p>
                         <p>
-                            If you unselect a side, then elements will be allowed to run off that side of the viewport
-                            and still be considered "inside".
+                            If a side is unselected, then <code>withinViewport</code> will ignore whether an element
+                            runs out of that side, and the element will still be considered "in".
                         </p>
                         <p>Typically, all sides should be selected.</p>
 
@@ -145,6 +143,11 @@
                 </fieldset>
             </form>
 
+            <div class="hide-when-collapsed code-output">
+                <p>The chosen settings are equivalent to this command:</p>
+                <pre><code class="language-js">withinViewportAsync(elem)</code></pre>
+            </div>
+
             <p class="hide-when-collapsed">
                 See the <a href="https://github.com/patik/within-viewport">code on GitHub</a> and the
                 <a href="http://patik.com/blog/within-viewport-javascript-and-jquery-plugin/">blog post</a> for more
@@ -157,5 +160,7 @@
         <div style="display: none" class="boundary boundary-right"></div>
         <div style="display: none" class="boundary boundary-bottom"></div>
         <div style="display: none" class="boundary boundary-left"></div>
+
+        <script src="scripts/main.ts" type="module"></script>
     </body>
 </html>

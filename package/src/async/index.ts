@@ -13,7 +13,7 @@ export async function withinViewportAsync(
     userOptions?: Side | MultipleSides | Partial<AsyncOptions>,
 ): Promise<boolean> {
     const config = getConfig(elem, userOptions)
-    console.log('async version ', determineRootMargin(config), config)
+    // console.log('async version ', determineRootMargin(config), config)
 
     return new Promise((resolve) => {
         const callback = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
