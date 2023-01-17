@@ -4,6 +4,7 @@
         "module": "CommonJS",
         "lib": ["dom", "dom.iterable", "esnext"],
         "outDir": "dist",
+        "rootDir": "../",
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
@@ -15,6 +16,6 @@
         "jsx": "preserve",
         "incremental": true
     },
-    "include": ["src/**/*.ts", "../package/**/*.d.ts", "../package/src/async/types.ts", "../package/src/sync/types.ts"],
+    "include": ["src/**/*.ts", "../package/**/*.d.ts", "../package/src/**/*.ts"],
     "exclude": ["node_modules", "./cypress"]
 }
