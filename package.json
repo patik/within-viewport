@@ -17,7 +17,7 @@
         "lint": "yarn workspaces run lint",
         "preversion": "yarn workspaces run preversion",
         "postversion": "git push && git push --tags",
-        "test": "yarn workspaces run test",
+        "test": "yarn --cwd module test",
         "cypress:open": "cypress open --project ./app",
         "prepare": "husky install"
     },
