@@ -8,13 +8,15 @@
     <body>
         <div class="control-panel" role="main">
             <h1>Within Viewport</h1>
-            <div id="toggler" class="button minus small">Collapse</div>
-            <p>
+            <div id="toggler" class="button small">Collapse</div>
+            <p class="hide-when-collapsed">
                 Scroll around the page. Boxes that are completely within the viewport will darken.
                 <span class="nudge-instructions" style="display: none">
                     Press <code>shift + arrow key</code> to nudge the page by 1 pixel at a time.
                 </span>
             </p>
+
+            <h2 class="hide-when-collapsed">Options</h2>
 
             <form action="." method="post" class="container-form hide-when-collapsed">
                 <fieldset>
@@ -24,7 +26,7 @@
 
                         <div class="form-field">
                             <input type="radio" name="container-form" value="window" id="container-window" checked />
-                            <label for="container-window">window</label>
+                            <label for="container-window"><code>window</code></label>
                         </div>
 
                         <div class="form-field">
@@ -37,8 +39,8 @@
 
             <form action="." method="post" class="boundary-form hide-when-collapsed">
                 <fieldset>
-                    <details open>
-                        <summary>Boundaries</summary>
+                    <details>
+                        <summary>Boundaries <code class="boundary-preview">(defaults)</code></summary>
                         <legend class="sr-only">Boundaries</legend>
 
                         <fieldset>
@@ -170,13 +172,13 @@
                 </fieldset>
             </form>
 
-            <div class="hide-when-collapsed code-output">
-                <p>The chosen settings are equivalent to this command:</p>
+            <details class="hide-when-collapsed code-output">
+                <summary>Show code</summary>
                 <pre><code class="language-js">withinViewportAsync(elem)</code></pre>
-            </div>
+            </details>
 
             <p class="hide-when-collapsed">
-                See the <a href="https://github.com/patik/within-viewport">code on GitHub</a> and the
+                See the <a href="https://github.com/patik/within-viewport">project on GitHub</a> and the
                 <a href="http://patik.com/blog/within-viewport-javascript-and-jquery-plugin/">blog post</a> for more
                 info.
             </p>

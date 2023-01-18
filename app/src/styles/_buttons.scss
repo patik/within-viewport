@@ -3,54 +3,29 @@
 .button {
     display: inline-block;
     white-space: nowrap;
-    background-color: #ccc;
-    border: 1px solid #777;
-    padding: 0 1em;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.25em 0.5em;
     margin: 0.5em;
     text-decoration: none;
     color: #333;
     cursor: pointer;
     border-radius: 0.2em;
     background-clip: padding-box;
-}
 
-.button:hover {
-    background-color: #ddd;
-}
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 
-.button:active {
-    position: relative;
-    top: 1px;
-}
+    &:active {
+        position: relative;
+        top: 1px;
+    }
 
-.button:focus {
-    outline: 0;
-    background: #fafafa;
-}
-
-.button:before {
-    background: #ccc;
-    background: rgba(0, 0, 0, 0.1);
-    float: left;
-    width: 1em;
-    text-align: center;
-    font-size: 1.5em;
-    margin: 0 1em 0 -1em;
-    padding: 0 0.2em;
-    border-radius: 0.15em 0 0 0.15em;
-    background-clip: padding-box;
-}
-
-/* Hexadecimal entities for the icons  */
-
-// plus sign
-.plus:before {
-    content: '\271A';
-}
-
-// minus sign
-.minus:before {
-    content: '\2013';
+    &:focus {
+        outline: 0;
+        background: rgba(0, 0, 0, 0.07);
+    }
 }
 
 // Smaller buttons

@@ -59,3 +59,29 @@ export function updateCodeOutput() {
 
     highlightElement($codeOutput)
 }
+
+export function updateBoundaryPreview() {
+    const { boundaries, $boundaryPreview } = store.getState()
+
+    const options: UserOptions = {}
+
+    objectKeysArray(boundaries).forEach((side) => {
+        if (boundaries[side] !== 0) {
+            options[side] = boundaries[side]
+        }
+    })
+
+    if (objectKeysArray(options).length > 0) {
+        const text = getCleanJson(options)
+            // Remove opening and closing braces
+            .replace(/^\{|\}$/g, '')
+            // Add units to numbers
+            .replace(/(\d+)\b/g, '$1px')
+            // Remove quotes around 'ignore'
+            .replace(/'ignore'/g, 'ignore')
+
+        $boundaryPreview.innerHTML = text
+    } else {
+        $boundaryPreview.innerHTML = `(defaults)`
+    }
+}

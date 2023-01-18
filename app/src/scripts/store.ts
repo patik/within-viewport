@@ -4,6 +4,7 @@ import { Config } from '../../../package/src/common/types'
 interface State {
     $boxes: HTMLElement[]
     $codeOutput: HTMLElement | Element
+    $boundaryPreview: HTMLElement | Element
     boundaries: Omit<Config, 'container'> // Just the boundaries
     // Which version of `withinViewport` should be called
     methodType: 'async' | 'sync'
@@ -16,7 +17,11 @@ interface State {
 export default createStore<State>()(() => ({
     containerForDOM: document.body,
     containerForEvents: window,
+
+    // These are crappy defaults, but I want TS to consider them to be defined at all times since I will init them before doing anything else
     $codeOutput: document.body.lastElementChild ?? document.body,
+    $boundaryPreview: document.body.firstElementChild ?? document.body,
+
     $boxes: [],
     methodType: 'async',
     boundaries: {

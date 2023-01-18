@@ -9,6 +9,7 @@ body {
 @import './_buttons.scss';
 @import './_boxes.scss';
 @import './_control-panel.scss';
+@import './_boundaries.scss';
 
 a {
     color: #36c;
@@ -25,10 +26,15 @@ h1 {
     margin-top: 0;
 }
 
+h2 {
+    font-size: 18px;
+}
+
 code {
     font: 0.9em/1em Menlo, Consolas, monospace;
     color: darken(rgba(51, 153, 255), 40%);
     background-color: rgba(51, 153, 255, 0.05);
+    padding: 0.2em;
 }
 
 #arbitrary-viewport-container {
@@ -38,39 +44,6 @@ code {
     height: 400px;
     height: 75vh;
     overflow: scroll;
-}
-
-.boundary {
-    position: fixed;
-    border: 0 dashed #03c;
-    background-color: #3cf;
-    background-color: rgba(51, 153, 255, 0.3);
-    overflow: hidden;
-    z-index: 2;
-}
-
-.boundary-top {
-    left: 0;
-    width: 100%;
-    border-bottom-width: 1px;
-}
-
-.boundary-right {
-    top: 0;
-    height: 100%;
-    border-left-width: 1px;
-}
-
-.boundary-bottom {
-    left: 0;
-    width: 100%;
-    border-top-width: 1px;
-}
-
-.boundary-left {
-    top: 0;
-    height: 100%;
-    border-right-width: 1px;
 }
 
 .sr-only {

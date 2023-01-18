@@ -2,7 +2,7 @@ import { isSide } from '../../../package/src/common/sides'
 import { drawBound } from './boundaries'
 import { createBoxHtml, updateBoxes } from './boxes'
 import { hideAll, query, showAll } from './dom'
-import { updateCodeOutput } from './output'
+import { updateBoundaryPreview, updateCodeOutput } from './output'
 import store from './store'
 
 export function triggerEvent(node: HTMLElement | null, eventName: string) {
@@ -85,10 +85,10 @@ export function addEventHandlers() {
 
     // Boundary number entry
     query(selectors.boundaryNumberInputs).forEach((elem) => {
-        elem.addEventListener('keyup', onBoundaryChange)
-        elem.addEventListener('change', onBoundaryChange)
+        elem.addEventListener('keyup', onBoundaryValueChange)
+        elem.addEventListener('change', onBoundaryValueChange)
         // 'click' is for spinners on input[number] control
-        elem.addEventListener('click', onBoundaryChange)
+        elem.addEventListener('click', onBoundaryValueChange)
     })
 
     // Nudge controls
@@ -222,10 +222,11 @@ function onBoundaryRadioChange(evt: Event) {
     // Update the page
     updateBoxes()
     updateCodeOutput()
+    updateBoundaryPreview()
 }
 
 // When a boundary value changes
-function onBoundaryChange(evt: Event) {
+function onBoundaryValueChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const val = parseInt(target?.value ?? '', 10)
@@ -263,6 +264,7 @@ function onBoundaryChange(evt: Event) {
     // Update the page
     updateBoxes()
     updateCodeOutput()
+    updateBoundaryPreview()
 }
 
 // When shift + arrow key is pressed, nudge the page by 1px
@@ -330,9 +332,6 @@ function onControlsToggle() {
     if (!toggler) {
         return
     }
-
-    toggler.classList.toggle('plus')
-    toggler.classList.toggle('minus')
 
     if (toggler.innerHTML === 'Collapse') {
         toggler.innerHTML = 'Expand'

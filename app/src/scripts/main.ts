@@ -13,6 +13,14 @@ function demo() {
             })
         }
 
+        const $boundaryPreview = document.querySelector('.boundary-preview')
+
+        if ($boundaryPreview) {
+            store.setState({
+                $boundaryPreview,
+            })
+        }
+
         createBoxHtml()
         addEventHandlers()
     }
