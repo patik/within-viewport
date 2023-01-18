@@ -45,7 +45,7 @@ withinViewport(elem) // returns a boolean
 
 ```js
 // Test against only some sides of the window for faster performance
-withinViewport(elem, { sides: 'left' })
+withinViewport(elem, { left: 'ignore' })
 ```
 
 ```js
@@ -64,7 +64,7 @@ For more options, see [Settings](#settings) section below.
 ### Shorthand notation
 
 ```js
-// These will use the default thresholds; see 'Settings' section below
+// This will only check the bottom and right of the viewport, ignoring the top and left
 withinViewport(elem, 'bottom right')
 left(elem)
 ```

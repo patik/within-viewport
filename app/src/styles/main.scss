@@ -12,10 +12,12 @@ body {
 @import './_boundaries.scss';
 
 a {
-    color: #36c;
+    color: rgba(51, 102, 204, 1);
 
+    &:active,
+    &:focus,
     &:hover {
-        color: #036;
+        color: rgba(51, 102, 204, 0.75);
         text-decoration: none;
     }
 }
@@ -28,6 +30,7 @@ h1 {
 
 h2 {
     font-size: 18px;
+    color: #555;
 }
 
 code {

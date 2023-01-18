@@ -1,3 +1,4 @@
+import { throttle } from 'lodash'
 import { withinViewportAsync } from '../../../package/src/async/index'
 import { withinViewport } from '../../../package/src/sync/index'
 import { query } from './dom'
@@ -132,3 +133,5 @@ export function updateBoxes() {
         })
     }
 }
+
+export const throttledUpdateBoxes = throttle(updateBoxes, 100)

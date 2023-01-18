@@ -7,7 +7,7 @@ $boxWidth: 18vw;
 
     // The boxes that we're monitoring
     div {
-        border: 1px solid #036;
+        border: 1px solid rgba(0, 51, 102, 1);
         color: #444;
         background-color: #ddd;
         text-align: center;
@@ -33,7 +33,7 @@ $boxWidth: 18vw;
     &.no-flex div {
         float: left;
         display: block;
-        border: 1px solid #036;
+        border: 1px solid rgba(0, 51, 102, 1);
         color: #444;
         background-color: #ddd;
         text-align: center;
@@ -49,6 +49,6 @@ $boxWidth: 18vw;
     // A box that's within the viewport
     .inview {
         color: #ddd;
-        background-color: #36c;
+        background-color: rgba(51, 102, 204, 1);
     }
 }

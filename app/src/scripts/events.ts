@@ -1,6 +1,6 @@
 import { isSide } from '../../../package/src/common/sides'
 import { drawBound } from './boundaries'
-import { createBoxHtml, updateBoxes } from './boxes'
+import { createBoxHtml, throttledUpdateBoxes, updateBoxes } from './boxes'
 import { hideAll, query, showAll } from './dom'
 import { updateBoundaryPreview, updateCodeOutput } from './output'
 import store from './store'
@@ -65,8 +65,8 @@ export function addEventHandlers() {
     const { containerForEvents } = store.getState()
 
     // Scroll or resize the viewport
-    containerForEvents.addEventListener('resize', updateBoxes)
-    containerForEvents.addEventListener('scroll', updateBoxes)
+    containerForEvents.addEventListener('resize', throttledUpdateBoxes)
+    containerForEvents.addEventListener('scroll', throttledUpdateBoxes)
 
     // Method radio buttons
     query(selectors.methodRadios).forEach((elem) => {
@@ -105,13 +105,15 @@ export function addEventHandlers() {
  * When we changed which element is used as the viewport, we need to 'move' the event handlers to the correct element
  */
 function resetContainerEventHandlers(previousContainer: HTMLElement | Window, nextContainer: HTMLElement | Window) {
+    throttledUpdateBoxes.cancel()
+
     // Remove handlers from the old container
-    previousContainer.removeEventListener('resize', updateBoxes)
-    previousContainer.removeEventListener('scroll', updateBoxes)
+    previousContainer.removeEventListener('resize', throttledUpdateBoxes)
+    previousContainer.removeEventListener('scroll', throttledUpdateBoxes)
 
     // Add handlers to the new container
-    nextContainer.addEventListener('resize', updateBoxes)
-    nextContainer.addEventListener('scroll', updateBoxes)
+    nextContainer.addEventListener('resize', throttledUpdateBoxes)
+    nextContainer.addEventListener('scroll', throttledUpdateBoxes)
 }
 
 // When the method/version radio buttons change
@@ -149,7 +151,6 @@ function onContainerFormChange(evt: Event) {
     }
 
     const viewportContainer = document.getElementById('arbitrary-viewport-container')
-
     const previousContainerForEvens = store.getState().containerForEvents
 
     if (whichRadio === 'window') {
@@ -230,35 +231,37 @@ function onBoundaryValueChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const val = parseInt(target?.value ?? '', 10)
-    const side = target?.id.replace(/^boundary-(\w+)-value/, '$1')
+    const side = target?.id.replace(/^boundary-(\w+)-value$/, '$1')
 
     if (!isSide(side)) {
         throw new Error('Input ID must be a valid side')
     }
 
+    store.setState((state) => ({
+        boundaries: {
+            ...state.boundaries,
+            [side]: val,
+        },
+    }))
+
     // Positive value was entered (negative values are allowed, but the boundaries would be off screen)
     if (val > 0) {
         showAll(`.boundary-${side}`)
-
-        store.setState((state) => ({
-            boundaries: {
-                ...state.boundaries,
-                [side]: val,
-            },
-        }))
-
         drawBound(side, val)
     }
     // Hide visual boundary, but store the negative value
     else {
-        store.setState((state) => ({
-            boundaries: {
-                ...state.boundaries,
-                [side]: val,
-            },
-        }))
-
         hideAll(`.boundary-${side}`)
+    }
+
+    // Select the accompanying radio button, if necessary
+    const correspondingRadioButtom = document.querySelector(
+        `[name="boundary-${side}"][value="threshold"]`,
+    ) as HTMLInputElement | null
+
+    if (correspondingRadioButtom && !correspondingRadioButtom.checked) {
+        triggerEvent(correspondingRadioButtom, 'click')
+        correspondingRadioButtom.checked = true
     }
 
     // Update the page
