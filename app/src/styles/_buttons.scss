@@ -1,0 +1,37 @@
+/* http://www.red-team-design.com/just-another-awesome-css3-buttons */
+
+.button {
+    display: inline-block;
+    white-space: nowrap;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.25em 0.5em;
+    margin: 0.5em;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+    border-radius: 0.2em;
+    background-clip: padding-box;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        position: relative;
+        top: 1px;
+    }
+
+    &:focus {
+        outline: 0;
+        background: rgba(0, 0, 0, 0.07);
+    }
+}
+
+// Smaller buttons
+.button.small {
+    &:before {
+        font-size: 1em;
+        margin: 0 0.5em 0 -1em;
+    }
+}

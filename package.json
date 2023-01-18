@@ -1,30 +1,77 @@
 {
-    "name": "withinviewport",
-    "version": "2.1.2",
+    "name": "@patik/within-viewport",
     "description": "Determine whether an element is completely within the browser viewport",
-    "main": "withinviewport.js",
+    "version": "3.0.0",
+    "private": true,
+    "workspaces": [
+        "module",
+        "app"
+    ],
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "dev": "yarn --cwd module tsc && yarn --cwd app dev",
+        "start": "yarn --cwd app start",
+        "start:ci": "yarn build && yarn --cwd app start",
+        "build": "yarn --cwd module build && yarn --cwd app build",
+        "clean": "git clean -fdx",
+        "cover": "yarn --cwd module test --collectCoverage",
+        "lint": "yarn workspaces run lint",
+        "preversion": "yarn workspaces run preversion",
+        "postversion": "git push && git push --tags",
+        "test": "yarn workspaces run test",
+        "cypress:open": "cypress open --project ./app",
+        "prepare": "husky install"
+    },
+    "dependencies": {
+        "typescript": "^4.9.4"
+    },
+    "devDependencies": {
+        "@jest/globals": "^29.3.1",
+        "@parcel/transformer-sass": "2.8.2",
+        "@types/jest": "^29.2.5",
+        "@types/node": "18.11.18",
+        "@types/react": "18.0.26",
+        "@types/react-dom": "18.0.10",
+        "@typescript-eslint/eslint-plugin": "^5.48.1",
+        "@typescript-eslint/parser": "^5.48.1",
+        "cypress": "^12.3.0",
+        "eslint": "8.31.0",
+        "eslint-config-next": "13.1.1",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-cypress": "^2.12.1",
+        "eslint-plugin-jsx-a11y": "^6.6.1",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "husky": "^8.0.3",
+        "jest": "^29.3.1",
+        "prettier": "^2.8.2",
+        "ts-jest": "^29.0.3",
+        "ts-node": "^10.9.1",
+        "ts-prune": "^0.10.3"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/patik/within-viewport.git"
     },
+    "author": {
+        "name": "Craig Patik",
+        "email": "craig@patik.com",
+        "url": "https://patik.com"
+    },
+    "license": "BSD-3-Clause",
     "keywords": [
+        "viewport",
+        "IntersectionObserver",
+        "window",
+        "DOM",
+        "visible",
+        "visibility",
+        "element",
+        "view",
         "within-viewport",
         "browser",
         "detect",
         "event",
         "infinite-scroll",
-        "scroll",
-        "view",
-        "viewport",
-        "window"
-    ],
-    "author": "Craig Patik <craig@patik.com> (http://patik.com)",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/patik/within-viewport/issues"
-    },
-    "homepage": "http://patik.github.io/within-viewport"
+        "scroll"
+    ]
 }

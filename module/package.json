@@ -1,0 +1,72 @@
+{
+    "name": "withinviewport",
+    "description": "Determine whether an element is completely within the browser viewport",
+    "version": "3.0.0",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/patik/within-viewport.git"
+    },
+    "devDependencies": {
+        "@testing-library/dom": "^8.19.1",
+        "@testing-library/jest-dom": "^5.16.5",
+        "@types/lodash": "^4.14.191",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-cypress": "^2.12.1",
+        "eslint-plugin-jest-dom": "^4.0.3",
+        "jest": "^29.3.1",
+        "jest-environment-jsdom": "^29.3.1"
+    },
+    "dependencies": {
+        "lodash": "^4.17.21"
+    },
+    "bugs": {
+        "url": "https://github.com/patik/within-viewport/issues"
+    },
+    "homepage": "https://github.com/patik/within-viewport",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "./dist/"
+    ],
+    "scripts": {
+        "build": "rm -rf dist/* && yarn tsc --project ./tsconfig.export.json && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+        "clean": "git clean -fdx",
+        "cover": "yarn test --collectCoverage",
+        "typecheck": "tsc --noEmit",
+        "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
+        "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
+        "preversion": "yarn build && yarn cover",
+        "test": "yarn jest --coverage",
+        "unused-exports": "ts-prune -p ./tsconfig.json",
+        "cypress:open": "cypress open"
+    },
+    "keywords": [
+        "viewport",
+        "IntersectionObserver",
+        "window",
+        "DOM",
+        "visible",
+        "visibility",
+        "element",
+        "view",
+        "within-viewport",
+        "browser",
+        "detect",
+        "event",
+        "infinite-scroll",
+        "scroll"
+    ],
+    "author": {
+        "name": "Craig Patik",
+        "email": "craig@patik.com",
+        "url": "https://patik.com"
+    },
+    "license": "BSD-3-Clause",
+    "lint-staged": {
+        "*.ts": "eslint --cache --cache-location .eslintcache --fix"
+    },
+    "engines": {
+        "node": ">=12.0"
+    }
+}

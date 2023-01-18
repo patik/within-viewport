@@ -1,0 +1,32 @@
+.boundary {
+    position: fixed;
+    border: 0 dashed #03c;
+    background-color: #3cf;
+    background-color: rgba(51, 153, 255, 0.3);
+    overflow: hidden;
+    z-index: 2;
+}
+
+.boundary-top {
+    left: 0;
+    width: 100%;
+    border-bottom-width: 1px;
+}
+
+.boundary-right {
+    top: 0;
+    height: 100%;
+    border-left-width: 1px;
+}
+
+.boundary-bottom {
+    left: 0;
+    width: 100%;
+    border-top-width: 1px;
+}
+
+.boundary-left {
+    top: 0;
+    height: 100%;
+    border-right-width: 1px;
+}
