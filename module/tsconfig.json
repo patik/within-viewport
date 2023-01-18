@@ -25,7 +25,8 @@
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "types": ["cypress", "node", "jest"],
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "allowJs": true
     },
     "include": ["src/**/*.ts*", "cypress.config.ts", "cypress/**/*.ts", "jest.config.ts"],
     "exclude": ["../node_modules", "node_modules"]

@@ -4,6 +4,37 @@ import { withinViewport } from './sync/index'
 export { withinViewportAsync } from './async/index'
 export { withinViewport } from './sync/index'
 
+import setupJQueryPlugin from './jquery/plugin.js'
+
+const global = (function (scope) {
+    if (typeof self !== 'undefined') {
+        return self
+    }
+    if (typeof window !== 'undefined') {
+        return window
+    }
+
+    return scope
+})(this)
+
+if (global) {
+    if ('jQuery' in global) {
+        setupJQueryPlugin(global.jQuery)
+    } else if ('$' in global) {
+        setupJQueryPlugin(global.$)
+    }
+}
+
+/**
+ * Temporary shim for the old function name—please switch to the camelCase `withinViewport` name.
+ *
+ * @deprecated
+ */
+export function withinviewport(...args: Parameters<typeof withinViewport>) {
+    console.error('The function name `withinviewport` is deprecated. Instead, call `withinViewport()` (camelCase).')
+    withinViewport(...args)
+}
+
 /**
  * Shortcut methods for each side of the viewport
  */
