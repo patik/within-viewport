@@ -5,7 +5,7 @@ import { hideAll, query, showAll } from './dom'
 import { updateBoundaryPreview, updateCodeOutput } from './output'
 import store from './store'
 
-export function triggerEvent(node: HTMLElement | null, eventName: string) {
+function triggerEvent(node: HTMLElement | null, eventName: string) {
     if (!node) {
         return
     }
