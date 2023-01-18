@@ -115,20 +115,20 @@ These shortcuts will result in slightly better performance if you're testing hun
 
 #### Live updating
 
-If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. Instead of `scroll`, I recommend using [James Padolsey's `scrollStop` event](http://james.padolsey.com/javascript/special-scroll-events-for-jquery/) since firing on every `window.scroll` event will [bring your UI to its knees](http://ejohn.org/blog/learning-from-twitter/).
+If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. However, for performance reasons, it's strongly recommended to [throttle](https://lodash.com/docs/#throttle) your event listener or use something like [James Padolsey's `scrollStop` event](http://james.padolsey.com/javascript/special-scroll-events-for-jquery/). Firing on every `window.scroll` event will [bring your UI to its knees](https://ejohn.org/blog/learning-from-twitter/).
 
 ```js
-$(window).on('resize scrollStop', function() {
+$(window).on('resize scrollStop', _.throttle(function() {
     // Your code here...
 
     // Example:
     $('div')
         // Momentarily declare all divs out of the viewport...
-        .removeClass('within-viewport');
+        .removeClass('within-viewport')
         // Then filter them to reveal which ones are still within it
         .filter(':within-viewport')
-            .addClass('within-viewport');
-});
+            .addClass('within-viewport')
+}, 100));
 ```
 
 ## Settings
@@ -140,9 +140,9 @@ This applies to both the jQuery plugin and standalone function.
 If you want to test whether an element is within a scrollable parent element (e.g. which has `overflow: auto` or `scroll`), assign the parent element to the `container` property:
 
 ```js
-$('.child-element').withinViewport({
-    container: $('.parent-element')
-});
+withinViewport(elem, {
+    container: document.querySelector('.parent-element')
+})
 ```
 
 ### Custom boundaries
@@ -150,20 +150,20 @@ $('.child-element').withinViewport({
 For example, a fixed header with a height of 100px that spans the entire width of the page effectively lowers the viewport by 100px from the top edge of the browser window:
 
 ```js
-withinViewport.defaults.top = 100
+withinViewport(elem, { top: 100 })
 ```
 
 If you only care about some edges of the viewport, you can specify them to improve performance:
 
 ```js
-withinViewport.defaults.sides = 'left bottom'
+withinViewport(elem, 'left bottom')
 ```
 
 You can also pass settings on the fly to temporarily override the defaults:
 
 ```js
-withinViewport(elem, { sides: 'left bottom', left: 40 })
-$('div').withinViewport({ sides: 'left bottom', left: 40 })
+withinViewport(elem, { left: 40 })
+$('div').withinViewport({ right: -70, top: 'ignore' })
 ```
 
 You can specify *negative threshold values* to allow elements to reside outside the viewport.

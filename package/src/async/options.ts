@@ -13,7 +13,7 @@ export function determineRootMargin(config: Config): string {
         const value = config[side]
 
         if (value === 'ignore' || value === null) {
-            margins[side] = -100000
+            margins[side] = -999999999
         } else {
             margins[side] = value ?? 0
         }
