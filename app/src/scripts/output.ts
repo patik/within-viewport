@@ -1,4 +1,4 @@
-import { Boundaries } from '../../../package/src/common/types'
+import { Boundaries } from '../../../module/src/common/types'
 import store from './store'
 import { highlightElement } from 'prismjs'
 import 'prismjs/themes/prism-okaidia.min.css'

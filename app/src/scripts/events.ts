@@ -1,4 +1,4 @@
-import { isSide } from '../../../package/src/common/sides'
+import { isSide } from '../../../module/src/common/sides'
 import { drawBound } from './boundaries'
 import { createBoxHtml, throttledUpdateBoxes, updateBoxes } from './boxes'
 import { hideAll, query, showAll } from './dom'

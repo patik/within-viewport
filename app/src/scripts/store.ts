@@ -1,5 +1,5 @@
 import { createStore } from 'zustand/vanilla'
-import { Config } from '../../../package/src/common/types'
+import { Config } from '../../../module/src/common/types'
 
 interface State {
     $boxes: HTMLElement[]

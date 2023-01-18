@@ -32,8 +32,8 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - run: yarn install
-      - run: yarn --cwd package build
-      - run: yarn --cwd package publish
+      - run: yarn --cwd module build
+      - run: yarn --cwd module publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
@@ -50,7 +50,7 @@ jobs:
           node-version: '16.x'
           registry-url: https://npm.pkg.github.com/
       - run: yarn install
-      - run: yarn --cwd package build
-      - run: yarn --cwd package publish
+      - run: yarn --cwd module build
+      - run: yarn --cwd module publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}

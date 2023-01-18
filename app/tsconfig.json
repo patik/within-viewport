@@ -18,10 +18,10 @@
     },
     "include": [
         "src/**/*.ts",
-        "../package/**/*.d.ts",
-        "../package/src/async/**/*.ts",
-        "../package/src/sync/**/*.ts",
-        "../package/src/common/**/*.ts"
+        "../module/**/*.d.ts",
+        "../module/src/async/**/*.ts",
+        "../module/src/sync/**/*.ts",
+        "../module/src/common/**/*.ts"
     ],
     "exclude": ["node_modules", "./cypress"]
 }

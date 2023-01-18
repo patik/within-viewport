@@ -1,6 +1,6 @@
 import { throttle } from 'lodash'
-import { withinViewportAsync } from '../../../package/src/async/index'
-import { withinViewport } from '../../../package/src/sync/index'
+import { withinViewportAsync } from '../../../module/src/async/index'
+import { withinViewport } from '../../../module/src/sync/index'
 import { query } from './dom'
 import store from './store'
 
