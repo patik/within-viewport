@@ -1,4 +1,4 @@
 {
-    "ignore": "./dist|pages/",
+    "ignore": "./dist",
     "error": true
 }

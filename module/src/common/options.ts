@@ -10,12 +10,14 @@ const defaultSettings = {
     left: 0,
 }
 
+// ts-prune-ignore-next
 export type SyncConfig = {
     container: HTMLElement | Window
 } & {
     [b in Side]: number | 'ignore'
 }
 
+// ts-prune-ignore-next
 export type AsyncConfig = {
     container: HTMLElement | Document
 } & {
