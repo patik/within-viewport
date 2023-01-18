@@ -1,8 +1,0 @@
-*.sublime-*
-node_modules
-.gitattributes
-.jshintrc
-.editorconfig
-demo
-demo-container
-bower.json

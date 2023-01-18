@@ -1,13 +1,13 @@
 # Within Viewport
 
-***Determine whether elements are within the viewport***
+***Determine whether elements are completely within the viewport***
 
 Includes:
 
 - A synchronous function, `withinViewport()`
-  - Also supports [legacy browsers](#browser-support)
+  - Continues to support [legacy browsers](#browser-support)
 - An asynchronous, promise-based function, `withinViewportAsync()`
-  - Only for [modern browsers](https://caniuse.com/intersectionobserver) (e.g. post IE 11)
+  - More performant, but only for [modern browsers](https://caniuse.com/intersectionobserver) (e.g. post IE 11)
 - Optional jQuery plugin with handy selectors and shorthand methods
 
 All of the above offer the same features.
