@@ -5,40 +5,40 @@ import { hideAll, query, showAll } from './dom'
 import { updateBoundaryPreview, updateCodeOutput } from './output'
 import store from './store'
 
-function triggerEvent(node: HTMLElement | null, eventName: string) {
-    if (!node) {
-        return
-    }
+// function triggerEvent(node: HTMLElement | null, eventName: string) {
+//     if (!node) {
+//         return
+//     }
 
-    // Modern browsers (as of the 2020s)
-    if (typeof Event !== 'undefined') {
-        node.dispatchEvent(new Event(eventName, { bubbles: true, cancelable: true }))
-    }
-    // The first generation of standards-compliant browsers (not IE) from the 2010s
-    else if (document.createEvent) {
-        const evt = document.createEvent('HTMLEvents')
+//     // Modern browsers (as of the 2020s)
+//     if (typeof Event !== 'undefined') {
+//         node.dispatchEvent(new Event(eventName, { bubbles: true, cancelable: true }))
+//     }
+//     // The first generation of standards-compliant browsers (not IE) from the 2010s
+//     else if (document.createEvent) {
+//         const evt = document.createEvent('HTMLEvents')
 
-        if ('initEvent' in evt) {
-            evt.initEvent(eventName, true, true)
-        }
+//         if ('initEvent' in evt) {
+//             evt.initEvent(eventName, true, true)
+//         }
 
-        if ('eventName' in evt) {
-            evt.eventName = eventName
-        }
+//         if ('eventName' in evt) {
+//             evt.eventName = eventName
+//         }
 
-        node.dispatchEvent(evt)
-    }
-    // Old IE
-    else if ('createEventObject' in document && typeof document.createEventObject === 'function') {
-        const evt = document.createEventObject()
+//         node.dispatchEvent(evt)
+//     }
+//     // Old IE
+//     else if ('createEventObject' in document && typeof document.createEventObject === 'function') {
+//         const evt = document.createEventObject()
 
-        evt.eventType = eventName
+//         evt.eventType = eventName
 
-        if ('fireEvent' in node && typeof node.fireEvent === 'function') {
-            node.fireEvent('on' + evt.eventType, evt)
-        }
-    }
-}
+//         if ('fireEvent' in node && typeof node.fireEvent === 'function') {
+//             node.fireEvent('on' + evt.eventType, evt)
+//         }
+//     }
+// }
 
 // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
 // Windows: Firefox, Trident, Safari, Opera; Mac: Chrome, Safari, Opera; Not Firefox
@@ -56,7 +56,7 @@ function areNudgeControlsSupported() {
 const selectors = {
     methodRadios: '[name="method-form"]',
     containerRadios: '[name="container-form"]',
-    boundaryRadios: '.boundary-form input[type="radio"]',
+    boundaryCheckboxes: '.boundary-form input[type="checkbox"]',
     boundaryNumberInputs: '.boundary-form input[type="number"]',
 }
 
@@ -79,8 +79,8 @@ export function addEventHandlers() {
     })
 
     // Boundary radio buttons
-    query(selectors.boundaryRadios).forEach((elem) => {
-        elem.addEventListener('change', onBoundaryRadioChange)
+    query(selectors.boundaryCheckboxes).forEach((elem) => {
+        elem.addEventListener('change', onBoundaryCheckboxChange)
     })
 
     // Boundary number entry
@@ -182,7 +182,7 @@ function onContainerFormChange(evt: Event) {
 }
 
 // When the boundary radio buttons change, e.g. choosing whether to ignore a side
-function onBoundaryRadioChange(evt: Event) {
+function onBoundaryCheckboxChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
 
@@ -196,28 +196,30 @@ function onBoundaryRadioChange(evt: Event) {
         throw new Error('Could not get side from input name')
     }
 
-    const whichRadio = target.value
+    const numberInput = document.querySelector<HTMLInputElement>(`input[id="boundary-${side}-value"]`)
 
-    if (whichRadio === 'threshold') {
-        const input = document.querySelector<HTMLInputElement>(`input[id="boundary-${side}-value"]`)
+    if (!numberInput) {
+        throw new Error('Could not find numeric input')
+    }
 
-        if (!input) {
-            throw new Error('Could not find numeric input')
-        }
-
-        store.setState((state) => ({
-            boundaries: {
-                ...state.boundaries,
-                [side]: parseInt(input.value, 10),
-            },
-        }))
-    } else {
+    if (target.checked) {
         store.setState((state) => ({
             boundaries: {
                 ...state.boundaries,
                 [side]: 'ignore',
             },
         }))
+
+        numberInput.disabled = true
+    } else {
+        store.setState((state) => ({
+            boundaries: {
+                ...state.boundaries,
+                [side]: parseInt(numberInput.value, 10),
+            },
+        }))
+
+        numberInput.disabled = false
     }
 
     // Update the page
@@ -252,16 +254,6 @@ function onBoundaryValueChange(evt: Event) {
     // Hide visual boundary, but store the negative value
     else {
         hideAll(`.boundary-${side}`)
-    }
-
-    // Select the accompanying radio button, if necessary
-    const correspondingRadioButtom = document.querySelector(
-        `[name="boundary-${side}"][value="threshold"]`,
-    ) as HTMLInputElement | null
-
-    if (correspondingRadioButtom && !correspondingRadioButtom.checked) {
-        triggerEvent(correspondingRadioButtom, 'click')
-        correspondingRadioButtom.checked = true
     }
 
     // Update the page
