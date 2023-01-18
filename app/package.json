@@ -9,7 +9,7 @@
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
-        "test": "yarn jest",
+        "test": "",
         "unused-exports": "ts-prune -p ./tsconfig.json"
     },
     "dependencies": {

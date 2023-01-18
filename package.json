@@ -12,7 +12,7 @@
         "dev": "yarn --cwd package tsc && yarn --cwd app dev",
         "start": "yarn --cwd app start",
         "start:ci": "yarn build && yarn --cwd app start",
-        "build": "yarn --cwd package lint && yarn --cwd package tsc && yarn --cwd app build",
+        "build": "yarn --cwd package build && yarn --cwd app build",
         "clean": "git clean -fdx",
         "cover": "yarn --cwd package test --collectCoverage",
         "lint": "yarn workspaces run lint",

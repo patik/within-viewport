@@ -1,5 +1,5 @@
 {
-    "name": "within-viewport",
+    "name": "withinviewport",
     "description": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     "version": "3.0.0",
     "type": "module",
@@ -11,13 +11,11 @@
         "@testing-library/dom": "^8.19.1",
         "@testing-library/jest-dom": "^5.16.5",
         "@types/lodash": "^4.14.191",
-        "cypress": "^12.3.0",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-cypress": "^2.12.1",
         "eslint-plugin-jest-dom": "^4.0.3",
         "jest": "^29.3.1",
-        "jest-environment-jsdom": "^29.3.1",
-        "source-map-support": "^0.5.21"
+        "jest-environment-jsdom": "^29.3.1"
     },
     "dependencies": {
         "lodash": "^4.17.21"
@@ -40,7 +38,7 @@
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
         "preversion": "yarn build && yarn cover",
         "test": "yarn jest --coverage",
-        "unused-exports": "ts-prune -p ./tsconfig.json --ignore 'src/index.ts|cypress.config.ts|jest.config.ts'",
+        "unused-exports": "ts-prune -p ./tsconfig.json",
         "cypress:open": "cypress open"
     },
     "keywords": [
@@ -48,8 +46,10 @@
         "IntersectionObserver",
         "window",
         "DOM",
+        "visible",
         "visibility",
-        "element"
+        "element",
+        "view"
     ],
     "author": {
         "name": "Craig Patik",
