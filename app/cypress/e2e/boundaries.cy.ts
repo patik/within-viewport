@@ -49,20 +49,31 @@ describe('Boundaries', () => {
                         inViewCount = $elem.length
                     })
                     .then(() => {
+                        cy.log(
+                            `Finished counting, found ${inViewCount} in-view boxes and ${outOfViewCount} out-of-view boxes. About to perform first scroll.`,
+                        )
                         cy.scrollTo(100, 0)
+
+                        cy.log(`Finished first scroll. Now filling in the boundary form.`)
 
                         // Open the form
                         cy.get('.boundary-form details').click()
 
                         cy.get('#boundary-left-value').type('10').trigger('change')
 
+                        cy.log('About to perform second scroll')
+
                         cy.scrollTo(-15, 0)
 
+                        cy.log(
+                            `Finished second scroll. Now looking for in-view boxes to make sure there are exactly ${inViewCount} of them`,
+                        )
                         // Now there should be fewer boxes in view
                         cy.get('#boxContainer [aria-hidden="false"]').should('have.length', inViewCount)
 
                         // And there should be more boxes out of view
                         cy.get('#boxContainer [aria-hidden="true"]').should('have.length', outOfViewCount)
+                        cy.log(`Done`)
                     })
             })
     })
