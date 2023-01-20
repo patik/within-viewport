@@ -140,7 +140,18 @@ export async function withinViewportAsync(
                 const { isIntersecting, intersectionRect } = entry
 
                 if (debug) {
-                    console.log(intersectionRect, entry)
+                    const { boundingClientRect, intersectionRect, intersectionRatio, isIntersecting, rootBounds } =
+                        entry
+                    console.log(entry)
+                    console.log(
+                        JSON.stringify({
+                            boundingClientRect,
+                            intersectionRect,
+                            intersectionRatio,
+                            isIntersecting,
+                            rootBounds,
+                        }),
+                    )
                 }
 
                 if (!entry.isIntersecting) {
