@@ -65,7 +65,7 @@ describe('Boundaries', () => {
                         cy.log('About to perform second scroll')
                         console.log('About to perform second scroll')
 
-                        cy.scrollTo(-20, 0)
+                        cy.scrollTo(80, 0)
 
                         cy.log(
                             `Finished second scroll. Now looking for in-view boxes to make sure there are exactly ${inViewCount} of them`,
