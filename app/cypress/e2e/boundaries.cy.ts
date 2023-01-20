@@ -49,6 +49,9 @@ describe('Boundaries', () => {
                         inViewCount = $elem.length
                     })
                     .then(() => {
+                        // Shift focus to the page before scrolling
+                        cy.get('#boxContainer').first().focus()
+
                         // First, scroll
                         cy.scrollTo(100, 0)
 
@@ -94,6 +97,9 @@ describe('Boundaries', () => {
                         cy.get('.boundary-form details').click()
 
                         cy.get('#boundary-left-value').type('10').trigger('change')
+
+                        // Shift focus back to the page before scrolling
+                        cy.get('#boxContainer').first().focus()
 
                         cy.log('About to perform second scroll')
                         console.log('About to perform second scroll')
