@@ -75,6 +75,7 @@ export function createBoxHtml() {
 
     boxContainer.innerHTML = boxHTML
     boxContainer.id = 'boxContainer'
+    boxContainer.tabIndex = 0 // Make it focusable for Cypress tests
 
     store.getState().containerForDOM.appendChild(boxContainer)
 
