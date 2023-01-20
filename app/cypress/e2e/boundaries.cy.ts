@@ -65,7 +65,7 @@ describe('Boundaries', () => {
                         cy.log('About to perform second scroll')
                         console.log('About to perform second scroll')
 
-                        cy.scrollTo(-15, 0)
+                        cy.scrollTo(-20, 0)
 
                         cy.log(
                             `Finished second scroll. Now looking for in-view boxes to make sure there are exactly ${inViewCount} of them`,
@@ -75,6 +75,13 @@ describe('Boundaries', () => {
                         )
                         // Now there should be fewer boxes in view
                         cy.get('#boxContainer [aria-hidden="false"]').should('have.length', inViewCount)
+
+                        cy.log(
+                            `Lastly, looking for out-of-view boxes to make sure there are exactly ${outOfViewCount} of them`,
+                        )
+                        console.log(
+                            `Lastly, looking for out-of-view boxes to make sure there are exactly ${outOfViewCount} of them`,
+                        )
 
                         // And there should be more boxes out of view
                         cy.get('#boxContainer [aria-hidden="true"]').should('have.length', outOfViewCount)
