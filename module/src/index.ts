@@ -31,8 +31,18 @@ if (global) {
  * @deprecated
  */
 export function withinviewport(...args: Parameters<typeof withinViewport>) {
-    console.error('The function name `withinviewport` is deprecated. Instead, call `withinViewport()` (camelCase).')
-    withinViewport(...args)
+    const result = withinViewport(...args)
+
+    try {
+        // Some *really* old browsers don't have a console
+        console.error(
+            'The lowercase name `withinviewport` is deprecated. Instead, use the camelCase name `withinViewport`.',
+        )
+    } catch (e) {
+        //
+    }
+
+    return result
 }
 
 /**

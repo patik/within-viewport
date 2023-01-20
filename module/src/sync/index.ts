@@ -1,4 +1,4 @@
-import { determineConfig } from '../common/options'
+import { getConfig } from '../common/options'
 import { sides } from '../common/sides'
 import { MultipleSides, Side, UserOptions } from '../common/types'
 
@@ -17,13 +17,12 @@ declare global {
  * @return {Boolean}                Whether the element was completely within the viewport
  */
 export function withinViewport(elem: HTMLElement, userOptions?: Side | MultipleSides | Partial<UserOptions>): boolean {
-    console.log('sync version')
     let containerBoundingRect: DOMRect
     let containerScrollTop = 0
     let containerScrollLeft = 0
     const scrollBarWidths = [0, 0]
 
-    const config = determineConfig('sync', elem, userOptions)
+    const config = getConfig('sync', elem, userOptions)
     const isContainerTheWindow = config.container === window
 
     // Get the element's bounding rectangle with respect to the viewport

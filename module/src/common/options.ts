@@ -29,17 +29,17 @@ export type AsyncConfig = {
  *
  * Reason for overloading: basically, the async method cannot work with `container:window`, and the sync method cannot work with `container:document`, and I want each of those methods to receive the correct types, so each overload has a different return type.
  */
-export function determineConfig(
+export function getConfig(
     methodType: 'sync',
     elem: HTMLElement,
     userOptions?: Side | MultipleSides | Partial<UserOptions>,
 ): SyncConfig
-export function determineConfig(
+export function getConfig(
     methodType: 'async',
     elem: HTMLElement,
     userOptions?: Side | MultipleSides | Partial<UserOptions>,
 ): AsyncConfig
-export function determineConfig(
+export function getConfig(
     methodType: 'sync' | 'async',
     elem: HTMLElement,
     userOptions?: Side | MultipleSides | Partial<UserOptions>,

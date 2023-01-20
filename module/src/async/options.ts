@@ -12,11 +12,11 @@ export function determineRootMargin(config: Config): string {
     sides.forEach((side) => {
         const value = config[side]
 
-        if (value === 'ignore' || value === null) {
-            margins[side] = -999999999
-        } else {
-            margins[side] = value ?? 0
-        }
+        // if (value === 'ignore' || value === null) {
+        // margins[side] = -screen.width
+        // } else {
+        margins[side] = typeof value === 'number' ? value : 0
+        // }
     })
 
     return `${-margins.top}px ${-margins.right}px ${-margins.bottom}px ${-margins.left}px`

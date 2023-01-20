@@ -4,8 +4,9 @@
     "private": true,
     "source": "src/index.html",
     "scripts": {
-        "start": "parcel",
-        "build": "parcel build",
+        "start": "yarn clear-parcel-cache && parcel",
+        "clear-parcel-cache": "rm -rf ../.parcel-cache",
+        "build": "yarn clear-parcel-cache && parcel build",
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",

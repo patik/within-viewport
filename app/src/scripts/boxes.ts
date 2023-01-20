@@ -4,25 +4,32 @@ import { withinViewport } from '../../../module/src/sync/index'
 import { query } from './dom'
 import store from './store'
 
-const areViewportUnitsSupported = (function () {
-    try {
-        const div = document.createElement('div')
+// To reduce fragmentation, lump browses into two groups: those that support both flexbox and viewport units, and those that do not
+const canUseFlexAndVPUnits = (function () {
+    const areViewportUnitsSupported = (function () {
+        try {
+            const div = document.createElement('div')
 
-        div.style.width = '50vw'
-        document.body.appendChild(div)
+            div.style.width = '50vw'
+            document.body.appendChild(div)
 
-        const elemWidth = parseInt(getComputedStyle(div, null).width, 10)
-        const halfWidth = parseInt(String(window.innerWidth / 2), 10)
+            const elemWidth = parseInt(getComputedStyle(div, null).width, 10)
+            const halfWidth = parseInt(String(window.innerWidth / 2), 10)
 
-        return elemWidth === halfWidth
-    } catch (e) {
-        console.error('Error when determining if the client supports viewport units: ', e)
-        return false
-    }
+            return elemWidth === halfWidth
+        } catch (e) {
+            console.error('Error when determining if the client supports viewport units: ', e)
+            return false
+        }
+    })()
+
+    const isFlexboxSupported = document.createElement('p').style.flex === ''
+
+    return isFlexboxSupported && areViewportUnitsSupported
 })()
 
 function determineBoxWidth() {
-    if (areViewportUnitsSupported) {
+    if (canUseFlexAndVPUnits) {
         return '18vw'
     }
 
@@ -40,10 +47,6 @@ function determineBoxWidth() {
     return `${boxWidth}px`
 }
 
-function isFlexboxSupported() {
-    return document.createElement('p').style.flex === ''
-}
-
 export function createBoxHtml() {
     const boxCount = 200
     let boxHTML = ''
@@ -52,29 +55,29 @@ export function createBoxHtml() {
     // Add a container and put the boxes inside
     const boxContainer = document.createElement('div')
 
-    if (isFlexboxSupported()) {
+    if (canUseFlexAndVPUnits) {
         let i = 0
         // Generate boxes which will each be tested for their viewport within-ness
         while (i < boxCount) {
-            boxHTML += '<div>&nbsp;</div>'
+            boxHTML += `<div data-boxid="${i}">&nbsp;</div>`
             i++
         }
 
-        boxContainer.classList.add('flex')
+        boxContainer.classList.add('flex-vp')
     } else {
         let i = 0
         while (i < boxCount) {
             // Set the styles so everything is nice and proportional to this device's screen
-            boxHTML += `<div style="width: ${boxWidth}; height: ${boxWidth};line-height: ${boxWidth};">&nbsp;</div>`
+            boxHTML += `<div data-boxid="${i}" style="width: ${boxWidth}; height: ${boxWidth}; line-height: ${boxWidth};">&nbsp;</div>`
             i++
         }
 
-        boxContainer.classList.add('no-flex')
-        boxContainer.style.cssText = 'width:' + (parseInt(boxWidth, 10) * 10 + 20) + 'px;'
+        boxContainer.classList.add('no-flex-vp')
+        boxContainer.style.cssText = `width: ${parseInt(boxWidth, 10) * 10 + 20}px;`
     }
 
     boxContainer.innerHTML = boxHTML
-    boxContainer.id = 'boxContainer'
+    boxContainer.id = 'box-container'
     boxContainer.tabIndex = 0 // Make it focusable for Cypress tests
 
     store.getState().containerForDOM.appendChild(boxContainer)
@@ -88,14 +91,14 @@ export function createBoxHtml() {
 }
 
 function setBoxIsIn(box: HTMLElement) {
-    box.innerHTML = 'in'
+    box.innerHTML = `<span>in</span><span>${box.getAttribute('data-boxid') ?? ''}</span>`
     box.setAttribute('aria-hidden', 'false')
     box.classList.add('in-view')
     box.classList.remove('out-of-view')
 }
 
 function setBoxIsOut(box: HTMLElement) {
-    box.innerHTML = 'out'
+    box.innerHTML = `<span>out</span><span>${box.getAttribute('data-boxid') ?? ''}</span>`
     box.setAttribute('aria-hidden', 'true')
     box.classList.remove('in-view')
     box.classList.add('out-of-view')

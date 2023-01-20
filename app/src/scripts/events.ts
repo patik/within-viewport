@@ -144,7 +144,7 @@ function onContainerFormChange(evt: Event) {
     const whichRadio = target?.value ?? ''
 
     // Remove any previously-existing box containers
-    const boxContainer = document.getElementById('boxContainer')
+    const boxContainer = document.getElementById('box-container')
 
     if (boxContainer) {
         boxContainer.parentNode?.removeChild(boxContainer)
@@ -211,6 +211,7 @@ function onBoundaryCheckboxChange(evt: Event) {
         }))
 
         numberInput.disabled = true
+        hideAll(`.boundary-${side}`)
     } else {
         store.setState((state) => ({
             boundaries: {
@@ -220,6 +221,7 @@ function onBoundaryCheckboxChange(evt: Event) {
         }))
 
         numberInput.disabled = false
+        showAll(`.boundary-${side}`)
     }
 
     // Update the page

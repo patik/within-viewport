@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash'
-import { AsyncConfig, determineConfig, SyncConfig } from '../../common/options'
+import { AsyncConfig, getConfig, SyncConfig } from '../../common/options'
 import { MultipleSides, Side, UserOptions } from '../../common/types'
 
 const div = document.createElement('div')
@@ -60,7 +60,7 @@ const syncTestCases: Array<{
 describe.each(syncTestCases)('Synchronous getConfig', (testCase) => {
     describe.each([fakeBody, arbitraryFakeDiv])(`user options: ${testCase.name}`, (targetElem) => {
         test(`target elem: ${targetElem.nodeName}`, () => {
-            const result = determineConfig('sync', targetElem, testCase.userOptions)
+            const result = getConfig('sync', targetElem, testCase.userOptions)
 
             expect(result).toStrictEqual(testCase.result)
         })
@@ -112,7 +112,7 @@ const asyncTestCases: Array<{
 describe.each(asyncTestCases)('Asynchronous getConfig', (testCase) => {
     describe.each([fakeBody, arbitraryFakeDiv])(`user options: ${testCase.name}`, (targetElem) => {
         test(`target elem: ${targetElem.nodeName}`, () => {
-            const result = determineConfig('async', targetElem, testCase.userOptions)
+            const result = getConfig('async', targetElem, testCase.userOptions)
 
             expect(result).toStrictEqual(testCase.result)
         })
