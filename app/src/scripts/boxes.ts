@@ -56,8 +56,7 @@ export function createBoxHtml() {
         let i = 0
         // Generate boxes which will each be tested for their viewport within-ness
         while (i < boxCount) {
-            boxHTML += '<div aria-hidden="false">&nbsp;</div>'
-
+            boxHTML += '<div>&nbsp;</div>'
             i++
         }
 
@@ -66,14 +65,7 @@ export function createBoxHtml() {
         let i = 0
         while (i < boxCount) {
             // Set the styles so everything is nice and proportional to this device's screen
-            boxHTML +=
-                '<div aria-hidden="false" style="width:' +
-                boxWidth +
-                ';height:' +
-                boxWidth +
-                ';line-height:' +
-                boxWidth +
-                ';">&nbsp;</div>'
+            boxHTML += `<div style="width: ${boxWidth}; height: ${boxWidth};line-height: ${boxWidth};">&nbsp;</div>`
             i++
         }
 
@@ -97,13 +89,15 @@ export function createBoxHtml() {
 function setBoxIsIn(box: HTMLElement) {
     box.innerHTML = 'in'
     box.setAttribute('aria-hidden', 'false')
-    box.classList.add('inview')
+    box.classList.add('in-view')
+    box.classList.remove('out-of-view')
 }
 
 function setBoxIsOut(box: HTMLElement) {
     box.innerHTML = 'out'
     box.setAttribute('aria-hidden', 'true')
-    box.classList.remove('inview')
+    box.classList.remove('in-view')
+    box.classList.add('out-of-view')
 }
 
 // Update each box's class to reflect whether it was determined to be within the viewport or not

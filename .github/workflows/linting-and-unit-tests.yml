@@ -3,7 +3,7 @@
 
 name: Linting and Unit Tests
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:

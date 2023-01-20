@@ -9,12 +9,12 @@ describe('Boundaries', () => {
         let inViewCount = 0
         let outOfViewCount = 0
 
-        cy.get('#boxContainer [aria-hidden="true"]')
+        cy.get('#boxContainer .out-of-view')
             .then(($elem) => {
                 outOfViewCount = $elem.length
             })
             .then(() => {
-                cy.get('#boxContainer [aria-hidden="false"]')
+                cy.get('#boxContainer .in-view')
                     .then(($elem) => {
                         inViewCount = $elem.length
                     })
@@ -25,26 +25,59 @@ describe('Boundaries', () => {
                         cy.get('#boundary-left-value').type('10').trigger('change')
 
                         // Now there should be fewer boxes in view
-                        cy.get('#boxContainer [aria-hidden="false"]').should('have.length.below', inViewCount)
+                        cy.get('#boxContainer .in-view').should('have.length.below', inViewCount)
 
                         // And there should be more boxes out of view
-                        cy.get('#boxContainer [aria-hidden="true"]').should('have.length.above', outOfViewCount)
+                        cy.get('#boxContainer .out-of-view').should('have.length.above', outOfViewCount)
                     })
             })
     })
 
-    it('Setting a positive left boundary and then scrolling results in the same number of boxes that are in view', () => {
+    it('Scrolling right a lot, then setting a small positive left boundary, has no effect on the number of boxes that are in view', () => {
         cy.visit(baseUrl)
 
         let inViewCount = 0
         let outOfViewCount = 0
 
-        cy.get('#boxContainer [aria-hidden="true"]')
+        cy.get('#boxContainer .out-of-view')
             .then(($elem) => {
                 outOfViewCount = $elem.length
             })
             .then(() => {
-                cy.get('#boxContainer [aria-hidden="false"]')
+                cy.get('#boxContainer .in-view')
+                    .then(($elem) => {
+                        inViewCount = $elem.length
+                    })
+                    .then(() => {
+                        // First, scroll
+                        cy.scrollTo(100, 0)
+
+                        // Open the form
+                        cy.get('.boundary-form details').click()
+
+                        cy.get('#boundary-left-value').type('10').trigger('change')
+
+                        // Now there should be the same number of boxes in view
+                        cy.get('#boxContainer .in-view').should('have.length', inViewCount)
+
+                        // And there should be same number of boxes out of view
+                        cy.get('#boxContainer .out-of-view').should('have.length', outOfViewCount)
+                    })
+            })
+    })
+
+    it('Scrolling right, setting a positive left boundary, and then scrolling back only part way, results in the same number of boxes that are in view', () => {
+        cy.visit(baseUrl)
+
+        let inViewCount = 0
+        let outOfViewCount = 0
+
+        cy.get('#boxContainer .out-of-view')
+            .then(($elem) => {
+                outOfViewCount = $elem.length
+            })
+            .then(() => {
+                cy.get('#boxContainer .in-view')
                     .then(($elem) => {
                         inViewCount = $elem.length
                     })
@@ -74,7 +107,7 @@ describe('Boundaries', () => {
                             `Finished second scroll. Now looking for in-view boxes to make sure there are exactly ${inViewCount} of them`,
                         )
                         // Now there should be fewer boxes in view
-                        cy.get('#boxContainer [aria-hidden="false"]').should('have.length', inViewCount)
+                        cy.get('#boxContainer .in-view').should('have.length', inViewCount)
 
                         cy.log(
                             `Lastly, looking for out-of-view boxes to make sure there are exactly ${outOfViewCount} of them`,
@@ -84,7 +117,7 @@ describe('Boundaries', () => {
                         )
 
                         // And there should be more boxes out of view
-                        cy.get('#boxContainer [aria-hidden="true"]').should('have.length', outOfViewCount)
+                        cy.get('#boxContainer .out-of-view').should('have.length', outOfViewCount)
                         cy.log(`Done`)
                         console.log(`Done`)
                     })
