@@ -4,7 +4,7 @@ export {}
 
 describe('Boundaries', () => {
     it('Setting a positive left boundary reduces the number of boxes that are in view', () => {
-        cy.visit(baseUrl)
+        cy.visit(baseUrl).scrollTo(0, 0)
 
         let inViewCount = 0
         let outOfViewCount = 0
@@ -34,7 +34,7 @@ describe('Boundaries', () => {
     })
 
     it('Scrolling right a lot, then setting a small positive left boundary, has no effect on the number of boxes that are in view', () => {
-        cy.visit(baseUrl)
+        cy.visit(baseUrl).scrollTo(0, 0)
 
         let inViewCount = 0
         let outOfViewCount = 0
@@ -70,7 +70,7 @@ describe('Boundaries', () => {
     })
 
     it('Scrolling right, setting a positive left boundary, and then scrolling back only part way, results in the same number of boxes that are in view', () => {
-        cy.visit(baseUrl)
+        cy.visit(baseUrl).scrollTo(0, 0)
 
         let inViewCount = 0
         let outOfViewCount = 0
@@ -104,7 +104,7 @@ describe('Boundaries', () => {
                         cy.log('About to perform second scroll')
                         console.log('About to perform second scroll')
 
-                        cy.scrollTo(80, 0)
+                        cy.get('body').scrollTo(80, 0)
 
                         cy.log(
                             `Finished second scroll. Now looking for in-view boxes to make sure there are exactly ${inViewCount} of them`,
