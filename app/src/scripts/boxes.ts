@@ -16,7 +16,7 @@ const areViewportUnitsSupported = (function () {
 
         return elemWidth === halfWidth
     } catch (e) {
-        console.error('[areViewportUnitsSupported] ', e)
+        console.error('Error when determining if the client supports viewport units: ', e)
         return false
     }
 })()
@@ -51,7 +51,6 @@ export function createBoxHtml() {
 
     // Add a container and put the boxes inside
     const boxContainer = document.createElement('div')
-    boxContainer.id = 'boxContainer'
 
     if (isFlexboxSupported()) {
         let i = 0
@@ -83,6 +82,8 @@ export function createBoxHtml() {
     }
 
     boxContainer.innerHTML = boxHTML
+    boxContainer.id = 'boxContainer'
+
     store.getState().containerForDOM.appendChild(boxContainer)
 
     store.setState({
@@ -114,7 +115,7 @@ export function updateBoxes() {
     }
 
     if (methodType === 'async') {
-        $boxes.forEach(function (box) {
+        $boxes.forEach((box) => {
             withinViewportAsync(box, options).then((result) => {
                 if (result) {
                     setBoxIsIn(box)
@@ -124,7 +125,7 @@ export function updateBoxes() {
             })
         })
     } else {
-        $boxes.forEach(function (box) {
+        $boxes.forEach((box) => {
             if (withinViewport(box, options)) {
                 setBoxIsIn(box)
             } else {

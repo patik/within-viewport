@@ -267,7 +267,7 @@ function onNudge(evt: KeyboardEvent) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
 
-    // Ignore input fields
+    // Ignore this event when an input field has focus
     if (target?.nodeName === 'INPUT') {
         return true
     }
@@ -278,6 +278,7 @@ function onNudge(evt: KeyboardEvent) {
 
     let code = evt.code
 
+    // For older browsers that don't support `code`, convert the `keyCode` to a `code`
     if (typeof code === 'undefined' && 'keyCode' in evt) {
         switch (evt.keyCode) {
             case 37: {
