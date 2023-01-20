@@ -50,21 +50,35 @@ describe('Boundaries', () => {
                     })
                     .then(() => {
                         // Shift focus to the page before scrolling
-                        cy.get('#boxContainer').first().focus()
-
-                        // First, scroll
-                        cy.scrollTo(100, 0)
-
-                        // Open the form
-                        cy.get('.boundary-form details').click()
-
-                        cy.get('#boundary-left-value').type('10').trigger('change')
-
-                        // Now there should be the same number of boxes in view
-                        cy.get('#boxContainer .in-view').should('have.length', inViewCount)
-
-                        // And there should be same number of boxes out of view
-                        cy.get('#boxContainer .out-of-view').should('have.length', outOfViewCount)
+                        cy.get('#boxContainer')
+                            .first()
+                            .focus()
+                            .then(() => {
+                                // First, scroll further than the boundary we'll be setting later
+                                cy.scrollTo(100, 0).then(() => {
+                                    // Open the form
+                                    cy.get('.boundary-form details')
+                                        .click()
+                                        .then(() => {
+                                            // Set a boundary that is smaller than the amount we have scrolled
+                                            cy.get('#boundary-left-value')
+                                                .type('10')
+                                                .trigger('change')
+                                                .then(() => {
+                                                    // Now there should be the same number of boxes in view
+                                                    cy.get('#boxContainer .in-view')
+                                                        .should('have.length', inViewCount)
+                                                        .then(() => {
+                                                            // And there should be same number of boxes out of view
+                                                            cy.get('#boxContainer .out-of-view').should(
+                                                                'have.length',
+                                                                outOfViewCount,
+                                                            )
+                                                        })
+                                                })
+                                        })
+                                })
+                            })
                     })
             })
     })
