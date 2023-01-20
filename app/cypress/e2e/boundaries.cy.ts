@@ -55,7 +55,7 @@ describe('Boundaries', () => {
                             .focus()
                             .then(() => {
                                 // First, scroll further than the boundary we'll be setting later
-                                cy.scrollTo(100, 0).then(() => {
+                                cy.scrollTo('bottomRight', { duration: 2000 }).then(() => {
                                     // Open the form
                                     cy.get('.boundary-form details')
                                         .click()
@@ -102,7 +102,7 @@ describe('Boundaries', () => {
                         cy.log(
                             `Finished counting, found ${inViewCount} in-view boxes and ${outOfViewCount} out-of-view boxes. About to perform first scroll.`,
                         )
-                        cy.scrollTo(100, 0)
+                        cy.scrollTo('bottomRight', { duration: 2000 })
 
                         cy.log(`Finished first scroll. Now filling in the boundary form.`)
                         console.log(`Finished first scroll. Now filling in the boundary form.`)
