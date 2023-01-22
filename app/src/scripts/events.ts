@@ -5,41 +5,6 @@ import { hideAll, query, showAll } from './dom'
 import { updateBoundaryPreview, updateCodeOutput } from './output'
 import store from './store'
 
-// function triggerEvent(node: HTMLElement | null, eventName: string) {
-//     if (!node) {
-//         return
-//     }
-
-//     // Modern browsers (as of the 2020s)
-//     if (typeof Event !== 'undefined') {
-//         node.dispatchEvent(new Event(eventName, { bubbles: true, cancelable: true }))
-//     }
-//     // The first generation of standards-compliant browsers (not IE) from the 2010s
-//     else if (document.createEvent) {
-//         const evt = document.createEvent('HTMLEvents')
-
-//         if ('initEvent' in evt) {
-//             evt.initEvent(eventName, true, true)
-//         }
-
-//         if ('eventName' in evt) {
-//             evt.eventName = eventName
-//         }
-
-//         node.dispatchEvent(evt)
-//     }
-//     // Old IE
-//     else if ('createEventObject' in document && typeof document.createEventObject === 'function') {
-//         const evt = document.createEventObject()
-
-//         evt.eventType = eventName
-
-//         if ('fireEvent' in node && typeof node.fireEvent === 'function') {
-//             node.fireEvent('on' + evt.eventType, evt)
-//         }
-//     }
-// }
-
 // Only certain combinations of browsers/OSes allow capturing arrow key strokes, unfortunately
 // Windows: Firefox, Trident, Safari, Opera; Mac: Chrome, Safari, Opera; Not Firefox
 function areNudgeControlsSupported() {
@@ -84,6 +49,7 @@ export function addEventHandlers() {
     })
 
     // Boundary number entry
+    // Note that this `change` will also fire after `blur` the field, annoyingly
     query(selectors.boundaryNumberInputs).forEach((elem) => {
         elem.addEventListener('keyup', onBoundaryValueChange)
         elem.addEventListener('change', onBoundaryValueChange)
@@ -133,6 +99,7 @@ function onMethodChange(evt: Event) {
     }
 
     // Update the page
+    console.log('calling from onMethodChange')
     updateBoxes()
     updateCodeOutput()
 }
@@ -225,6 +192,7 @@ function onBoundaryCheckboxChange(evt: Event) {
     }
 
     // Update the page
+    console.log('calling from onBoundaryCheckboxChange')
     updateBoxes()
     updateCodeOutput()
     updateBoundaryPreview()
@@ -235,6 +203,7 @@ function onBoundaryValueChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const val = parseInt(target?.value ?? '', 10)
+    console.log('event type ', evt.type, val)
     const side = target?.id.replace(/^boundary-(\w+)-value$/, '$1')
 
     if (!isSide(side)) {
@@ -259,6 +228,7 @@ function onBoundaryValueChange(evt: Event) {
     }
 
     // Update the page
+    console.log('calling from onBoundaryValueChange')
     updateBoxes()
     updateCodeOutput()
     updateBoundaryPreview()

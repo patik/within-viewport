@@ -38,7 +38,7 @@ const scrollSpeed = 1000
                                 // Open the form
                                 cy.get('.boundary-form details').click()
 
-                                cy.get('#boundary-left-value').type('10').trigger('change')
+                                cy.get('#boundary-left-value').type('10').trigger('change').trigger('blur')
 
                                 // Now there should be fewer boxes in view...
                                 cy.get('#box-container .in-view').should('have.length.below', inViewCount)
@@ -52,7 +52,7 @@ const scrollSpeed = 1000
                     })
             })
 
-            it.only('Ignoring the left boundary removes the effect it had', () => {
+            it('Ignoring the left boundary removes the effect it had', () => {
                 cy.visit(baseUrl).scrollTo(0, 0)
 
                 let inViewCount = 0
@@ -71,23 +71,35 @@ const scrollSpeed = 1000
                                 // Open the form
                                 cy.get('.boundary-form details').click()
 
-                                cy.get('#boundary-left-value').type('10').trigger('change')
+                                cy.get('#boundary-left-value')
+                                    .type('{selectall}10')
+                                    .trigger('change')
+                                    .trigger('blur')
+                                    .then(() => {
+                                        // Now there should be fewer boxes in view...
+                                        cy.get('#box-container .in-view').should('have.length.below', inViewCount)
 
-                                // Now there should be fewer boxes in view...
-                                cy.get('#box-container .in-view').should('have.length.below', inViewCount)
+                                        // ...but make sure it's a sane number
+                                        cy.get('#box-container .in-view').should('have.length.above', 1)
 
-                                // ...but make sure it's a sane number
-                                cy.get('#box-container .in-view').should('have.length.above', 1)
+                                        // And there should be more boxes out of view
+                                        cy.get('#box-container .out-of-view').should(
+                                            'have.length.above',
+                                            outOfViewCount,
+                                        )
 
-                                // And there should be more boxes out of view
-                                cy.get('#box-container .out-of-view').should('have.length.above', outOfViewCount)
-
-                                // Now ignore the boundary
-                                cy.get('#left-ignore').check()
-
-                                // The counts should be back to how they were at the beginning
-                                cy.get('#box-container .in-view').should('have.length', inViewCount)
-                                cy.get('#box-container .out-of-view').should('have.length', outOfViewCount)
+                                        // Now ignore the boundary
+                                        cy.get('#left-ignore')
+                                            .check()
+                                            .then(() => {
+                                                // The counts should be back to how they were at the beginning
+                                                cy.get('#box-container .in-view').should('have.length', inViewCount)
+                                                cy.get('#box-container .out-of-view').should(
+                                                    'have.length',
+                                                    outOfViewCount,
+                                                )
+                                            })
+                                    })
                             })
                     })
             })
@@ -120,13 +132,11 @@ const scrollSpeed = 1000
                                 // Set a boundary that is smaller than the amount we have scrolled
                                 cy.get('#boundary-left-value').type('10').trigger('change')
 
-                                cy.scrollTo(0, 0, { duration: scrollSpeed }).then(() => {
-                                    // Now there should be the same number of boxes in view
-                                    cy.get('#box-container .in-view').should('have.length', inViewCount)
+                                // Now there should be the same number of boxes in view
+                                cy.get('#box-container .in-view').should('have.length', inViewCount)
 
-                                    // And there should be same number of boxes out of view
-                                    cy.get('#box-container .out-of-view').should('have.length', outOfViewCount)
-                                })
+                                // And there should be same number of boxes out of view
+                                cy.get('#box-container .out-of-view').should('have.length', outOfViewCount)
                             })
                     })
             })

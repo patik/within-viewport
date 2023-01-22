@@ -1,4 +1,4 @@
-import { throttle } from 'lodash'
+import { cloneDeep, debounce, throttle } from 'lodash'
 import { withinViewportAsync } from '../../../module/src/async/index'
 import { withinViewport } from '../../../module/src/sync/index'
 import { query } from './dom'
@@ -105,32 +105,43 @@ function setBoxIsOut(box: HTMLElement) {
 }
 
 // Update each box's class to reflect whether it was determined to be within the viewport or not
-export function updateBoxes() {
-    const { boundaries, methodType, $boxes, containerForDOM } = store.getState()
-    const options = {
-        ...boundaries,
-        container: containerForDOM,
-    }
+export const updateBoxes = debounce(
+    function () {
+        const { boundaries, methodType, $boxes, containerForDOM } = store.getState()
+        const options = cloneDeep({
+            ...boundaries,
+            container: containerForDOM,
+        })
 
-    if (methodType === 'async') {
-        $boxes.forEach((box) => {
-            withinViewportAsync(box, options).then((result) => {
-                if (result) {
+        if (methodType === 'async') {
+            $boxes.forEach((box) => {
+                // if (
+                //     box.getAttribute('data-boxid') === '10' ||
+                //     box.getAttribute('data-boxid') === '20' ||
+                //     box.getAttribute('data-boxid') === '0'
+                // ) {
+                //     console.log(box.getAttribute('data-boxid'), ' passing options ', options)
+                // }
+                withinViewportAsync(box, options).then((result) => {
+                    if (result) {
+                        setBoxIsIn(box)
+                    } else {
+                        setBoxIsOut(box)
+                    }
+                })
+            })
+        } else {
+            $boxes.forEach((box) => {
+                if (withinViewport(box, options)) {
                     setBoxIsIn(box)
                 } else {
                     setBoxIsOut(box)
                 }
             })
-        })
-    } else {
-        $boxes.forEach((box) => {
-            if (withinViewport(box, options)) {
-                setBoxIsIn(box)
-            } else {
-                setBoxIsOut(box)
-            }
-        })
-    }
-}
+        }
+    },
+    // This is kind of a bullshit value but it helps with Cypress tests. When DOM events fire rapidly and often, it can lead to many overlapping calls to this function, and the last call might not necessarily have the most up to date options.
+    0,
+)
 
 export const throttledUpdateBoxes = throttle(updateBoxes, 100)

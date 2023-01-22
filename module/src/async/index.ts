@@ -11,11 +11,13 @@ import { getIntersectionObserverOptions } from './options'
 export async function withinViewportAsync(
     elem: HTMLElement,
     userOptions?: Side | MultipleSides | Partial<UserOptions>,
-    debug = elem.getAttribute('data-boxid') === '90',
+    debug = elem.getAttribute('data-boxid') === '0' ||
+        elem.getAttribute('data-boxid') === '10' ||
+        elem.getAttribute('data-boxid') === '20',
 ): Promise<boolean> {
     return new Promise((resolve) => {
         const config = getConfig('async', elem, userOptions)
-        const opts = getIntersectionObserverOptions('loose', config, resolve, debug)
+        const opts = getIntersectionObserverOptions('loose', config, resolve, debug, elem)
 
         new IntersectionObserver(...opts).observe(elem)
     })

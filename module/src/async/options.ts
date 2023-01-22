@@ -22,7 +22,7 @@ export function getIntersectionObserverOptions(
     config: AsyncConfig,
     resolve: (value: boolean | PromiseLike<boolean>) => void,
     debug: boolean,
-    elem?: never,
+    elem?: HTMLElement,
 ): [callback: IntersectionObserverCallback, options: IntersectionObserverInit]
 export function getIntersectionObserverOptions(
     mode: 'strict' | 'loose',
@@ -31,6 +31,10 @@ export function getIntersectionObserverOptions(
     debug: boolean,
     elem?: HTMLElement,
 ) {
+    // if (debug) {
+    //     console.log('---------------', elem?.getAttribute('data-boxid'))
+    // }
+
     if (mode === 'strict' && elem) {
         return strictCallbackAndRootMargin(elem, config, resolve, debug)
     }
@@ -41,24 +45,23 @@ export function getIntersectionObserverOptions(
                 observer.disconnect()
                 const { isIntersecting } = entry
 
-                if (debug) {
-                    const { boundingClientRect, intersectionRect, intersectionRatio, isIntersecting, rootBounds } =
-                        entry
-                    console.log(entry)
-                    console.log(
-                        JSON.stringify({
-                            boundingClientRect,
-                            intersectionRect,
-                            intersectionRatio,
-                            isIntersecting,
-                            rootBounds,
-                        }),
-                    )
-                }
+                // if (debug) {
+                //     console.log('---------------', elem?.getAttribute('data-boxid'))
+                //     const { boundingClientRect, intersectionRect, intersectionRatio, isIntersecting, rootBounds } =
+                //         entry
+                //     console.log(entry)
+                //     console.log(
+                //         JSON.stringify({
+                //             boundingClientRect,
+                //             intersectionRect,
+                //             intersectionRatio,
+                //             isIntersecting,
+                //             rootBounds,
+                //         }),
+                //     )
+                //     console.log('returning ', isIntersecting)
+                // }
 
-                if (debug) {
-                    console.log('returning ', isIntersecting)
-                }
                 resolve(isIntersecting)
                 return
             })
