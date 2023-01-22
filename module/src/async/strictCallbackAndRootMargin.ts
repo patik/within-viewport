@@ -1,5 +1,5 @@
 import { AsyncConfig } from '../common/options'
-import { determineRootMarginStrict } from './options'
+import { determineRootMargin } from './rootMargin'
 
 function isWithinTop(entry: IntersectionObserverEntry) {
     const { intersectionRect, boundingClientRect } = entry
@@ -116,15 +116,17 @@ function isWithinLeft(entry: IntersectionObserverEntry) {
     )
 }
 
+/**
+ * Sets the root margin by measuring the screen and the target element, which can be costly
+ */
 export function strictCallbackAndRootMargin(
     elem: HTMLElement,
     config: AsyncConfig,
     resolve: (value: boolean | PromiseLike<boolean>) => void,
     debug = elem.getAttribute('data-boxid') === '90',
-) {
-    return {
-        rootMargin: determineRootMarginStrict(config),
-        callback: (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+): [callback: IntersectionObserverCallback, options?: IntersectionObserverInit] {
+    return [
+        (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
             entries.forEach((entry) => {
                 observer.disconnect()
                 const { isIntersecting } = entry
@@ -201,5 +203,10 @@ export function strictCallbackAndRootMargin(
                 return
             })
         },
-    }
+        {
+            rootMargin: determineRootMargin(config, 'strict'),
+            root: config.container,
+            threshold: 1.0,
+        },
+    ]
 }

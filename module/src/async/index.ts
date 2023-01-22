@@ -1,6 +1,6 @@
 import { getConfig } from '../common/options'
 import { MultipleSides, Side, UserOptions } from '../common/types'
-import { strictCallbackAndRootMargin } from './strictCallbackAndRootMargin'
+import { getIntersectionObserverOptions } from './options'
 
 /**
  * Determines whether an element is within the viewport
@@ -15,13 +15,8 @@ export async function withinViewportAsync(
 ): Promise<boolean> {
     return new Promise((resolve) => {
         const config = getConfig('async', elem, userOptions)
-        const { callback, rootMargin } = strictCallbackAndRootMargin(elem, config, resolve, debug)
-        // const { callback, rootMargin } = looseCallbackAndRootMargin(elem, config, resolve, debug)
+        const opts = getIntersectionObserverOptions('loose', config, resolve, debug)
 
-        new IntersectionObserver(callback, {
-            root: config.container,
-            rootMargin,
-            threshold: 1.0,
-        }).observe(elem ?? document.body)
+        new IntersectionObserver(...opts).observe(elem)
     })
 }

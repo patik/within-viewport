@@ -1,40 +1,72 @@
-import { Config } from '../common/types'
-import { sides } from '../common/sides'
+import { AsyncConfig } from '../common/options'
+import { determineRootMargin } from './rootMargin'
+import { strictCallbackAndRootMargin } from './strictCallbackAndRootMargin'
 
-export function determineRootMarginLoose(config: Config): string {
-    const margins = {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
+/**
+ * Generates the arguments for IntersectionObserver()
+ *
+ * Loose mode uses very large (but ultimately arbitrary) values for sides that should be ignored.
+ *
+ * Strict mode calculates these values by measuring the screen and the target element, but that is costly and it
+ * seems very unlikely that these arbitrary values will produce inaccurate results for our purposes.
+ */
+export function getIntersectionObserverOptions(
+    mode: 'strict',
+    config: AsyncConfig,
+    resolve: (value: boolean | PromiseLike<boolean>) => void,
+    debug: boolean,
+    elem: HTMLElement,
+): [callback: IntersectionObserverCallback, options: IntersectionObserverInit]
+export function getIntersectionObserverOptions(
+    mode: 'loose',
+    config: AsyncConfig,
+    resolve: (value: boolean | PromiseLike<boolean>) => void,
+    debug: boolean,
+    elem?: never,
+): [callback: IntersectionObserverCallback, options: IntersectionObserverInit]
+export function getIntersectionObserverOptions(
+    mode: 'strict' | 'loose',
+    config: AsyncConfig,
+    resolve: (value: boolean | PromiseLike<boolean>) => void,
+    debug: boolean,
+    elem?: HTMLElement,
+) {
+    if (mode === 'strict' && elem) {
+        return strictCallbackAndRootMargin(elem, config, resolve, debug)
     }
 
-    sides.forEach((side) => {
-        const value = config[side]
+    return [
+        (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+            entries.forEach((entry) => {
+                observer.disconnect()
+                const { isIntersecting } = entry
 
-        if (value === 'ignore' || value === null) {
-            margins[side] = -screen.width
-        } else {
-            margins[side] = typeof value === 'number' ? value : 0
-        }
-    })
+                if (debug) {
+                    const { boundingClientRect, intersectionRect, intersectionRatio, isIntersecting, rootBounds } =
+                        entry
+                    console.log(entry)
+                    console.log(
+                        JSON.stringify({
+                            boundingClientRect,
+                            intersectionRect,
+                            intersectionRatio,
+                            isIntersecting,
+                            rootBounds,
+                        }),
+                    )
+                }
 
-    return `${-margins.top}px ${-margins.right}px ${-margins.bottom}px ${-margins.left}px`
-}
-
-export function determineRootMarginStrict(config: Config): string {
-    const margins = {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-    }
-
-    sides.forEach((side) => {
-        const value = config[side]
-
-        margins[side] = typeof value === 'number' ? value : 0
-    })
-
-    return `${-margins.top}px ${-margins.right}px ${-margins.bottom}px ${-margins.left}px`
+                if (debug) {
+                    console.log('returning ', isIntersecting)
+                }
+                resolve(isIntersecting)
+                return
+            })
+        },
+        {
+            rootMargin: determineRootMargin(config, 'loose'),
+            root: config.container,
+            threshold: 1.0,
+        },
+    ]
 }

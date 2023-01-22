@@ -1,5 +1,6 @@
 import { MultipleSides, Side, UserOptions } from './types'
 
+// This order must match the shorthand used for CSS, e.g. for `margin: T R B L`
 export const sides: Side[] = ['top', 'right', 'bottom', 'left']
 
 export function isSide(side: string | Partial<UserOptions> | undefined): side is Side {

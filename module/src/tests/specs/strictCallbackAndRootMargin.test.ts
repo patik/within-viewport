@@ -218,3 +218,20 @@ const partialLeftTotallyOffTop: PartialIntersectionObserverEntry = {
     isIntersecting: false,
     rootBounds: { x: 0, y: 0, width: 1073, height: 968, top: 0, right: 1073, bottom: 968, left: 0 },
 }
+
+describe.each([
+    leftEdge,
+    leftEdgePartialTop,
+    leftEdgeOffTop,
+    leftEdgePartiallyOffBottom,
+    leftEdgeTotallyOffBottom,
+    partialLeftTotallyOffBottom,
+    partialLeft,
+    partialLeftPartialTop,
+    partialLeftTotallyOffTop,
+])('strict mode', (variation) => {
+    test('test', () => {
+        // TODO
+        expect(variation).toHaveProperty('rootBounds')
+    })
+})
