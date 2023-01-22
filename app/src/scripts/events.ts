@@ -1,6 +1,6 @@
 import { isSide } from '../../../module/src/common/sides'
 import { drawBound } from './boundaries'
-import { createBoxHtml, throttledUpdateBoxes, updateBoxes } from './boxes'
+import { createBoxHtml, updateBoxes } from './boxes'
 import { hideAll, query, showAll } from './dom'
 import { updateBoundaryPreview, updateCodeOutput } from './output'
 import store from './store'
@@ -30,8 +30,8 @@ export function addEventHandlers() {
     const { containerForEvents } = store.getState()
 
     // Scroll or resize the viewport
-    containerForEvents.addEventListener('resize', throttledUpdateBoxes)
-    containerForEvents.addEventListener('scroll', throttledUpdateBoxes)
+    containerForEvents.addEventListener('resize', updateBoxes)
+    containerForEvents.addEventListener('scroll', updateBoxes)
 
     // Method radio buttons
     query(selectors.methodRadios).forEach((elem) => {
@@ -49,7 +49,8 @@ export function addEventHandlers() {
     })
 
     // Boundary number entry
-    // Note that this `change` will also fire after `blur` the field, annoyingly
+    // Note that this `change` will also fire after `blur` the field, which is annoying
+    // e.g. if this input is focused when the ignore checkbox is checked, this could fire *after* the checkbox handler, overwriting a newer state
     query(selectors.boundaryNumberInputs).forEach((elem) => {
         elem.addEventListener('keyup', onBoundaryValueChange)
         elem.addEventListener('change', onBoundaryValueChange)
@@ -71,15 +72,15 @@ export function addEventHandlers() {
  * When we changed which element is used as the viewport, we need to 'move' the event handlers to the correct element
  */
 function resetContainerEventHandlers(previousContainer: HTMLElement | Window, nextContainer: HTMLElement | Window) {
-    throttledUpdateBoxes.cancel()
+    updateBoxes.cancel()
 
     // Remove handlers from the old container
-    previousContainer.removeEventListener('resize', throttledUpdateBoxes)
-    previousContainer.removeEventListener('scroll', throttledUpdateBoxes)
+    previousContainer.removeEventListener('resize', updateBoxes)
+    previousContainer.removeEventListener('scroll', updateBoxes)
 
     // Add handlers to the new container
-    nextContainer.addEventListener('resize', throttledUpdateBoxes)
-    nextContainer.addEventListener('scroll', throttledUpdateBoxes)
+    nextContainer.addEventListener('resize', updateBoxes)
+    nextContainer.addEventListener('scroll', updateBoxes)
 }
 
 // When the method/version radio buttons change
@@ -99,7 +100,6 @@ function onMethodChange(evt: Event) {
     }
 
     // Update the page
-    console.log('calling from onMethodChange')
     updateBoxes()
     updateCodeOutput()
 }
@@ -192,7 +192,6 @@ function onBoundaryCheckboxChange(evt: Event) {
     }
 
     // Update the page
-    console.log('calling from onBoundaryCheckboxChange')
     updateBoxes()
     updateCodeOutput()
     updateBoundaryPreview()
@@ -203,7 +202,6 @@ function onBoundaryValueChange(evt: Event) {
     // TODO - Make TS work properly with DOM events
     const target = evt.target as HTMLInputElement | null
     const val = parseInt(target?.value ?? '', 10)
-    console.log('event type ', evt.type, val)
     const side = target?.id.replace(/^boundary-(\w+)-value$/, '$1')
 
     if (!isSide(side)) {
@@ -228,7 +226,6 @@ function onBoundaryValueChange(evt: Event) {
     }
 
     // Update the page
-    console.log('calling from onBoundaryValueChange')
     updateBoxes()
     updateCodeOutput()
     updateBoundaryPreview()

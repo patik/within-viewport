@@ -1,4 +1,4 @@
-import { cloneDeep, debounce, throttle } from 'lodash'
+import { cloneDeep, debounce } from 'lodash'
 import { withinViewportAsync } from '../../../module/src/async/index'
 import { withinViewport } from '../../../module/src/sync/index'
 import { query } from './dom'
@@ -115,13 +115,6 @@ export const updateBoxes = debounce(
 
         if (methodType === 'async') {
             $boxes.forEach((box) => {
-                // if (
-                //     box.getAttribute('data-boxid') === '10' ||
-                //     box.getAttribute('data-boxid') === '20' ||
-                //     box.getAttribute('data-boxid') === '0'
-                // ) {
-                //     console.log(box.getAttribute('data-boxid'), ' passing options ', options)
-                // }
                 withinViewportAsync(box, options).then((result) => {
                     if (result) {
                         setBoxIsIn(box)
@@ -140,8 +133,6 @@ export const updateBoxes = debounce(
             })
         }
     },
-    // This is kind of a bullshit value but it helps with Cypress tests. When DOM events fire rapidly and often, it can lead to many overlapping calls to this function, and the last call might not necessarily have the most up to date options.
+    // This is kind of a bullshit value for debouncing, but it helps with Cypress tests. When DOM events fire rapidly and often, it can lead to many overlapping calls to this function, and the last call might not necessarily have the most up to date options.
     0,
 )
-
-export const throttledUpdateBoxes = throttle(updateBoxes, 100)
