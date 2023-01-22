@@ -115,7 +115,7 @@ These shortcuts will result in slightly better performance if you're testing hun
 
 #### Live updating
 
-If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. However, for performance reasons, it's strongly recommended to [throttle](https://lodash.com/docs/#throttle) your event listener or use something like [James Padolsey's `scrollStop` event](http://james.padolsey.com/javascript/special-scroll-events-for-jquery/). Firing on every `window.scroll` event will [bring your UI to its knees](https://ejohn.org/blog/learning-from-twitter/).
+If you're looking to keep tabs on elements' whereabouts at all times, you can bind to the `window`'s `resize` and `scroll` events. However, for performance reasons, it's strongly recommended to [throttle](https://lodash.com/docs/#throttle) your event listener or use something like [James Padolsey's `scrollStop` event](https://web.archive.org/web/20210824132834/https://j11y.io/javascript/special-scroll-events-for-jquery/). Firing on every `window.scroll` event will [bring your UI to its knees](https://ejohn.org/blog/learning-from-twitter/).
 
 ```js
 $(window).on('resize scrollStop', _.throttle(function() {
@@ -184,8 +184,8 @@ All functions (both versions) are transpiled to ES5.
 
 Within Viewport is inspired by these similar utilities which only reflect whether an element is at least partially in view:
 
-- Remy Sharp's [Element 'in view' Event Plugin](http://remysharp.com/2009/01/26/element-in-view-event-plugin/)
-- Mike Tuupola's [Viewport Selectors for jQuery](http://www.appelsiini.net/projects/viewport)
+- Remy Sharp's [Element 'in view' Event Plugin](https://remysharp.com/2009/01/26/element-in-view-event-plugin/)
+- Mike Tuupola's [Viewport Selectors for jQuery](https://github.com/tuupola/jquery_viewport)
 
 ## License
 
