@@ -14,29 +14,22 @@ export function getIntersectionObserverOptions(
     mode: 'strict',
     config: AsyncConfig,
     resolve: (value: boolean | PromiseLike<boolean>) => void,
-    debug: boolean,
     elem: HTMLElement,
 ): [callback: IntersectionObserverCallback, options: IntersectionObserverInit]
 export function getIntersectionObserverOptions(
     mode: 'loose',
     config: AsyncConfig,
     resolve: (value: boolean | PromiseLike<boolean>) => void,
-    debug: boolean,
     elem?: HTMLElement,
 ): [callback: IntersectionObserverCallback, options: IntersectionObserverInit]
 export function getIntersectionObserverOptions(
     mode: 'strict' | 'loose',
     config: AsyncConfig,
     resolve: (value: boolean | PromiseLike<boolean>) => void,
-    debug: boolean,
     elem?: HTMLElement,
 ) {
-    // if (debug) {
-    //     console.log('---------------', elem?.getAttribute('data-boxid'))
-    // }
-
     if (mode === 'strict' && elem) {
-        return strictCallbackAndRootMargin(elem, config, resolve, debug)
+        return strictCallbackAndRootMargin(elem, config, resolve)
     }
 
     return [
@@ -44,23 +37,6 @@ export function getIntersectionObserverOptions(
             entries.forEach((entry) => {
                 observer.disconnect()
                 const { isIntersecting } = entry
-
-                // if (debug) {
-                //     console.log('---------------', elem?.getAttribute('data-boxid'))
-                //     const { boundingClientRect, intersectionRect, intersectionRatio, isIntersecting, rootBounds } =
-                //         entry
-                //     console.log(entry)
-                //     console.log(
-                //         JSON.stringify({
-                //             boundingClientRect,
-                //             intersectionRect,
-                //             intersectionRatio,
-                //             isIntersecting,
-                //             rootBounds,
-                //         }),
-                //     )
-                //     console.log('returning ', isIntersecting)
-                // }
 
                 resolve(isIntersecting)
                 return

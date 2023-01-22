@@ -4,9 +4,9 @@
 
 Includes:
 
-- A synchronous function, `withinViewport()`
+- The synchronous function, `withinViewport()`
   - Continues to support [legacy browsers](#browser-support)
-- An asynchronous, promise-based function, `withinViewportAsync()`
+- The asynchronous, promise-based function, `withinViewportAsync()`
   - More performant, but only for [modern browsers](https://caniuse.com/intersectionobserver) (e.g. post IE 11)
 - Optional jQuery plugin with handy selectors and shorthand methods
 
