@@ -39,9 +39,12 @@ import { withinViewport /* or withinViewportAsync */ } from 'withinviewport'
 const elem = document.getElementById('#myElement')
 
 withinViewport(elem) // returns a boolean
+withinViewportAsync(elem) // returns a Promise<boolean>
 ```
 
 ### Advanced
+
+All options work the same for both the synchronous and asynchronous functions.
 
 ```js
 // Test against only some sides of the window for faster performance
@@ -59,7 +62,7 @@ withinViewport(elem, { container: document.getElementById('myElem') })
 withinViewport(elem, { top: 12, right: 12 })
 ```
 
-For more options, see [Settings](#settings) section below.
+For more options, see [Options](#options) section below.
 
 ### Shorthand notation
 
@@ -131,9 +134,9 @@ $(window).on('resize scrollStop', _.throttle(function() {
 }, 100));
 ```
 
-## Settings
+## Options
 
-This applies to both the jQuery plugin and standalone function.
+All options work the same across the synchronous and asynchronous functions and the jQuery plugin.
 
 ### Custom viewport element
 
@@ -159,14 +162,26 @@ If you only care about some edges of the viewport, you can specify them to impro
 withinViewport(elem, 'left bottom')
 ```
 
-You can also pass settings on the fly to temporarily override the defaults:
+You can also combine optins:
 
 ```js
-withinViewport(elem, { left: 40 })
+withinViewport(elem, { left: 40, container: myDiv })
 $('div').withinViewport({ right: -70, top: 'ignore' })
 ```
 
 You can specify *negative threshold values* to allow elements to reside outside the viewport.
+
+## Migrating from v2 to v3
+
+The `sides` option has been deprecated. The following calls are equivalent:
+
+```js
+// 2.x: specifying which sides to *monitor*
+withinViewport(elem, { sides: ['left', 'right']})
+
+// 3.x: specifying which sides to *ignore*
+withinViewport(elem, { top: 'ignore', bottom: 'ignore' })
+```
 
 ## Browser Support
 
