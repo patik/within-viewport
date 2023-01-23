@@ -6,7 +6,7 @@
     "scripts": {
         "start": "yarn clear-parcel-cache && parcel",
         "clear-parcel-cache": "rm -rf ../.parcel-cache",
-        "build": "yarn clear-parcel-cache && parcel build",
+        "build": "yarn clear-parcel-cache && parcel build --public-url \"https://patik.github.io/within-viewport\"",
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
