@@ -1,0 +1,153 @@
+/* Floating intro and controls window */
+
+.control-panel {
+    $padding: 0.75em;
+    $width: 500px;
+    $verticalMargin: 3em;
+
+    position: fixed;
+    top: $verticalMargin;
+
+    max-width: 500px;
+    max-height: calc(100vh - $verticalMargin - $verticalMargin);
+    overflow: scroll;
+
+    padding: $padding;
+
+    // Center it
+    left: 50%;
+    margin-left: calc(-1 * ($width / 2 + $padding + $padding));
+
+    @media screen and (max-width: 768px) {
+        max-width: 100vw;
+        margin: 0;
+        left: 0;
+    }
+
+    background-color: white;
+    opacity: 1;
+    border: 1px solid rgba(51, 102, 204, 0.5);
+    border-radius: 4px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    z-index: 3;
+
+    &.collapsed {
+        opacity: 0.5;
+
+        @media screen and (max-width: 768px) {
+            max-width: 60vw;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+        }
+    }
+}
+
+#toggler {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+:not(.shown-while-collapsed) {
+    .collapsed & {
+        display: none;
+    }
+}
+
+form {
+    margin: 0 0 1em 0;
+    border: 1px solid rgba(51, 102, 204, 0.07);
+    background-color: rgba(51, 102, 204, 0.04);
+    border-radius: 3px;
+}
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.form-wrapper {
+    display: flex;
+    padding: 1em;
+}
+
+.form-name {
+    margin-right: 1em;
+}
+
+.form-field {
+    flex-grow: 1;
+}
+
+.boundary-form {
+    padding: 1em;
+
+    input[type='number'] {
+        width: 4em;
+    }
+
+    .independent-sides-wrapper div {
+        text-align: center;
+    }
+
+    fieldset {
+        padding: 0;
+    }
+}
+
+.boundary-item {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+    margin-bottom: 1em;
+    background-color: rgba(51, 102, 204, 0.06);
+    border-radius: 3px;
+
+    .boundary-item-name {
+        flex-shrink: 1;
+        flex-basis: 4em;
+    }
+
+    .boundary-item-threshold {
+        flex-grow: 1;
+
+        label {
+            font-size: 0.8em;
+        }
+    }
+
+    .boundary-item-ignorw {
+        flex-shrink: 1;
+    }
+}
+
+details {
+    & > summary {
+        cursor: pointer;
+
+        .boundary-preview {
+            font-size: 0.8em;
+            margin-left: 1em;
+            padding: 0.5em;
+        }
+
+        legend {
+            display: inline;
+        }
+    }
+
+    &[open] > summary {
+        margin-bottom: 1em;
+    }
+}
+
+.code-output {
+    padding: 0.5em;
+}
+
+hr {
+    border-color: rgba(51, 102, 204, 0.1);
+}

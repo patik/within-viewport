@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "CommonJS",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "outDir": "dist",
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "incremental": true,
+        "types": ["jest"]
+    },
+    "include": [
+        "src/**/*.ts",
+        "../module/**/*.d.ts",
+        "../module/src/async/**/*.ts",
+        "../module/src/sync/**/*.ts",
+        "../module/src/common/**/*.ts"
+    ],
+    "exclude": ["node_modules", "./cypress"]
+}

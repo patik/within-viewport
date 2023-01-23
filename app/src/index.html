@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Within Viewport - Determine whether an element is completely within the browser viewport</title>
+        <link href="styles/main.scss" rel="stylesheet" media="all" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimal-ui,viewport-fit=cover" />
+        <meta name="author" content="Craig Patik" />
+        <meta
+            name="description"
+            content="Node modules that determines whether an element is completely within the browser viewport"
+        />
+        <meta
+            name="keywords"
+            content="viewport, IntersectionObserver, window, DOM, visible, visibility, element, view, within viewport, browser, detect, event, infinite scrolling, scroll"
+        />
+        <link rel="canonical" href="https://patik.github.io/within-viewport" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-touch-fullscreen" content="yes" />
+    </head>
+    <body>
+        <div class="control-panel" role="main">
+            <h1 class="shown-while-collapsed">Within Viewport</h1>
+            <div id="toggler" class="button small shown-while-collapsed">Collapse</div>
+            <p class="shown-while-collapsed">
+                Scroll around the page. Boxes that are completely within the viewport will darken.
+                <span class="nudge-instructions" style="display: none">
+                    Press <code class="shown-while-collapsed">shift + arrow key</code> to nudge the page by 1 pixel at a
+                    time.
+                </span>
+            </p>
+
+            <hr />
+
+            <h2>Options</h2>
+
+            <form action="." method="post" class="container-form">
+                <fieldset>
+                    <legend class="sr-only">Viewport element</legend>
+                    <div class="form-wrapper">
+                        <div class="form-name" aria-hidden="true">Viewport element:</div>
+
+                        <div class="form-field">
+                            <input type="radio" name="container-form" value="window" id="container-window" checked />
+                            <label for="container-window"><code>window</code></label>
+                        </div>
+
+                        <div class="form-field">
+                            <input type="radio" name="container-form" value="div" id="container-div" />
+                            <label for="container-div">An arbitrary <code>&lt;div&gt;</code></label>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
+            <form action="." method="post" class="boundary-form">
+                <fieldset>
+                    <details>
+                        <summary>Boundaries <code class="boundary-preview">(defaults)</code></summary>
+                        <legend class="sr-only">Boundaries</legend>
+
+                        <fieldset>
+                            <legend class="sr-only">Top</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Top</div>
+                                <div class="boundary-item-threshold">
+                                    <input type="number" value="0" id="boundary-top-value" step="1" tabindex="1" />
+                                    <label for="boundary-top-value"
+                                        ><span class="sr-only">Set a threshold for the top edge. Number of </span>pixels
+                                        from the edge</label
+                                    >
+                                </div>
+                                <div class="boundary-item-ignore">
+                                    <input type="checkbox" name="boundary-top" value="ignore" id="top-ignore" />
+                                    <label for="top-ignore">Ignore</label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="sr-only">Right</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Right</div>
+                                <div class="boundary-item-threshold">
+                                    <input type="number" value="0" id="boundary-right-value" step="1" tabindex="1" />
+                                    <label for="boundary-right-value"
+                                        ><span class="sr-only">Set a threshold for the right edge. Number of </span
+                                        >pixels from the edge</label
+                                    >
+                                </div>
+                                <div class="boundary-item-ignore">
+                                    <input type="checkbox" name="boundary-right" value="ignore" id="right-ignore" />
+                                    <label for="right-ignore">Ignore</label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="sr-only">Bottom</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Bottom</div>
+                                <div class="boundary-item-threshold">
+                                    <input type="number" value="0" id="boundary-bottom-value" step="1" tabindex="1" />
+                                    <label for="boundary-bottom-value"
+                                        ><span class="sr-only">Set a threshold for the bottom edge. Number of </span
+                                        >pixels from the edge</label
+                                    >
+                                </div>
+                                <div class="boundary-item-ignore">
+                                    <input type="checkbox" name="boundary-bottom" value="ignore" id="bottom-ignore" />
+                                    <label for="bottom-ignore">Ignore</label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend class="sr-only">Left</legend>
+                            <div class="boundary-item">
+                                <div class="boundary-item-name" aria-hidden="true">Left</div>
+                                <div class="boundary-item-threshold">
+                                    <input type="number" value="0" id="boundary-left-value" step="1" tabindex="1" />
+                                    <label for="boundary-left-value"
+                                        ><span class="sr-only">Set a threshold for the left edge. Number of </span
+                                        >pixels from the edge</label
+                                    >
+                                </div>
+                                <div class="boundary-item-ignore">
+                                    <input type="checkbox" name="boundary-left" value="ignore" id="left-ignore" />
+                                    <label for="left-ignore">Ignore</label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </details>
+                </fieldset>
+            </form>
+
+            <form action="." method="post" class="method-form">
+                <fieldset>
+                    <legend class="sr-only">Method</legend>
+                    <div class="form-wrapper">
+                        <div class="form-name" aria-hidden="true">Method:</div>
+
+                        <div class="form-field">
+                            <input type="radio" name="method-form" value="async" id="method-async" checked />
+                            <label for="method-async"
+                                ><abbr title="Uses IntersectionObserver, more performant">Asynchronous</abbr></label
+                            >
+                        </div>
+
+                        <div class="form-field">
+                            <input type="radio" name="method-form" value="sync" id="method-sync" />
+                            <label for="method-sync"
+                                ><abbr title="Uses old school DOM measurements, less performant"
+                                    >Synchronous</abbr
+                                ></label
+                            >
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
+            <details class="code-output">
+                <summary>Show code</summary>
+                <pre><code class="language-js">withinViewportAsync(elem)</code></pre>
+            </details>
+
+            <hr />
+
+            <p style="text-align: center">
+                <a href="https://www.npmjs.com/package/withinviewport">Node module</a> &bull;
+                <a href="https://github.com/patik/within-viewport">GitHub</a> &bull;
+                <a href="https://patik.com/blog/within-viewport-javascript-and-jquery-plugin/">Blog post</a>
+            </p>
+        </div>
+        <div style="display: none" id="arbitrary-viewport-container"></div>
+        <!-- Boundary lines -->
+        <div style="display: none" class="boundary boundary-top"></div>
+        <div style="display: none" class="boundary boundary-right"></div>
+        <div style="display: none" class="boundary boundary-bottom"></div>
+        <div style="display: none" class="boundary boundary-left"></div>
+
+        <script src="scripts/main.ts" type="module"></script>
+    </body>
+</html>

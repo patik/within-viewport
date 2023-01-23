@@ -1,0 +1,59 @@
+body {
+    font: 1em/1.2em -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Calibri, 'Myriad Pro', Tahoma, sans-serif;
+    overflow: scroll;
+    background-color: lightblue;
+    margin: 0;
+    padding: 0;
+}
+
+@import './_buttons.scss';
+@import './_boxes.scss';
+@import './_control-panel.scss';
+@import './_boundaries.scss';
+
+a {
+    color: rgba(51, 102, 204, 1);
+
+    &:active,
+    &:focus,
+    &:hover {
+        color: rgba(51, 102, 204, 0.75);
+        text-decoration: none;
+    }
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 18px;
+    color: #555;
+}
+
+code {
+    font: 0.9em/1em Menlo, Consolas, monospace;
+    color: darken(rgba(51, 153, 255), 40%);
+    background-color: rgba(51, 153, 255, 0.05);
+    padding: 0.2em;
+}
+
+#arbitrary-viewport-container {
+    background-color: white;
+    margin: 12.5%;
+    width: 75%;
+    height: 400px;
+    height: 75vh;
+    overflow: scroll;
+}
+
+.sr-only {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
