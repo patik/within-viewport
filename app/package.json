@@ -21,7 +21,7 @@
         "@types/prismjs": "^1.26.0",
         "cypress-terminal-report": "^5.0.0",
         "eslint-plugin-prettier": "^4.2.1",
-        "parcel": "^2.8.2"
+        "parcel": "^2.8.3"
     },
     "lint-staged": {
         "*.ts": "eslint --cache --cache-location .eslintcache --fix"
