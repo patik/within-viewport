@@ -24,7 +24,7 @@ jobs:
           wait-on: 'http://localhost:1234' # Waits for above
           # Records to Cypress Dashboard
           # https://docs.cypress.io/guides/dashboard/projects#Set-up-a-project-to-record
-          record: true
+          # record: true
           parallel: true # Runs test in parallel using settings above
         env:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
