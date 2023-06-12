@@ -1,4 +1,4 @@
-import { MultipleSides, Side, UserOptions } from './types'
+import { MultipleSides, Side, UserOptions } from './types.js'
 
 // This order must match the shorthand used for CSS, e.g. for `margin: T R B L`
 export const sides: Side[] = ['top', 'right', 'bottom', 'left']

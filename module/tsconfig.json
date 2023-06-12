@@ -29,5 +29,8 @@
         "allowJs": true
     },
     "include": ["src/**/*.ts*", "cypress.config.ts", "cypress/**/*.ts", "jest.config.ts"],
-    "exclude": ["../node_modules", "node_modules"]
+    "exclude": ["../node_modules", "node_modules"],
+    "ts-node": {
+        "esm": true
+    }
 }

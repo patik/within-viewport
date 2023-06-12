@@ -1,0 +1,19 @@
+{
+  "entry": ["src/index.ts"],
+  "pathTransforms": {
+	"(\\.(?!\/jquery\/plugin).+)\\.js$": "$1.ts"
+},
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.tests.{js,jsx,ts,tsx}",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*.d.ts"
+  ],
+  "ignoreUnimported": [],
+  "ignoreUnused": [],
+  "ignoreUnresolved": [],
+  "rootDir": "./src"
+}

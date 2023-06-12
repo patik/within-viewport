@@ -1,6 +1,5 @@
-import { defaults } from 'lodash'
-import { Config, MultipleSides, Side, UserOptions } from './types'
-import { isSide, isMultipleSides, sides } from './sides'
+import { Config, MultipleSides, Side, UserOptions } from './types.js'
+import { isSide, isMultipleSides, sides } from './sides.js'
 
 const defaultSettings = {
     container: window,
@@ -74,11 +73,11 @@ export function getConfig(
             }
         })
     } else {
-        settings = defaults({}, userOptions, defaultSettings)
+        settings = Object.assign({}, defaultSettings, userOptions);
     }
 
     // Build configuration from defaults and user-provided settings and metadata
-    const config: Config = defaults({}, settings, defaultSettings)
+    const config: Config = Object.assign({}, defaultSettings, settings)
 
     // Use the window as the container if the user specified the body or a non-element
     if (

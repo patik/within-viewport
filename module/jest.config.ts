@@ -11,9 +11,14 @@ const config: Config = {
             {
                 // Disable type-checking by Jest because it's tedious while debugging (we'll rely on our lint scripts to prevent pushing bad code)
                 isolatedModules: true,
+                useESM: true
             },
         ],
     },
+    moduleNameMapper: {
+        "(.+)\\.js": "$1"
+    },
+    extensionsToTreatAsEsm: [".ts"],
 }
 
 export default config

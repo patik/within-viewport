@@ -1,6 +1,6 @@
-import { getConfig } from '../common/options'
-import { sides } from '../common/sides'
-import { MultipleSides, Side, UserOptions } from '../common/types'
+import { getConfig } from '../common/options.js'
+import { sides } from '../common/sides.js'
+import { MultipleSides, Side, UserOptions } from '../common/types.js'
 
 declare global {
     interface Window {

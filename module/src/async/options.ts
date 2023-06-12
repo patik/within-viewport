@@ -1,6 +1,6 @@
-import { AsyncConfig } from '../common/options'
-import { determineRootMargin } from './rootMargin'
-import { strictCallbackAndRootMargin } from './strictCallbackAndRootMargin'
+import { AsyncConfig } from '../common/options.js'
+import { determineRootMargin } from './rootMargin.js'
+import { strictCallbackAndRootMargin } from './strictCallbackAndRootMargin.js'
 
 /**
  * Generates the arguments for IntersectionObserver()

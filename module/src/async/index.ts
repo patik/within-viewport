@@ -1,6 +1,6 @@
-import { getConfig } from '../common/options'
-import { MultipleSides, Side, UserOptions } from '../common/types'
-import { getIntersectionObserverOptions } from './options'
+import { getConfig } from '../common/options.js'
+import { MultipleSides, Side, UserOptions } from '../common/types.js'
+import { getIntersectionObserverOptions } from './options.js'
 
 /**
  * Determines whether an element is within the viewport

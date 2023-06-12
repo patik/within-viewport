@@ -1,8 +1,8 @@
-import { withinViewportAsync } from './async/index'
-import { withinViewport } from './sync/index'
+import { withinViewportAsync } from './async/index.js'
+import { withinViewport } from './sync/index.js'
 
-export { withinViewportAsync } from './async/index'
-export { withinViewport } from './sync/index'
+export { withinViewportAsync } from './async/index.js'
+export { withinViewport } from './sync/index.js'
 
 import setupJQueryPlugin from './jquery/plugin.js'
 

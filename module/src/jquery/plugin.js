@@ -1,7 +1,6 @@
 /* global withinviewport */
 /* eslint-disable @typescript-eslint/no-extra-semi */
 
-module.exports =
     /**
      * Within Viewport jQuery Plugin
      *
@@ -10,7 +9,7 @@ module.exports =
      * @version     3.0.0
      * @date        2023-01-18
      */
-    function ($) {
+    const setup = function ($) {
         /**
          * $.withinviewport()
          * @description          jQuery method
@@ -173,3 +172,8 @@ module.exports =
             // }
         })
     }
+
+	if (typeof module === 'object') {
+		module.exports = setup;
+	}
+	export default setup;

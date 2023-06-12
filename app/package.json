@@ -10,18 +10,18 @@
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
-        "unused-exports": "ts-prune -p ./tsconfig.json"
+        "unused-exports": "unimported --no-cache"
     },
     "dependencies": {
         "prismjs": "^1.29.0",
-        "zustand": "^4.3.7"
+        "zustand": "^4.3.8"
     },
     "devDependencies": {
         "@types/jquery": "^3.5.16",
         "@types/prismjs": "^1.26.0",
-        "cypress-terminal-report": "^5.1.1",
+        "cypress-terminal-report": "^5.2.0",
         "eslint-plugin-prettier": "^4.2.1",
-        "parcel": "^2.8.3"
+        "parcel": "^2.9.2"
     },
     "lint-staged": {
         "*.ts": "eslint --cache --cache-location .eslintcache --fix"
