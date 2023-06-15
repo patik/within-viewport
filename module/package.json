@@ -1,14 +1,14 @@
 {
     "name": "withinviewport",
     "description": "Determine whether an element is completely within the browser viewport",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "type": "module",
     "repository": {
 		"type": "git",
         "url": "https://github.com/patik/within-viewport.git"
     },
     "devDependencies": {
-		"@testing-library/dom": "^9.3.0",
+        "@testing-library/dom": "^9.3.1",
         "@testing-library/jest-dom": "^5.16.5",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-cypress": "^2.13.3",
