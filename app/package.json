@@ -5,7 +5,7 @@
     "source": "src/index.html",
     "scripts": {
         "start": "yarn clear-parcel-cache && parcel",
-        "clear-parcel-cache": "rm -rf ../.parcel-cache",
+        "clear-parcel-cache": "shx rm -rf ../.parcel-cache",
         "build": "yarn clear-parcel-cache && parcel build --no-scope-hoist --public-url \"/within-viewport\"",
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
