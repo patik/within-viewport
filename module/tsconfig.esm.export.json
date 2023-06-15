@@ -2,7 +2,9 @@
     "extends": "./tsconfig.esm.json",
     "compilerOptions": {
         "rootDir": "src",
-        "baseUrl": "src"
+        "baseUrl": "src",
+        "declaration": false,
+        "declarationMap": false,
     },
     "include": ["src/**/*.ts*"],
     "exclude": ["../node_modules", "node_modules", "src/tests/*"]
