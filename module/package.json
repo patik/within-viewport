@@ -22,11 +22,24 @@
 		"url": "https://github.com/patik/within-viewport/issues"
     },
     "homepage": "https://github.com/patik/within-viewport",
+	"exports": {
+        ".": {
+            "import": {
+                "types": "./dist-esm/index.d.ts",
+                "default": "./dist-esm/index.js"
+            },
+            "require": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            }
+        }
+    },
+    "types": "./dist/index.d.ts",
     "main": "./dist/index.js",
     "module": "dist-esm/index.js",
-    "types": "./dist/index.d.ts",
     "files": [
-        "./dist/"
+        "./dist/",
+		"./dist-esm/"
     ],
     "scripts": {
         "build": "yarn build-default && yarn build-esm",

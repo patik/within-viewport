@@ -3,8 +3,8 @@
     "compilerOptions": {
         "rootDir": "src",
         "baseUrl": "src",
-        "declaration": false,
-        "declarationMap": false,
+        "declaration": true,
+        "declarationMap": true,
     },
     "include": ["src/**/*.ts*"],
     "exclude": ["../node_modules", "node_modules", "src/tests/*"]
