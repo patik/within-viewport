@@ -14,7 +14,7 @@
     },
     "dependencies": {
         "prismjs": "^1.29.0",
-        "zustand": "^4.3.7"
+        "zustand": "^4.3.8"
     },
     "devDependencies": {
         "@types/jquery": "^3.5.16",
