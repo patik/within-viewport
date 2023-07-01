@@ -30,6 +30,8 @@ And then in your JavaScript or TypeScript:
 import { withinViewport /* or withinViewportAsync */ } from 'withinviewport'
 ```
 
+Both CommonJS and ESM modules are provided.
+
 ## Usage
 
 ### Basic

@@ -43,6 +43,11 @@ export function getConfig(
     elem: HTMLElement,
     userOptions?: Side | MultipleSides | Partial<UserOptions>,
 ) {
+    // Don't bother running in non-browser environments
+    if (typeof window === 'undefined') {
+        return
+    }
+
     if (typeof elem !== 'object' || (elem && 'nodeType' in elem && elem.nodeType !== 1)) {
         throw new Error('First argument must be an element')
     }
@@ -73,7 +78,7 @@ export function getConfig(
             }
         })
     } else {
-        settings = Object.assign({}, defaultSettings, userOptions);
+        settings = Object.assign({}, defaultSettings, userOptions)
     }
 
     // Build configuration from defaults and user-provided settings and metadata

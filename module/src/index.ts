@@ -1,10 +1,9 @@
 import { withinViewportAsync } from './async/index.js'
+import setupJQueryPlugin from './jquery/plugin.js'
 import { withinViewport } from './sync/index.js'
 
 export { withinViewportAsync } from './async/index.js'
 export { withinViewport } from './sync/index.js'
-
-import setupJQueryPlugin from './jquery/plugin.js'
 
 const global = (function (scope) {
     if (typeof self !== 'undefined') {
@@ -24,6 +23,20 @@ if (global) {
         setupJQueryPlugin(global.$)
     }
 }
+
+// async function setupJquery() {
+//     const setupJQueryPlugin = (await import('./jquery/plugin.js')) as unknown as (jQuery: unknown) => void
+
+//     if (global && typeof setupJQueryPlugin === 'function') {
+//         if ('jQuery' in global) {
+//             setupJQueryPlugin(global.jQuery)
+//         } else if ('$' in global) {
+//             setupJQueryPlugin(global.$)
+//         }
+//     }
+// }
+
+// setupJquery()
 
 /**
  * Temporary shim for the old function name—please switch to the camelCase `withinViewport` name.

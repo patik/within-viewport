@@ -1,4 +1,4 @@
 {
-    "ignore": "./dist|./dist-esm|./index.ts|src/index.ts|cypress.config.ts|jest.config.ts",
+    "ignore": "./dist|./index.ts|src/index.ts|cypress.config.ts|jest.config.ts",
     "error": true
 }

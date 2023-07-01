@@ -1,10 +1,10 @@
 {
     "name": "withinviewport",
     "description": "Determine whether an element is completely within the browser viewport",
-    "version": "3.0.1",
+    "version": "3.1.0",
     "type": "module",
     "repository": {
-		"type": "git",
+        "type": "git",
         "url": "https://github.com/patik/within-viewport.git"
     },
     "devDependencies": {
@@ -16,35 +16,33 @@
         "jest": "^29.5.0",
         "jest-environment-jsdom": "^29.5.0"
     },
-    "dependencies": {
-    },
+    "dependencies": {},
     "bugs": {
-		"url": "https://github.com/patik/within-viewport/issues"
+        "url": "https://github.com/patik/within-viewport/issues"
     },
     "homepage": "https://github.com/patik/within-viewport",
-	"exports": {
+    "exports": {
         ".": {
             "import": {
-                "types": "./dist-esm/index.d.ts",
-                "default": "./dist-esm/index.js"
+                "types": "./dist/esm/index.d.ts",
+                "default": "./dist/esm/index.js"
             },
             "require": {
-                "types": "./dist/index.d.ts",
-                "default": "./dist/index.js"
+                "types": "./dist/cjs/index.d.ts",
+                "default": "./dist/cjs/index.js"
             }
         }
     },
-    "types": "./dist/index.d.ts",
-    "main": "./dist/index.js",
-    "module": "dist-esm/index.js",
+    "types": "./dist/cjs/index.d.ts",
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
     "files": [
-        "./dist/",
-		"./dist-esm/"
+        "./dist/"
     ],
     "scripts": {
-        "build": "yarn build-default && yarn build-esm",
-        "build-default": "shx rm -rf dist/* && yarn tsc --project ./tsconfig.export.json && shx cp ../README.md ./README.md && shx cp ../LICENSE ./LICENSE",
-        "build-esm": "shx rm -rf dist-esm/* && yarn tsc --project ./tsconfig.esm.export.json && shx cp ../README.md ./README.md && shx cp ../LICENSE ./LICENSE",
+        "build": "yarn build-commonjs && yarn build-esm && ./postbuild",
+        "build-commonjs": "shx rm -rf dist/cjs/* && yarn tsc --project ./tsconfig.cjs.json && shx cp ../README.md ./README.md && shx cp ../LICENSE ./LICENSE",
+        "build-esm": "shx rm -rf dist/esm/* && yarn tsc --project ./tsconfig.esm.json && shx cp ../README.md ./README.md && shx cp ../LICENSE ./LICENSE",
         "clean": "git clean -fdx",
         "cover": "yarn test --collectCoverage",
         "typecheck": "tsc --noEmit",
