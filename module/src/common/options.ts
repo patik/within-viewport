@@ -1,22 +1,12 @@
 import { Config, MultipleSides, Side, UserOptions } from './types.js'
 import { isSide, isMultipleSides, sides } from './sides.js'
 
-const defaultSettings = {
-    container: window,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-}
-
-// ts-prune-ignore-next
 export type SyncConfig = {
     container: HTMLElement | Window
 } & {
     [b in Side]: number | 'ignore'
 }
 
-// ts-prune-ignore-next
 export type AsyncConfig = {
     container: HTMLElement | Document
 } & {
@@ -50,6 +40,14 @@ export function getConfig(
 
     if (typeof elem !== 'object' || (elem && 'nodeType' in elem && elem.nodeType !== 1)) {
         throw new Error('First argument must be an element')
+    }
+
+    const defaultSettings = {
+        container: window,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
     }
 
     let settings: Config

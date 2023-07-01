@@ -2,7 +2,6 @@ export type Side = 'top' | 'right' | 'bottom' | 'left'
 
 export type MultipleSides = `${Side} ${Side}` | `${Side} ${Side} ${Side}`
 
-// ts-prune-ignore-next
 export type Boundaries = {
     [b in Side]?: number | 'ignore' | null
 }

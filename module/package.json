@@ -1,7 +1,7 @@
 {
     "name": "withinviewport",
     "description": "Determine whether an element is completely within the browser viewport",
-    "version": "3.1.0",
+    "version": "3.0.1",
     "type": "module",
     "repository": {
         "type": "git",

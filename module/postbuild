@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#   Add package.json files to cjs & esm dist subfolders
+#
 
 cat >dist/cjs/package.json <<!EOF
 {
