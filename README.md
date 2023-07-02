@@ -9,6 +9,8 @@ Includes:
 - The asynchronous, promise-based function, `withinViewportAsync()`
   - More performant, but only for [modern browsers](https://caniuse.com/intersectionobserver) (e.g. post IE 11)
 - Optional jQuery plugin with handy selectors and shorthand methods
+- TypeScript support
+- Support for CommonJS and ESM modules
 
 All of the above offer the same features.
 
