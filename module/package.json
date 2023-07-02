@@ -10,7 +10,7 @@
     "devDependencies": {
         "@testing-library/dom": "^9.2.0",
         "@testing-library/jest-dom": "^5.16.5",
-        "@types/lodash": "^4.14.192",
+        "@types/lodash": "^4.14.195",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-cypress": "^2.13.2",
         "eslint-plugin-jest-dom": "^5.0.1",
