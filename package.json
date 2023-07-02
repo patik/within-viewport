@@ -21,12 +21,9 @@
         "cypress:open": "cypress open --project ./app",
         "prepare": "husky install"
     },
-    "dependencies": {
-        "typescript": "^4.9.4"
-    },
     "devDependencies": {
         "@jest/globals": "^29.5.0",
-        "@parcel/transformer-sass": "2.8.3",
+        "@parcel/transformer-sass": "^2.9.2",
         "@types/jest": "^29.5.0",
         "@types/node": "18.15.11",
         "@types/react": "18.2.2",
@@ -46,7 +43,8 @@
         "prettier": "^2.8.7",
         "ts-jest": "^29.1.0",
         "ts-node": "^10.9.1",
-        "ts-prune": "^0.10.3"
+        "ts-prune": "^0.10.3",
+        "typescript": "^5.1.6"
     },
     "repository": {
         "type": "git",
