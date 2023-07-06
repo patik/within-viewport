@@ -1,7 +1,7 @@
 {
     "name": "withinviewport",
     "description": "Determine whether an element is completely within the browser viewport",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "type": "module",
     "repository": {
         "type": "git",
@@ -10,36 +10,50 @@
     "devDependencies": {
         "@testing-library/dom": "^9.3.1",
         "@testing-library/jest-dom": "^5.16.5",
-        "@types/lodash": "^4.14.195",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-cypress": "^2.13.3",
         "eslint-plugin-jest-dom": "^5.0.1",
         "jest": "^29.6.0",
         "jest-environment-jsdom": "^29.6.0"
     },
-    "dependencies": {
-        "lodash": "^4.17.21"
-    },
+    "dependencies": {},
     "bugs": {
         "url": "https://github.com/patik/within-viewport/issues"
     },
     "homepage": "https://github.com/patik/within-viewport",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/esm/index.d.ts",
+                "default": "./dist/esm/index.js"
+            },
+            "require": {
+                "types": "./dist/cjs/index.d.ts",
+                "default": "./dist/cjs/index.js"
+            }
+        }
+    },
+    "types": "./dist/cjs/index.d.ts",
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
     "files": [
         "./dist/"
     ],
     "scripts": {
-        "build": "rm -rf dist/* && yarn tsc --project ./tsconfig.export.json && cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+        "build": "yarn build-commonjs && yarn build-esm && yarn addcjstype && yarn addesmtype",
+        "build-commonjs": "shx rm -rf dist/cjs/* && yarn tsc --project ./tsconfig.cjs.json && shx cp ../README.md ./README.md && shx cp ../LICENSE ./LICENSE",
+        "build-esm": "shx rm -rf dist/esm/* && yarn tsc --project ./tsconfig.esm.json && shx cp ../README.md ./README.md && shx cp ../LICENSE ./LICENSE",
         "clean": "git clean -fdx",
         "cover": "yarn test --collectCoverage",
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
-        "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
+        "lint": "yarn typecheck && yarn run code-lint && yarn unused-exports",
         "preversion": "yarn build && yarn cover",
         "test": "yarn jest --coverage",
-        "unused-exports": "ts-prune -p ./tsconfig.json",
-        "cypress:open": "cypress open"
+        "unused-exports": "unimported --no-cache",
+        "cypress:open": "cypress open",
+        "addcjstype": "shx cat >dist/cjs/package.json <<!EOF\n{\n    \"type\": \"commonjs\"\n}\n!EOF",
+        "addesmtype": "shx cat >dist/esm/package.json <<!EOF\n{\n    \"type\": \"module\"\n}\n!EOF"
     },
     "keywords": [
         "viewport",

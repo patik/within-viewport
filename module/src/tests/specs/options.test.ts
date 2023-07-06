@@ -1,5 +1,5 @@
-import { AsyncConfig, getConfig, SyncConfig } from '../../common/options'
-import { MultipleSides, Side, UserOptions } from '../../common/types'
+import { AsyncConfig, getConfig, SyncConfig } from '../../common/options.js'
+import { MultipleSides, Side, UserOptions } from '../../common/types.js'
 
 const div = document.createElement('div')
 document.body.appendChild(div)

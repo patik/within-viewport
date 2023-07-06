@@ -1,16 +1,16 @@
 {
     "name": "@patik/within-viewport-demo",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "private": true,
     "source": "src/index.html",
     "scripts": {
         "start": "yarn clear-parcel-cache && parcel",
-        "clear-parcel-cache": "rm -rf ../.parcel-cache",
+        "clear-parcel-cache": "shx rm -rf ../.parcel-cache",
         "build": "yarn clear-parcel-cache && parcel build --no-scope-hoist --public-url \"/within-viewport\"",
         "typecheck": "tsc --noEmit",
         "code-lint": "eslint --ext .ts --fix ./src/**/*.ts",
         "lint": "yarn typecheck && yarn code-lint && yarn unused-exports",
-        "unused-exports": "ts-prune -p ./tsconfig.json"
+        "unused-exports": "unimported --no-cache"
     },
     "dependencies": {
         "prismjs": "^1.29.0",

@@ -6,7 +6,7 @@
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
-        "outDir": "dist",
+        "outDir": "./dist",
         "rootDir": ".",
         "baseUrl": ".",
         "strict": true,
@@ -29,5 +29,8 @@
         "allowJs": true
     },
     "include": ["src/**/*.ts*", "jest.config.ts"],
-    "exclude": ["../node_modules", "node_modules"]
+    "exclude": ["../node_modules", "node_modules", "./dist"],
+    "ts-node": {
+        "esm": true
+    }
 }

@@ -1,5 +1,5 @@
-import { Config } from '../common/types'
-import { sides } from '../common/sides'
+import { Config } from '../common/types.js'
+import { sides } from '../common/sides.js'
 
 /**
  * Determines the rootMargin value for IntersectionObserver

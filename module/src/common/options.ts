@@ -1,23 +1,12 @@
-import { defaults } from 'lodash'
-import { Config, MultipleSides, Side, UserOptions } from './types'
-import { isSide, isMultipleSides, sides } from './sides'
+import { Config, MultipleSides, Side, UserOptions } from './types.js'
+import { isSide, isMultipleSides, sides } from './sides.js'
 
-const defaultSettings = {
-    container: window,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-}
-
-// ts-prune-ignore-next
 export type SyncConfig = {
     container: HTMLElement | Window
 } & {
     [b in Side]: number | 'ignore'
 }
 
-// ts-prune-ignore-next
 export type AsyncConfig = {
     container: HTMLElement | Document
 } & {
@@ -44,8 +33,21 @@ export function getConfig(
     elem: HTMLElement,
     userOptions?: Side | MultipleSides | Partial<UserOptions>,
 ) {
+    // Don't bother running in non-browser environments
+    if (typeof window === 'undefined') {
+        return
+    }
+
     if (typeof elem !== 'object' || (elem && 'nodeType' in elem && elem.nodeType !== 1)) {
         throw new Error('First argument must be an element')
+    }
+
+    const defaultSettings = {
+        container: window,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
     }
 
     let settings: Config
@@ -74,11 +76,11 @@ export function getConfig(
             }
         })
     } else {
-        settings = defaults({}, userOptions, defaultSettings)
+        settings = Object.assign({}, defaultSettings, userOptions)
     }
 
     // Build configuration from defaults and user-provided settings and metadata
-    const config: Config = defaults({}, settings, defaultSettings)
+    const config: Config = Object.assign({}, defaultSettings, settings)
 
     // Use the window as the container if the user specified the body or a non-element
     if (

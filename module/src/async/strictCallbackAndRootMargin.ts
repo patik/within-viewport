@@ -1,5 +1,5 @@
-import { AsyncConfig } from '../common/options'
-import { determineRootMargin } from './rootMargin'
+import { AsyncConfig } from '../common/options.js'
+import { determineRootMargin } from './rootMargin.js'
 
 function isWithinTop(entry: IntersectionObserverEntry) {
     const { intersectionRect, boundingClientRect } = entry
