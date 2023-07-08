@@ -14,10 +14,11 @@
     },
     "dependencies": {
         "prismjs": "^1.29.0",
-        "zustand": "^4.3.8"
+        "zustand": "^4.3.9"
     },
     "devDependencies": {
         "@types/jquery": "^3.5.16",
+        "@types/lodash": "^4.14.195",
         "@types/prismjs": "^1.26.0",
         "cypress-terminal-report": "^5.3.0",
         "eslint-plugin-prettier": "^4.2.1",
