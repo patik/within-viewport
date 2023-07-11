@@ -22,7 +22,7 @@
         "prepare": "husky install"
     },
     "devDependencies": {
-        "@jest/globals": "^29.6.0",
+        "@jest/globals": "^29.6.1",
         "@parcel/transformer-sass": "^2.9.2",
         "@types/jest": "^29.5.2",
         "@types/node": "20.4.1",
