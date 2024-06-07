@@ -20,7 +20,7 @@
         "@types/jquery": "^3.5.16",
         "@types/lodash": "^4.17.0",
         "@types/prismjs": "^1.26.0",
-        "cypress-terminal-report": "^5.3.2",
+        "cypress-terminal-report": "^6.1.0",
         "eslint-plugin-prettier": "^5.0.0",
         "parcel": "^2.12.0"
     },
